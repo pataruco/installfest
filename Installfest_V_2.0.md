@@ -1,35 +1,8 @@
-![ga_cog_large_red_rgb](https://cloud.githubusercontent.com/assets/40461/8183776/469f976e-1432-11e5-8199-6ac91363302b.png)
-
-WDI
-======
-## Installfest
-
-During this WDI course, we will be using a variety of different tools to develop web-applications, however it is important that we all start off using similar technologies so that we can focus on learning concepts and code.
-
 ### Pre-install
 
 1. Identify which version of OSX you're using - ideally you should have Yosemite or newer (10.10.x)
 2. Ensure you've got [Xcode installed](https://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12)
 3. Ensure that you've uninstalled any antivirus software you may have, as it can prevent some of the tools from installing properly
-
-<br>
-
-## Slack
-
-Install and connect to Slack. We use Slack for both sending code during lessons and also for chatting socially. 
-
-1. Sign up to [Slack](https://www.slack.com/)
-2. Install the OSX app and keep it running
-
-<br>
-
-## Google Chrome
-
-We primarily use Chrome on this course. If you use other browsers, you can continue to do so in your spare time. However, on this course all lessons will expect you to be using Chrome.
-
-1. Go to [https://google.com/chrome](https://google.com/chrome)
-2. Click on `Download Chrome`
-3. Go to the Downloads folder and run the `googlechrome.dmg` package
 
 <br>
 
@@ -43,14 +16,6 @@ Xcode is a large suite of software development tools and libraries from Apple. T
 4. Agree to the license by typing `sudo xcodebuild -license`
 5. Press enter, then `q`
 6. Then on the next prompt, type `agree`
-
-<br>
-
-## Sublime Text 3
-
-1. Download and install [Sublime Text 3](http://www.sublimetext.com/) - version 3065 is current
-2. Make a symlink for Sublime Text, allowing us to launch it from the command line:
-`sudo ln -s /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl /bin/subl`
 
 <br>
 
@@ -303,44 +268,6 @@ Check the directory listing to see if you have files named either id_rsa.pub or 
 
 <br>
 
-## Customize Sublime
-
-We can improve our Sublime setup by installing custom packages. However, in order for us to do this, we need to first install a package manager.
-
-#### Install the Sublime package manager
-
-For instructions on how to install the Sublime package manager, navigate to 
-check [https://packagecontrol.io/installation](https://packagecontrol.io/installation).
-
-1. Copy the text under the tab `Sublime Text 3`
-2. Then open sublime and open up the Sublime Text console with `` ctrl+` ``
-3. Press `enter`
-
-#### Add the SidebarEnhancements Package
-
-One of the packages that we need to install is the "SidebarEnhancement" pacakge.
-
-1. Press `cmd-shift-p`
-2. Type 'Package Control: Install Package' and press `enter`
-
-#### Add custom key bindings
-
-We also want to add some custom key shortcuts to help us keep our code tidy:
-
-1. Go to `Sublime Text > Preferences > Key Bindings - User`
-2. Add this: 
-
-```
-[
-  { "keys": ["super+v"], "command": "paste_and_indent" },
-  { "keys": ["super+shift+v"], "command": "paste" },
-  { "keys": ["super+shift+r"], "command": "reindent" },
-  { "keys": ["super+g"], "command": "encode_html_entities" }
-]
-```
-
-<br>
-
 ## Speed up your cursor
 
 During the course, we will be doing a lot of navigating using our keyboards. By default, the speed of the curson on a Mac is a little too slow. Let's increase the speed of the cursor by going to:
@@ -350,9 +277,3 @@ System Preferences > Keyboard
 ```
 
 Move both up to maximum.
-
-<br>
-
-## Closure
-
-Don't worry, you won't have to remember how to do all of this. If you need to setup a new machine in the future, we can send you over these installation instructions!**
