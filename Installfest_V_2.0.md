@@ -4,7 +4,14 @@
 2. Ensure you've got [Xcode installed](https://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12)
 3. Ensure that you've uninstalled any antivirus software you may have, as it can prevent some of the tools from installing properly
 
-<br>
+## Text editor
+[Visual Studio](https://code.visualstudio.com/Download) Code is a lightweight but powerful source code editor which runs on your desktop and is available for Windows, macOS and Linux. It comes with built-in support for JavaScript, TypeScript and Node.js
+
+1. Download Visual Studio
+2. Move the app from downloads folder to application folder
+3. Open Visual studio
+4. Press `shift` + `⌘ (cmd)` + `p`
+5. Type `shell` to and select `Shell Command` to install shell command 'code' in PATH.
 
 ## Command Line Tools
 
@@ -58,7 +65,7 @@ The American English pronunciation of Z is "zee", so Z shell rhymes with C shell
 2. Type `zsh` . You should have a different prompt
 3. Type `exit` to return to bash
 4. Type `which zsh` to determine where your new shell has installed
-5. Type `subl /etc/shells` and add `/YOUR/PATH/TO/zsh`. (Lists trusted shells. The chsh command allows users to change their login shell only to shells listed in this file)
+5. Type `code /etc/shells` and add `/YOUR/PATH/TO/zsh`. (Lists trusted shells. The chsh command allows users to change their login shell only to shells listed in this file)
 6. In a new tab, type `chsh -s /YOUR/PATH/TO/zsh`, then close and reopen your terminal application to This will enable zsh by default.
 7. Type `echo $SHELL`. this should return `/YOUR/PATH/TO/zsh` 
 
@@ -72,7 +79,7 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
 
 1. Type `curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh`
 2. Let's move Homebrew's directory further up the PATH, so that software loads from there by preference:
-  * Open the zshrc file `subl ~/.zshrc`
+  * Open the zshrc file `code ~/.zshrc`
   * Find the line that starts with export PATH=$PATH (usually near the end of the file)
   * Get rid of any $PATH part which is located just after the = sign
   * Move the /usr/local/bin part to the front of the statement (just after the = sign)
@@ -82,7 +89,7 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
 Add following to .zshrc to make Sublime the default text editor:
 
 ```
-export EDITOR='subl -w -n'
+export EDITOR='code -w -n'
 export PAGER='less -f'
 ```
 
