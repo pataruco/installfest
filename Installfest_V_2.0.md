@@ -227,7 +227,13 @@ Git is the version control system that we will use throughout the course. It is 
 `git config --global user.name "Your Name"`
 `git config --global user.email "you@example.com"`
 
-<br>
+### Git Multiple identities
+Instead to have a global user email, we can set a different identity per repo.
+1. Reset global user email
+`git config --global --unset-all user.email`
+2. Set local config per repo
+`git config --global --add user.useConfigOnly true`
+3. Add email to your GitHub account [emails](https://github.com/settings/emails)
 
 ## Global .gitignore 
 
