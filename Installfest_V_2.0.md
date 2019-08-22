@@ -234,6 +234,8 @@ Instead to have a global user email, we can set a different identity per repo.
 2. Set local config per repo
 `git config --global --add user.useConfigOnly true`
 3. Add email to your GitHub account [emails](https://github.com/settings/emails)
+4. Before the first commit on repo
+`git config --local --add user.email mail@example.com`
 
 ## Global .gitignore 
 
