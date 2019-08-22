@@ -1,6 +1,6 @@
 ### Pre-install
 
-1. Identify which version of OSX you're using - ideally you should have Yosemite or newer (10.10.x)
+1. Identify which version of OSX you're using - ideally you should have Mojave or newer (10.14.x)
 2. Ensure you've got [Xcode installed](https://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12)
 3. Ensure that you've uninstalled any antivirus software you may have, as it can prevent some of the tools from installing properly
 
