@@ -253,6 +253,24 @@ Instead to have a global user email, we can set a different identity per repo.
 git config --local --add user.email mail@example.com
 ```
 
+## `git show` plugin [(Delta)](https://github.com/dandavison/delta)
+
+> Delta provides language syntax-highlighting, within-line insertion/deletion detection, and restructured diff output for git on the command line.
+
+1. Install via brew
+   ```sh
+   brew install git-delta
+   ```
+2. Configure git to use delta adding the following to `.gitconfig`:
+
+   ```toml
+   [core]
+    pager = delta --plus-color="#012800" --minus-color="#340001" --theme='Monokai Extended'
+
+   [interactive]
+    diffFilter = delta --color-only
+   ```
+
 ## Global .gitignore
 
 There are a few files that we don't want Git to track. We can specifically ignore them by adding the files to a global `.gitignore` file.
