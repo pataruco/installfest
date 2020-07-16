@@ -27,7 +27,7 @@ Xcode is a large suite of software development tools and libraries from Apple. T
 5. Press enter, then `q`
 6. Then on the next prompt, type `agree`
 
-## Homebew Package Manager
+## Homebrew Package Manager
 
 Homebrew is a package manager for OSX.
 
