@@ -306,6 +306,8 @@ In the same way, we want to never track the contents of our uploads folder in Ra
 echo "/public/uploads/\nnode_modules/\nbower_components/" >> ~/.gitignore_global
 ```
 
+## Configure SSH keys on Github
+
 GitHub is a web-based Git repository hosting service. It allows us to keep a remote version of our version-controlled projects. When we push and pull from Git, we don't want to always have to login to verify who we are. Therefore, what we can do is generate and use something called an SSH key. SSH keys are a way to identify trusted computers, without involving passwords.
 
 1. First, we need to check for existing SSH keys on your computer. Open up your Terminal and type:
@@ -333,7 +335,7 @@ GitHub is a web-based Git repository hosting service. It allows us to keep a rem
     ssh -T git@github.com
    ```
 
-## Configure GPG keys to Github
+## Configure GPG keys on Github
 
 1. Install **OpenPGP** (_gpg_)
 
