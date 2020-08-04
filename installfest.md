@@ -154,37 +154,34 @@ Ruby-build is an rbenv plugin that provides an rbenv install command to compile 
 
 1. Open a terminal window and type:
 
-```sh
-  curl https://raw.githubusercontent.com/creationix/nvm/v0.11.1/install.sh | bash
-```
-
-This will install `nvm` in your system.
+   ```sh
+   curl https://raw.githubusercontent.com/creationix/nvm/v0.11.1/install.sh | bash
+   ```
 
 2. Type `source ~/.nvmrc` to include the new folders to the current `$PATH`
 
-Now that nvm is installed, we want to list the available versions.
+3. Now that nvm is installed, we want to list the available versions, type:
 
-3. Type:
+   ```sh
+   nvm ls-remote
+   ```
 
-```sh
-nvm ls-remote
-```
+   - And you will be shown a list of all the available versions of node
 
-And you will be shown a list of all the available versions of node.js
+4. Install the latest version of node and the current **Long term support** (_LTS_)
+   ```sh
+   nvm install node
+   nvm install --lts
+   ```
+5. Check that Node is installed, type
 
-```sh
-nvm install <LAST_VERSION>
-```
+   ```sh
+   node --version
+   ```
 
-If you type:
+   - You should see the last version number that you've installed
 
-```sh
-node --version
-```
-
-You should see the last version number that you've installed
-
-To use `nvm use` automatically in a directory with a `.nvmrc` file add [this script](https://github.com/nvm-sh/nvm#zsh) to `.zshrc`
+6. To use `nvm use` automatically in a directory with a `.nvmrc` file add [this script](https://github.com/nvm-sh/nvm#zsh) to `.zshrc`
 
 ## Yarn
 
