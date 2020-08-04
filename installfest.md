@@ -6,6 +6,14 @@
 2. Ensure you've got [Xcode installed](https://apps.apple.com/gb/app/xcode/id497799835)
 3. Ensure that you've uninstalled any antivirus software you may have, as it can prevent some of the tools from installing properly
 
+## Terminal
+
+1. Install [iTerm2](https://www.iterm2.com/downloads.html)
+2. Set the font size to be **14pt**
+   - Press <kbd>⌘</kbd> + <kbd>,</kbd>
+   - Navigate to **Profiles** > **Text** > **Font**
+   - Increase the font size
+
 ## Text editor
 
 [Visual Studio](https://code.visualstudio.com/Download) Code is a lightweight but powerful source code editor which runs on your desktop and is available for Windows, macOS and Linux. It comes with built-in support for JavaScript, TypeScript and Node.js
@@ -13,7 +21,7 @@
 1. Download Visual Studio
 2. Move the app from downloads folder to application folder
 3. Open Visual studio
-4. Press `shift` + `⌘ (cmd)` + `p`
+4. Press <kbd>shift</kbd> + <kbd>⌘</kbd> + <kbd>p</kbd>
 5. Type `shell` to and select `Shell Command` to install shell command 'code' in PATH.
 6. Install [sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync) extension
 
@@ -24,6 +32,20 @@
 7. Open sync extension
    - Click **Login with GitHub**
    - Select **GitHub Gist Id**
+
+## Terminal theme
+
+1. Create file called `one-dark.itermcolors` on the `~/Desktop` and open it
+
+   ```sh
+   code  ~/Desktop/one-dark.itermcolors
+   ```
+
+2. Copy and paste [**One Dark theme** code](https://raw.githubusercontent.com/one-dark/iterm-one-dark-theme/master/One%20Dark.itermcolors) into the file
+3. Set the theme
+   - Press <kbd>⌘</kbd> + <kbd>,</kbd>
+   - Navigate to **Profiles** > **Colors** > **Color presets...**
+   - Select **one-dark**
 
 ## Command Line Tools
 
@@ -254,16 +276,16 @@ Instead to have a global user email, we can set a different identity per repo.
    ```
 2. Set local config per repo
 
-```sh
-  git config --global --add user.useConfigOnly true
-```
+   ```sh
+   git config --global --add user.useConfigOnly true
+   ```
 
 3. Add email to your GitHub account [emails](https://github.com/settings/emails)
 4. Before the first commit on repo
 
-```sh
-git config --local --add user.email mail@example.com
-```
+   ```sh
+   git config --local --add user.email mail@example.com
+   ```
 
 ## `git show` plugin [(Delta)](https://github.com/dandavison/delta)
 
