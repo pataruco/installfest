@@ -124,6 +124,25 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
 
 4. 2. Restart the terminal (close and open) the prompt should be a tilde (**~**), and in colour.
 
+### Increase ZSH history
+
+1. Add following to `.zshrc` file to increase ZSH history:
+
+   ```sh
+      # History
+      export HISTFILE=~/.zsh_history
+      ## Increase history size
+      export HISTFILESIZE=1000000000
+      export HISTSIZE=1000000000
+      ## Immediate append
+      setopt INC_APPEND_HISTORY
+      export HISTTIMEFORMAT="[%F %T] "
+      ## Handling duplicate commands
+      setopt EXTENDED_HISTORY
+      setopt HIST_FIND_NO_DUPS
+      setopt HIST_IGNORE_ALL_DUPS
+   ```
+
 ## Ruby Environment (Rbenv)
 
 A Ruby version manager, is a programme designed to manage multiple installations of Ruby on the same device.
