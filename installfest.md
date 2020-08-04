@@ -15,6 +15,15 @@
 3. Open Visual studio
 4. Press `shift` + `⌘ (cmd)` + `p`
 5. Type `shell` to and select `Shell Command` to install shell command 'code' in PATH.
+6. Install [sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync) extension
+
+   ```sh
+   code --install-extension shan.code-settings-sync
+   ```
+
+7. Open sync extension
+   - Click **Login with GitHub**
+   - Select **GitHub Gist Id**
 
 ## Command Line Tools
 
@@ -29,7 +38,7 @@ Xcode is a large suite of software development tools and libraries from Apple. T
 
 ## Homebrew Package Manager
 
-Homebrew is a package manager for OSX.
+Homebrew is a package manager for ~~OSX~~ **Linux**.
 
 #### What are packages?
 
@@ -177,6 +186,12 @@ You should see the last version number that you've installed
 
 To use `nvm use` automatically in a directory with a `.nvmrc` file add [this script](https://github.com/nvm-sh/nvm#zsh) to `.zshrc`
 
+## Yarn
+
+```sh
+brew install yarn
+```
+
 ## Skip gem rdoc generation
 
 Whenever we install a gem, it also installs a bunch of documentation we probably don't want - the following command allows us to avoid this:
@@ -294,8 +309,6 @@ In the same way, we want to never track the contents of our uploads folder in Ra
 echo "/public/uploads/\nnode_modules/\nbower_components/" >> ~/.gitignore_global
 ```
 
-## Configure SSH access to Github
-
 GitHub is a web-based Git repository hosting service. It allows us to keep a remote version of our version-controlled projects. When we push and pull from Git, we don't want to always have to login to verify who we are. Therefore, what we can do is generate and use something called an SSH key. SSH keys are a way to identify trusted computers, without involving passwords.
 
 1. First, we need to check for existing SSH keys on your computer. Open up your Terminal and type:
@@ -322,6 +335,45 @@ GitHub is a web-based Git repository hosting service. It allows us to keep a rem
    ```sh
     ssh -T git@github.com
    ```
+
+## Configure GPG keys to Github
+
+1. Install **OpenPGP** (_gpg_)
+
+   ```sh
+   brew install gpg
+   ```
+
+2. Generate a GPG key
+
+   ```sh
+   gpg --full-generate-key
+   ```
+
+3. Check the GPG key pair
+
+   ```sh
+   gpg --list-secret-keys --keyid-format LONG
+   ```
+
+4. Copy the GPG key ID you'd like to use, e.g.
+
+   ```sh
+   $ gpg --list-secret-keys --keyid-format LONG
+   /Users/hubot/.gnupg/secring.gpg
+   ------------------------------------
+   sec   4096R/<key number to copy> 2016-03-10 [expires: 2017-03-10]
+   uid                          Hubot
+   ssb   4096R/42B317FD4BA89E7A 2016-03-10
+   ```
+
+5. Copy the GPG key
+
+   ```sh
+   gpg --armor --export <key number> | pbcopy
+   ```
+
+6. Add your SSH key to GitHub by logging into Github, visiting **account settings** and clicking **GPG keys**. Click **Add GPG key**
 
 ## Speed up your cursor
 
