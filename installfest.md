@@ -143,6 +143,35 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
       setopt HIST_IGNORE_ALL_DUPS
    ```
 
+## Install [Starship](https://starship.rs/)
+
+1. Type
+
+   ```sh
+   brew install starship
+   ```
+
+2. Add following to `.zshrc` to make Starship run on ZSH init
+
+   ```sh
+   eval "$(starship init zsh)"
+   ```
+
+3. To get started configuring starship, create the following file:`~/.config/starship.toml`
+
+   ```toml
+   # Don't print a new line at the start of the prompt
+   add_newline = false
+
+   # Replace the "❯" symbol in the prompt with "➜"
+   [character]      # The name of the module we are configuring is "character"
+   symbol = "➜"     # The "symbol" segment is being set to "➜"
+
+   # Disable the package module, hiding it from the prompt completely
+   [package]
+   disabled = true
+   ```
+
 ## Ruby Environment (Rbenv)
 
 A Ruby version manager, is a programme designed to manage multiple installations of Ruby on the same device.
@@ -324,7 +353,16 @@ Instead to have a global user email, we can set a different identity per repo.
     diffFilter = delta --color-only
    ```
 
-## Global .gitignore
+## `git lb` Git alias for recent branches
+
+1. Paste the following in `~/.gitconfig`
+
+```toml
+[alias]
+    lb = !git reflog show --pretty=format:'%gs ~ %gd' --date=relative | grep 'checkout:' | grep -oE '[^ ]+ ~ .*' | awk -F~ '!seen[$1]++' | head -n 10 | awk -F' ~ HEAD@{' '{printf(\"  \\033[33m%s: \\033[37m %s\\033[0m\\n\", substr($2, 1, length($2)-1), $1)}'
+```
+
+## Global `.gitignore`
 
 There are a few files that we don't want Git to track. We can specifically ignore them by adding the files to a global `.gitignore` file.
 
