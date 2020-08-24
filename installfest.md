@@ -143,7 +143,7 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
       setopt HIST_IGNORE_ALL_DUPS
    ```
 
-## Install [Starship](https://starship.rs/)
+## Install [Starship 🚀](https://starship.rs/)
 
 1. Type
 
@@ -170,6 +170,15 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
    # Disable the package module, hiding it from the prompt completely
    [package]
    disabled = true
+   ```
+
+## Install [Bat 🦇](https://github.com/sharkdp/bat)
+
+A cat(1) clone with syntax highlighting and Git integration.
+
+1. Type
+   ```sh
+   brew install bat
    ```
 
 ## Ruby Environment (Rbenv)
