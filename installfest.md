@@ -371,6 +371,19 @@ Instead to have a global user email, we can set a different identity per repo.
     lb = !git reflog show --pretty=format:'%gs ~ %gd' --date=relative | grep 'checkout:' | grep -oE '[^ ]+ ~ .*' | awk -F~ '!seen[$1]++' | head -n 10 | awk -F' ~ HEAD@{' '{printf(\"  \\033[33m%s: \\033[37m %s\\033[0m\\n\", substr($2, 1, length($2)-1), $1)}'
 ```
 
+## `git-clean`
+
+1. Paste the following in `~/.zshrc`
+
+```sh
+# Git Remove tracking branches no longer on remote
+# https://stackoverflow.com/a/33548037/4842303
+
+git-clean(){
+  git fetch -p && for branch in $(git for-each-ref --format '%(refname) %(upstream:track)' refs/heads | awk '$2 == "[gone]" {sub("refs/heads/", "", $1); print $1}'); do git branch -D $branch; done
+}
+```
+
 ## Global `.gitignore`
 
 There are a few files that we don't want Git to track. We can specifically ignore them by adding the files to a global `.gitignore` file.
