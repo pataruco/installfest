@@ -21,17 +21,8 @@
 1. Download Visual Studio
 2. Move the app from downloads folder to application folder
 3. Open Visual studio
-4. Press <kbd>shift</kbd> + <kbd>⌘</kbd> + <kbd>p</kbd>
-5. Type `shell` to and select `Shell Command` to install shell command 'code' in PATH.
-6. Install [sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync) extension
-
-   ```sh
-   code --install-extension shan.code-settings-sync
-   ```
-
-7. Open sync extension
-   - Click **Login with GitHub**
-   - Select **GitHub Gist Id**
+4. Turn on **Settings sync**
+   ![](https://code.visualstudio.com/assets/docs/editor/settings-sync/turn-on-sync.png)
 
 ## Terminal theme
 
