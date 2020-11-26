@@ -1,4 +1,4 @@
-# Installfest
+# 💻 macOS Installfest
 
 ## Pre-install
 
@@ -76,7 +76,7 @@ We will go into a bit more detail about the shell later on in the course but a s
 
 Macs before OSX Catalina came shipped with a shell called 'bash' by default. Bash stands for **'Bourne-again shell'**, referring to its objective as a free replacement for the Bourne shell which was developed by [Steven Bourne](https://en.wikipedia.org/wiki/Stephen_R._Bourne).
 
-### _If you are using Catalina or a greater version skip these steps_
+### ⚠️ _If you are using Catalina or a greater version skip these steps_ ⚠️
 
 We are going to use another shell called zsh because it has some extra features to make our web-development easier.
 
@@ -101,7 +101,7 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
 1. Type
 
    ```sh
-    curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
+   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
    ```
 
 2. Restart the terminal (close and open)
@@ -225,7 +225,11 @@ Ruby-build is an rbenv plugin that provides an rbenv install command to compile 
 1. Open a terminal window and type:
 
    ```sh
-   curl https://raw.githubusercontent.com/creationix/nvm/v0.11.1/install.sh | bash
+   export NVM_DIR="$HOME/.nvm" && (
+   git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
+   cd "$NVM_DIR"
+   git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
+   ) && \. "$NVM_DIR/nvm.sh"
    ```
 
 2. Type `source ~/.nvmrc` to include the new folders to the current `$PATH`
@@ -284,19 +288,6 @@ We will often download files from the internet in the command line. We can insta
 
 ```sh
 brew install wget
-```
-
-## Install PostgreSQL
-
-PostgreSQL will be the main relational database that we use throughout WDI. You can download it a few different ways but we are going to download using the Postgres app.
-
-1. Download [PostgreSQL](http://postgresapp.com/)
-2. Unzip the downloaded file and drag to `applications`
-3. Choose `automatically start at login` in preferences, and don't `show welcome screen`
-4. add to the PATH variable in .zshrc:
-
-```sh
-export PATH="/Applications/Postgres.app/Contents/Versions/9.4/bin:$PATH"
 ```
 
 ## Install Git
