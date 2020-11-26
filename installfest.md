@@ -263,6 +263,48 @@ Ruby-build is an rbenv plugin that provides an rbenv install command to compile 
 brew install yarn
 ```
 
+## ESLint
+
+### Create `.eslintrc.json` file
+
+- Let define some rules for `eslint`
+
+      ```sh
+      code ~/.eslintrc.json
+      ```
+
+- Copy and paste this [text](https://gist.github.com/pataruco/353b75f87ad809dc96b64174b2201f60#file-eslintrc-json) in the file `.eslintrc.json`
+- Save file <kbd>command</kbd> + <kbd>S</kbd>.
+
+### Install `eslint` packages
+
+Install the following **eslint** packages
+
+```sh
+yarn global add eslint@^7 eslint-plugin-react babel-eslint eslint-config-prettier
+```
+
+## Prettier
+
+### Create `.prettierrc.json` file
+
+- Let define some rules for `prettier`
+
+      ```sh
+      code ~/.prettierrc
+      ```
+
+- Copy and paste this [text](https://gist.github.com/pataruco/353b75f87ad809dc96b64174b2201f60#file-prettierrc-json) in the file `.prettierrc.json`
+- Save file <kbd>command </kbd> + <kbd>S</kbd>.
+
+### Install `prettier` packages
+
+Install the following **prettier** packages
+
+```sh
+yarn global add prettier
+```
+
 ## Skip gem rdoc generation
 
 Whenever we install a gem, it also installs a bunch of documentation we probably don't want - the following command allows us to avoid this:
