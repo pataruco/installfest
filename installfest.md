@@ -379,11 +379,20 @@ Instead to have a global user email, we can set a different identity per repo.
 2. Configure git to use delta adding the following to `.gitconfig`:
 
    ```toml
-   [core]
-    pager = delta --plus-color="#012800" --minus-color="#340001" --theme='Monokai Extended'
+    [core]
+        pager = delta
 
-   [interactive]
-    diffFilter = delta --color-only
+    [interactive]
+        diffFilter = delta --color-only
+
+    [delta]
+        features = side-by-side line-numbers decorations
+        whitespace-error-style = 22 reverse
+
+    [delta "decorations"]
+        commit-decoration-style = bold yellow box ul
+        file-style = bold yellow ul
+        file-decoration-style = none
    ```
 
 ## `git lb` Git alias for recent branches
