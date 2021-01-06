@@ -272,9 +272,9 @@ brew install yarn
 
 - Let define some rules for `eslint`
 
-      ```sh
-      code ~/.eslintrc.json
-      ```
+  ```sh
+  code ~/.eslintrc.json
+  ```
 
 - Copy and paste this [text](https://gist.github.com/pataruco/353b75f87ad809dc96b64174b2201f60#file-eslintrc-json) in the file `.eslintrc.json`
 - Save file <kbd>command</kbd> + <kbd>S</kbd>.
@@ -293,9 +293,9 @@ yarn global add eslint@^7 eslint-plugin-react babel-eslint eslint-config-prettie
 
 - Let define some rules for `prettier`
 
-      ```sh
-      code ~/.prettierrc
-      ```
+  ```sh
+  code ~/.prettierrc
+  ```
 
 - Copy and paste this [text](https://gist.github.com/pataruco/353b75f87ad809dc96b64174b2201f60#file-prettierrc-json) in the file `.prettierrc.json`
 - Save file <kbd>command </kbd> + <kbd>S</kbd>.
