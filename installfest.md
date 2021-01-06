@@ -151,16 +151,19 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
 3. To get started configuring starship, create the following file:`~/.config/starship.toml`
 
    ```toml
-   # Don't print a new line at the start of the prompt
-   add_newline = false
+    # Don't print a new line at the start of the prompt
+    add_newline = false
 
-   # Replace the "❯" symbol in the prompt with "➜"
-   [character]      # The name of the module we are configuring is "character"
-   symbol = "➜"     # The "symbol" segment is being set to "➜"
+    # Replace the "❯" symbol in the prompt with "➜"
+    [character]      # The name of the module we are configuring is "character"
+    symbol = "➜"     # The "symbol" segment is being set to "➜"
 
-   # Disable the package module, hiding it from the prompt completely
-   [package]
-   disabled = true
+    # Disable the package module, hiding it from the prompt completely
+    [package]
+    disabled = true
+
+    [git_branch]
+    symbol = "🌱 "
    ```
 
 ## Install [Bat 🦇](https://github.com/sharkdp/bat)
