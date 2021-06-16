@@ -2,7 +2,7 @@
 
 ## Pre-install
 
-1. Identify which version of OSX you're using - ideally you should have Catalina or newer (10.15.x)
+1. Identify which version of OSX you're using - ideally you should have Big Sur or newer (11.14.x)
 2. Ensure you've got [Xcode installed](https://apps.apple.com/gb/app/xcode/id497799835)
 3. Ensure that you've uninstalled any antivirus software you may have, as it can prevent some of the tools from installing properly
 
@@ -260,11 +260,19 @@ Ruby-build is an rbenv plugin that provides an rbenv install command to compile 
 
 6. To use `nvm use` automatically in a directory with a `.nvmrc` file add [this script](https://github.com/nvm-sh/nvm#zsh) to `.zshrc`
 
-## Yarn
+## Yarn 2
 
-```sh
-brew install yarn
-```
+1. Install Yarn
+
+   ```sh
+   brew install yarn
+   ```
+
+2. Set Yarn to use version 2
+
+   ```sh
+   yarn set version berry
+   ```
 
 ## ESLint
 
