@@ -379,6 +379,12 @@ Instead to have a global user email, we can set a different identity per repo.
    git config --local --add user.email mail@example.com
    ```
 
+### Git set default branch to be `main`
+
+```sh
+git config --global init.defaultBranch main
+```
+
 ## `git show` plugin [(Delta)](https://github.com/dandavison/delta)
 
 > Delta provides language syntax-highlighting, within-line insertion/deletion detection, and restructured diff output for git on the command line.
