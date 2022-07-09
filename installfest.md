@@ -134,6 +134,10 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
       setopt HIST_IGNORE_ALL_DUPS
    ```
 
+### Install personal ZSH scripts
+
+- Follow this instructions https://github.com/pataruco/sh-scripts
+
 ## Install [Starship 🚀](https://starship.rs/)
 
 1. Type
