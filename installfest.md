@@ -461,6 +461,14 @@ In the same way, we want to never track the contents of our uploads folder in Ra
 echo "/public/uploads/\nnode_modules/\nbower_components/" >> ~/.gitignore_global
 ```
 
+#### autocorrect
+
+Enable auto-correct the suggested command will run after a short delay to give you the chance to cancel the command if it is not what you intended
+
+```sh
+git config --global help.autocorrect 20
+```
+
 ## Configure SSH keys on Github
 
 GitHub is a web-based Git repository hosting service. It allows us to keep a remote version of our version-controlled projects. When we push and pull from Git, we don't want to always have to login to verify who we are. Therefore, what we can do is generate and use something called an SSH key. SSH keys are a way to identify trusted computers, without involving passwords.
