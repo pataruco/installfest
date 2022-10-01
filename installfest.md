@@ -48,6 +48,7 @@ Xcode is a large suite of software development tools and libraries from Apple. T
 4. Agree to the license by typing `sudo xcodebuild -license`
 5. Press enter, then `q`
 6. Then on the next prompt, type `agree`
+7. Run `xcodebuild -runFirstLaunch`
 
 ## Homebrew Package Manager
 
