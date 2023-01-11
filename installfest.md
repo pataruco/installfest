@@ -252,6 +252,23 @@ Ruby-build is an rbenv plugin that provides an rbenv install command to compile 
    `rbenv global 2.2.3`
 5. Test you have the right version with `ruby -v`
 
+## Skip gem rdoc generation
+
+Whenever we install a gem, it also installs a bunch of documentation we probably don't want - the following command allows us to avoid this:
+
+```sh
+echo 'gem: --no-rdoc --no-ri' >> ~/.gemrc
+```
+
+## Bundler
+
+Bundler manages Ruby gems per-project/application, and makes it trivial to install all the dependencies for an application:
+
+```sh
+gem install bundler
+rbenv rehash
+```
+
 ## Install nvm
 
 1. Open a terminal window and type:
@@ -289,18 +306,17 @@ Ruby-build is an rbenv plugin that provides an rbenv install command to compile 
 
 6. To use `nvm use` automatically in a directory with a `.nvmrc` file add [this script](https://github.com/nvm-sh/nvm#zsh) to `.zshrc`
 
-## Yarn 2
+## PNPM
 
-1. Install Yarn
+1. Install pnpm
 
    ```sh
-   brew install yarn
+   brew install pnpm
    ```
 
-2. Set Yarn to use version 2
-
+2. Configure PNPM to work globally
    ```sh
-   yarn set version berry
+   pnpm setup
    ```
 
 ## ESLint
@@ -321,7 +337,7 @@ Ruby-build is an rbenv plugin that provides an rbenv install command to compile 
 Install the following **eslint** packages
 
 ```sh
-yarn global add eslint@^7 eslint-plugin-react babel-eslint eslint-config-prettier
+pnpm --global add eslint@latest eslint-plugin-react babel-eslint eslint-config-prettier
 ```
 
 ## Prettier
@@ -342,24 +358,7 @@ yarn global add eslint@^7 eslint-plugin-react babel-eslint eslint-config-prettie
 Install the following **prettier** packages
 
 ```sh
-yarn global add prettier
-```
-
-## Skip gem rdoc generation
-
-Whenever we install a gem, it also installs a bunch of documentation we probably don't want - the following command allows us to avoid this:
-
-```sh
-echo 'gem: --no-rdoc --no-ri' >> ~/.gemrc
-```
-
-## Bundler
-
-Bundler manages Ruby gems per-project/application, and makes it trivial to install all the dependencies for an application:
-
-```sh
-gem install bundler
-rbenv rehash
+pnpm --global add prettier
 ```
 
 If you install a gem that includes 'binaries' (or any generally available command line scripts), you need to run `rbenv rehash` so that rbenv can create the necessary shim files, (a shim file ensures there's no threat of incompatibilities between libraries or systems like Bundler and rbenv.)
