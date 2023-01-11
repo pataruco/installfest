@@ -269,6 +269,40 @@ gem install bundler
 rbenv rehash
 ```
 
+## Install pyenv
+
+[pyenv](https://github.com/pyenv/pyenv) lets you easily switch between multiple versions of Python.
+
+1. Install
+   ```sh
+   brew install pyenv
+   brew install pyenv-virtualenv
+   ```
+2. Set up shell environment for Pyenv
+   ```sh
+   echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
+   echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
+   echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+   echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.zshrc
+   ```
+
+## Install python
+
+> Check the latest [python](https://www.python.org/downloads/) version and replace the semver number
+
+1. Install
+   ```sh
+   pyenv install 3.11.1
+   ```
+2. Set the global version
+   ```sh
+   pyenv global 3.11.1
+   ```
+3. Python doesn't ship with the most up to date version of package manager pip, so upgrade pip
+   ```sh
+   pip install -upgrade pip
+   ```
+
 ## Install nvm
 
 1. Open a terminal window and type:
