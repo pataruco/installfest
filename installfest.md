@@ -79,7 +79,7 @@ Macs before OSX Catalina came shipped with a shell called 'bash' by default. Bas
 
 <details>
   <summary>
-     **Warning** If you are using Catalina or a greater version skip these steps
+    ⚠️ If you are using Catalina or a greater version skip these inside steps ⚠️
   </summary>
 
 We are going to use another shell called zsh because it has some extra features to make our web-development easier.
@@ -88,13 +88,13 @@ The American English pronunciation of Z is "zee", so Z shell rhymes with C shell
 
 #### Install
 
-1. Type `brew install zsh` Type `0` if the prompt ask you about .zshrc
-2. Type `zsh` . You should have a different prompt
-3. Type `exit` to return to bash
-4. Type `which zsh` to determine where your new shell has installed
-5. Type `code /etc/shells` and add `/YOUR/PATH/TO/zsh`. (Lists trusted shells. The chsh command allows users to change their login shell only to shells listed in this file)
-6. In a new tab, type `chsh -s /YOUR/PATH/TO/zsh`, then close and reopen your terminal application to This will enable zsh by default.
-7. Type `echo $SHELL`. this should return `/YOUR/PATH/TO/zsh`
+1.  Type `brew install zsh` Type `0` if the prompt ask you about .zshrc
+2.  Type `zsh` . You should have a different prompt
+3.  Type `exit` to return to bash
+4.  Type `which zsh` to determine where your new shell has installed
+5.  Type `code /etc/shells` and add `/YOUR/PATH/TO/zsh`. (Lists trusted shells. The chsh command allows users to change their login shell only to shells listed in this file)
+6.  In a new tab, type `chsh -s /YOUR/PATH/TO/zsh`, then close and reopen your terminal application to This will enable zsh by default.
+7.  Type `echo $SHELL`. this should return `/YOUR/PATH/TO/zsh`
 </details>
 
 ## Oh-My-Zsh
@@ -560,44 +560,24 @@ GitHub is a web-based Git repository hosting service. It allows us to keep a rem
     ssh -T git@github.com
    ```
 
-## Configure GPG keys on Github
+## Configure signed commits
 
-1. Install **OpenPGP** (_gpg_)
-
+1. Copy your key to the clipboard with the terminal command:
    ```sh
-   brew install gpg
+    pbcopy < ~/.ssh/id_rsa.pub
    ```
-
-2. Generate a GPG key
-
+2. On Github, create a descriptive title for your key, an paste into the `key` field - _do not add or remove and characters or whitespace to the key_
+3. Select the type of key to be `Signing Key`.
+4. Click `Add key`
+5. Configure Git to use SSH to sign commits and tags
    ```sh
-   gpg --full-generate-key
+   git config --global commit.gpgsign true
+   git config --global gpg.format ssh
    ```
-
-3. Check the GPG key pair
-
+6. To set your SSH signing key in Git with the path to the public key you'd like to use.
    ```sh
-   gpg --list-secret-keys --keyid-format LONG
+   git config --global user.signingkey ~/.ssh/id_rsa.pub
    ```
-
-4. Copy the GPG key ID you'd like to use, e.g.
-
-   ```sh
-   $ gpg --list-secret-keys --keyid-format LONG
-   /Users/hubot/.gnupg/secring.gpg
-   ------------------------------------
-   sec   4096R/<key number to copy> 2016-03-10 [expires: 2017-03-10]
-   uid                          Hubot
-   ssb   4096R/42B317FD4BA89E7A 2016-03-10
-   ```
-
-5. Copy the GPG key
-
-   ```sh
-   gpg --armor --export <key number> | pbcopy
-   ```
-
-6. Add your SSH key to GitHub by logging into Github, visiting **account settings** and clicking **GPG keys**. Click **Add GPG key**
 
 ## Speed up your cursor
 
