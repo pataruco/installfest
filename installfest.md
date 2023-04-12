@@ -2,9 +2,19 @@
 
 ## Pre-install
 
-1. Identify which version of OSX you're using - ideally you should have Big Sur or newer (11.14.x)
-2. Ensure you've got [Xcode installed](https://apps.apple.com/gb/app/xcode/id497799835)
-3. Ensure that you've uninstalled any antivirus software you may have, as it can prevent some of the tools from installing properly
+1. Identify which version of OSX you're using - ideally you should have Ventura or newer (13.3.x)
+2. Ensure that you've uninstalled any antivirus software you may have, as it can prevent some of the tools from installing properly
+
+## Install Xcode Command Line Tools
+
+- Open terminal an type
+
+  ```sh
+  xcode-select --install
+  ```
+
+- You'll see a panel that asks you to install Xcode Command Line Tools.
+- Click 'Install' to begin the download and installation process.
 
 ## Terminal
 
@@ -312,11 +322,7 @@ rbenv rehash
 1. Open a terminal window and type:
 
    ```sh
-   export NVM_DIR="$HOME/.nvm" && (
-   git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
-   cd "$NVM_DIR"
-   git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
-   ) && \. "$NVM_DIR/nvm.sh"
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
    ```
 
 2. Type `source ~/.nvmrc` to include the new folders to the current `$PATH`
