@@ -140,18 +140,18 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
 1. Add following to `.zshrc` file to increase ZSH history:
 
    ```sh
-      # History
-      export HISTFILE=~/.zsh_history
-      ## Increase history size
-      export HISTFILESIZE=1000000000
-      export HISTSIZE=1000000000
-      ## Immediate append
-      setopt INC_APPEND_HISTORY
-      export HISTTIMEFORMAT="[%F %T] "
-      ## Handling duplicate commands
-      setopt EXTENDED_HISTORY
-      setopt HIST_FIND_NO_DUPS
-      setopt HIST_IGNORE_ALL_DUPS
+   # History
+   export HISTFILE=~/.zsh_history
+   ## Increase history size
+   export HISTFILESIZE=1000000000
+   export HISTSIZE=1000000000
+   ## Immediate append
+   setopt INC_APPEND_HISTORY
+   export HISTTIMEFORMAT="[%F %T] "
+   ## Handling duplicate commands
+   setopt EXTENDED_HISTORY
+   setopt HIST_FIND_NO_DUPS
+   setopt HIST_IGNORE_ALL_DUPS
    ```
 
 ### Install personal ZSH scripts
@@ -175,43 +175,43 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
 3. To get started configuring starship, create the following file:`~/.config/starship.toml`
 
    ```toml
-       # Don't print a new line at the start of the prompt
-       add_newline = false
+    # Don't print a new line at the start of the prompt
+    add_newline = false
 
-       # Disable the package module, hiding it from the prompt completely
-      [package]
-      format = "via [🎁 $version](208 bold) "
+   # Disable the package module, hiding it from the prompt completely
+   [package]
+   format = "via [🎁 $version](208 bold) "
 
-      [git_branch]
-      symbol = "🌱 "
+   [git_branch]
+   symbol = "🌱 "
 
-      [nodejs]
-      format = "via [🤖 $version](bold green) "
+   [nodejs]
+   format = "via [🤖 $version](bold green) "
 
-      [directory]
-      truncation_length = 8
-      truncation_symbol = "…/"
+   [directory]
+   truncation_length = 8
+   truncation_symbol = "…/"
 
-      [docker_context]
-      format = "via [🐋 $context](blue bold)"
+   [docker_context]
+   format = "via [🐋 $context](blue bold)"
 
-      [kotlin]
-      symbol = "🅺 "
+   [kotlin]
+   symbol = "🅺 "
 
-      [kubernetes]
-      format = 'on [🐳 ($user on )($cluster in )$context \($namespace\)](dimmed green) '
-      disabled = false
+   [kubernetes]
+   format = 'on [🐳 ($user on )($cluster in )$context \($namespace\)](dimmed green) '
+   disabled = false
 
-      [rust]
-      format = "via [⚙️ $version](red bold)"
+   [rust]
+   format = "via [⚙️ $version](red bold)"
 
-      [sudo]
-      style = "bold green"
-      symbol = "👩‍💻 "
-      disabled = false
+   [sudo]
+   style = "bold green"
+   symbol = "👩‍💻 "
+   disabled = false
 
-      [terraform]
-      format = "[🏎💨 $workspace]($style) "
+   [terraform]
+   format = "[🏎💨 $workspace]($style) "
    ```
 
 ## Install [Bat 🦇](https://github.com/sharkdp/bat)
