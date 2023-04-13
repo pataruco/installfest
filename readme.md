@@ -387,6 +387,14 @@ Install the following **prettier** packages
 pnpm --global add prettier
 ```
 
+## Install Rust 🦀
+
+Just run this
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
 ## Install Git
 
 Git is the version control system that we will use throughout the course. It is one of the most powerful tools you will use as a developer.
