@@ -48,27 +48,32 @@
    - Navigate to **Profiles** > **Colors** > **Color presets...**
    - Select **one-dark**
 
-## Command Line Tools
+<details>
+  <summary>
+      ⚠️ If you already setup Xcode CLI tools skip these steps ⚠️
+  </summary>
 
 Xcode is a large suite of software development tools and libraries from Apple. The Xcode Command Line Tools are part of XCode. Installation of many common Unix-based tools requires the [GCC compiler](https://en.wikipedia.org/wiki/GNU_Compiler_Collection). The Xcode Command Line Tools include a GCC compiler.
 
-1. Run from the command line: `xcode-select --install`
-2. Choose `install tools` from the prompt and `agree` to the terms
-3. If you recieve a message saying "Can't install the software because it is not currently available from the Software Update server"... it's probably because the command line tools are already installed...
-4. Agree to the license by typing `sudo xcodebuild -license`
-5. Press enter, then `q`
-6. Then on the next prompt, type `agree`
-7. Run `xcodebuild -runFirstLaunch`
+1.  Run from the command line: `xcode-select --install`
+2.  Choose `install tools` from the prompt and `agree` to the terms
+3.  If you recieve a message saying "Can't install the software because it is not currently available from the Software Update server"... it's probably because the command line tools are already installed...
+4.  Agree to the license by typing `sudo xcodebuild -license`
+5.  Press enter, then `q`
+6.  Then on the next prompt, type `agree`
+7.  Run `xcodebuild -runFirstLaunch`
+
+</details>
 
 ## Homebrew Package Manager
 
-Homebrew is a package manager for ~~OSX~~ **Linux**.
+Homebrew is a package manager for ~~macOS~~ **Linux**.
 
-#### What are packages?
+### What are packages?
 
 Packages are bundles of source code distributed by developers of software, which can be compiled and installed on your machine.
 
-#### Install
+### Install
 
 1. The package manager allows us to install and update software (like Ruby, Git, MongoDB, etc) from the command line:
 2. Open [http://brew.sh/](http://brew.sh/), scroll down to Install Homebrew and copy+paste the command into the terminal.
@@ -79,11 +84,11 @@ Packages are bundles of source code distributed by developers of software, which
 
 ## Zsh
 
-#### What is a shell?
+### What is a shell?
 
 We will go into a bit more detail about the shell later on in the course but a shell is a very basic user interface for accessing an operating system's services.
 
-#### bash vs zsh
+### bash vs zsh
 
 Macs before OSX Catalina came shipped with a shell called 'bash' by default. Bash stands for **'Bourne-again shell'**, referring to its objective as a free replacement for the Bourne shell which was developed by [Steven Bourne](https://en.wikipedia.org/wiki/Stephen_R._Bourne).
 
@@ -135,18 +140,18 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
 1. Add following to `.zshrc` file to increase ZSH history:
 
    ```sh
-      # History
-      export HISTFILE=~/.zsh_history
-      ## Increase history size
-      export HISTFILESIZE=1000000000
-      export HISTSIZE=1000000000
-      ## Immediate append
-      setopt INC_APPEND_HISTORY
-      export HISTTIMEFORMAT="[%F %T] "
-      ## Handling duplicate commands
-      setopt EXTENDED_HISTORY
-      setopt HIST_FIND_NO_DUPS
-      setopt HIST_IGNORE_ALL_DUPS
+   # History
+   export HISTFILE=~/.zsh_history
+   ## Increase history size
+   export HISTFILESIZE=1000000000
+   export HISTSIZE=1000000000
+   ## Immediate append
+   setopt INC_APPEND_HISTORY
+   export HISTTIMEFORMAT="[%F %T] "
+   ## Handling duplicate commands
+   setopt EXTENDED_HISTORY
+   setopt HIST_FIND_NO_DUPS
+   setopt HIST_IGNORE_ALL_DUPS
    ```
 
 ### Install personal ZSH scripts
@@ -170,43 +175,43 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
 3. To get started configuring starship, create the following file:`~/.config/starship.toml`
 
    ```toml
-       # Don't print a new line at the start of the prompt
-       add_newline = false
+    # Don't print a new line at the start of the prompt
+    add_newline = false
 
-       # Disable the package module, hiding it from the prompt completely
-      [package]
-      format = "via [🎁 $version](208 bold) "
+   # Disable the package module, hiding it from the prompt completely
+   [package]
+   format = "via [🎁 $version](208 bold) "
 
-      [git_branch]
-      symbol = "🌱 "
+   [git_branch]
+   symbol = "🌱 "
 
-      [nodejs]
-      format = "via [🤖 $version](bold green) "
+   [nodejs]
+   format = "via [🤖 $version](bold green) "
 
-      [directory]
-      truncation_length = 8
-      truncation_symbol = "…/"
+   [directory]
+   truncation_length = 8
+   truncation_symbol = "…/"
 
-      [docker_context]
-      format = "via [🐋 $context](blue bold)"
+   [docker_context]
+   format = "via [🐋 $context](blue bold)"
 
-      [kotlin]
-      symbol = "🅺 "
+   [kotlin]
+   symbol = "🅺 "
 
-      [kubernetes]
-      format = 'on [🐳 ($user on )($cluster in )$context \($namespace\)](dimmed green) '
-      disabled = false
+   [kubernetes]
+   format = 'on [🐳 ($user on )($cluster in )$context \($namespace\)](dimmed green) '
+   disabled = false
 
-      [rust]
-      format = "via [⚙️ $version](red bold)"
+   [rust]
+   format = "via [⚙️ $version](red bold)"
 
-      [sudo]
-      style = "bold green"
-      symbol = "👩‍💻 "
-      disabled = false
+   [sudo]
+   style = "bold green"
+   symbol = "👩‍💻 "
+   disabled = false
 
-      [terraform]
-      format = "[🏎💨 $workspace]($style) "
+   [terraform]
+   format = "[🏎💨 $workspace]($style) "
    ```
 
 ## Install [Bat 🦇](https://github.com/sharkdp/bat)
@@ -282,6 +287,8 @@ Bundler manages Ruby gems per-project/application, and makes it trivial to insta
 gem install bundler
 rbenv rehash
 ```
+
+If you install a gem that includes 'binaries' (or any generally available command line scripts), you need to run `rbenv rehash` so that rbenv can create the necessary shim files, (a shim file ensures there's no threat of incompatibilities between libraries or systems like Bundler and rbenv.)
 
 ## Install pyenv
 
@@ -363,27 +370,6 @@ rbenv rehash
    pnpm setup
    ```
 
-## ESLint
-
-### Create `.eslintrc.json` file
-
-- Let define some rules for `eslint`
-
-  ```sh
-  code ~/.eslintrc.json
-  ```
-
-- Copy and paste this [text](https://gist.github.com/pataruco/353b75f87ad809dc96b64174b2201f60#file-eslintrc-json) in the file `.eslintrc.json`
-- Save file <kbd>command</kbd> + <kbd>S</kbd>.
-
-### Install `eslint` packages
-
-Install the following **eslint** packages
-
-```sh
-pnpm --global add eslint@latest eslint-plugin-react babel-eslint eslint-config-prettier
-```
-
 ## Prettier
 
 ### Create `.prettierrc.json` file
@@ -394,7 +380,7 @@ pnpm --global add eslint@latest eslint-plugin-react babel-eslint eslint-config-p
   code ~/.prettierrc
   ```
 
-- Copy and paste this [text](https://gist.github.com/pataruco/353b75f87ad809dc96b64174b2201f60#file-prettierrc-json) in the file `.prettierrc.json`
+- Copy and paste this [text](./prettier/prettierrc.json) in the file `.prettierrc.json`
 - Save file <kbd>command </kbd> + <kbd>S</kbd>.
 
 ### Install `prettier` packages
@@ -403,16 +389,6 @@ Install the following **prettier** packages
 
 ```sh
 pnpm --global add prettier
-```
-
-If you install a gem that includes 'binaries' (or any generally available command line scripts), you need to run `rbenv rehash` so that rbenv can create the necessary shim files, (a shim file ensures there's no threat of incompatibilities between libraries or systems like Bundler and rbenv.)
-
-## Install Wget
-
-We will often download files from the internet in the command line. We can install a tool to help us do that:
-
-```sh
-brew install wget
 ```
 
 ## Install Git
