@@ -7,6 +7,10 @@
 
 ## Install Xcode Command Line Tools
 
+Xcode is a large suite of software development tools and libraries from Apple.
+
+The Xcode Command Line Tools are part of Xcode. Installation of many common Unix-based tools requires the [GCC compiler](https://en.wikipedia.org/wiki/GNU_Compiler_Collection).The Xcode Command Line Tools include a GCC compiler.
+
 - Open terminal an type
 
   ```sh
@@ -47,23 +51,6 @@
    - Press <kbd>⌘</kbd> + <kbd>,</kbd>
    - Navigate to **Profiles** > **Colors** > **Color presets...**
    - Select **one-dark**
-
-<details>
-  <summary>
-      ⚠️ If you already setup Xcode CLI tools skip these steps ⚠️
-  </summary>
-
-Xcode is a large suite of software development tools and libraries from Apple. The Xcode Command Line Tools are part of XCode. Installation of many common Unix-based tools requires the [GCC compiler](https://en.wikipedia.org/wiki/GNU_Compiler_Collection). The Xcode Command Line Tools include a GCC compiler.
-
-1.  Run from the command line: `xcode-select --install`
-2.  Choose `install tools` from the prompt and `agree` to the terms
-3.  If you recieve a message saying "Can't install the software because it is not currently available from the Software Update server"... it's probably because the command line tools are already installed...
-4.  Agree to the license by typing `sudo xcodebuild -license`
-5.  Press enter, then `q`
-6.  Then on the next prompt, type `agree`
-7.  Run `xcodebuild -runFirstLaunch`
-
-</details>
 
 ## Homebrew Package Manager
 
@@ -154,7 +141,7 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
    setopt HIST_IGNORE_ALL_DUPS
    ```
 
-### Install personal ZSH scripts
+## Install personal ZSH scripts
 
 - Follow this instructions https://github.com/pataruco/sh-scripts
 
@@ -227,7 +214,7 @@ A cat(1) clone with syntax highlighting and Git integration.
 
 A Ruby version manager, is a programme designed to manage multiple installations of Ruby on the same device.
 
-#### Rbenv vs Rvm
+### Rbenv vs Rvm
 
 There are two main Ruby version managers, Rbenv and rvm. Both have advantages and disadvantages. On this course we are going to be using rvm.
 
@@ -238,7 +225,7 @@ rvm implode
 gem uninstall rvm
 ```
 
-#### Install Rbenv
+### Install Rbenv
 
 1. Install rbenv (the Ruby version manager) and ruby-build (the Ruby version builder) from Homebrew:
    ```sh
@@ -258,7 +245,7 @@ gem uninstall rvm
 4. Quit the current terminal (Cmd+Q)
 5. And then reopen the terminal application, ensuring there are no errors - you should be able to type `rbenv -v` and get a version number.
 
-## Install a version of Ruby with ruby-build
+### Install a version of Ruby with ruby-build
 
 Ruby-build is an rbenv plugin that provides an rbenv install command to compile and install different versions of Ruby on UNIX-like systems.
 
@@ -271,7 +258,7 @@ Ruby-build is an rbenv plugin that provides an rbenv install command to compile 
    `rbenv global 2.2.3`
 5. Test you have the right version with `ruby -v`
 
-## Skip gem rdoc generation
+### Skip gem rdoc generation
 
 Whenever we install a gem, it also installs a bunch of documentation we probably don't want - the following command allows us to avoid this:
 
@@ -279,7 +266,7 @@ Whenever we install a gem, it also installs a bunch of documentation we probably
 echo 'gem: --no-rdoc --no-ri' >> ~/.gemrc
 ```
 
-## Bundler
+### Bundler
 
 Bundler manages Ruby gems per-project/application, and makes it trivial to install all the dependencies for an application:
 
@@ -357,7 +344,7 @@ If you install a gem that includes 'binaries' (or any generally available comman
 
 6. To use `nvm use` automatically in a directory with a `.nvmrc` file add [this script](https://github.com/nvm-sh/nvm#zsh) to `.zshrc`
 
-## PNPM
+## Install PNPM
 
 1. Install pnpm
 
@@ -380,7 +367,16 @@ If you install a gem that includes 'binaries' (or any generally available comman
   code ~/.prettierrc
   ```
 
-- Copy and paste this [text](./prettier/prettierrc.json) in the file `.prettierrc.json`
+- Copy and paste
+  ```json
+  {
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true,
+    "endOfLine": "lf"
+  }
+  ```
 - Save file <kbd>command </kbd> + <kbd>S</kbd>.
 
 ### Install `prettier` packages
@@ -486,7 +482,7 @@ git-clean(){
 
 There are a few files that we don't want Git to track. We can specifically ignore them by adding the files to a global `.gitignore` file.
 
-#### .DS_Store files
+### .DS_Store files
 
 `.DS_Store` files are used by Mac OS X to store folder specific metadata information. They are different for every mac, it means that they often cause conflicts in version controlled folders.
 
@@ -497,7 +493,7 @@ echo .DS_Store >> ~/.gitignore_global
 git config --global core.excludesfile ~/.gitignore_global
 ```
 
-#### public/uploads/, node_modules & bower_components
+### public/uploads/, node_modules & bower_components
 
 In the same way, we want to never track the contents of our uploads folder in Rails (which usually contain images or media that we have uploaded during testing) or our node_modules or bower_components.
 
@@ -505,7 +501,7 @@ In the same way, we want to never track the contents of our uploads folder in Ra
 echo "/public/uploads/\nnode_modules/\nbower_components/" >> ~/.gitignore_global
 ```
 
-#### autocorrect
+### autocorrect
 
 Enable auto-correct the suggested command will run after a short delay to give you the chance to cancel the command if it is not what you intended
 
