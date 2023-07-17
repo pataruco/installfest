@@ -162,8 +162,8 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
 3. To get started configuring starship, create the following file:`~/.config/starship.toml`
 
    ```toml
-    # Don't print a new line at the start of the prompt
-    add_newline = false
+   # Don't print a new line at the start of the prompt
+   add_newline = false
 
    # Disable the package module, hiding it from the prompt completely
    [package]
@@ -186,7 +186,7 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
    symbol = "🅺 "
 
    [kubernetes]
-   format = 'on [🐳 ($user on )($cluster in )$context \($namespace\)](dimmed green) '
+   format = 'on [🐳 $context \($namespace\)](bold green) '
    disabled = false
 
    [rust]
