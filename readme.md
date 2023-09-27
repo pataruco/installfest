@@ -346,13 +346,21 @@ If you install a gem that includes 'binaries' (or any generally available comman
 
 ## Install PNPM
 
+Since v16.13, Node.js is shipping [Corepack](https://nodejs.org/api/corepack.html) for managing package managers.
+
+1. Enable corepack
+
+   ```sh
+   corepack enable
+   ```
+
 1. Install pnpm
 
    ```sh
-   brew install pnpm
+   corepack prepare pnpm@latest --activate
    ```
 
-2. Configure PNPM to work globally
+1. Configure PNPM to work globally
    ```sh
    pnpm setup
    ```
