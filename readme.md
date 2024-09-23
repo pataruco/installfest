@@ -30,12 +30,30 @@ The Xcode Command Line Tools are part of Xcode. Installation of many common Unix
 
 ## Text editor
 
+### Zed
+
+[Zed](https://zed.dev/) Zed is a next-generation code editor designed for
+high-performance collaboration with humans and AI, written in Rust 🦀.
+
+1. Download Zed
+2. Move the app from downloads folder to application folder
+3. Open Zed
+4. Open the settings with <kbd>⌘</kbd> + <kbd>,</kbd>
+5. Copy and paste the contents of this [`settings.json`](./configs/zed/settings.json) file into the settings
+6. Install the CLI integration by press `Zed > Install CLI Integration`
+
+### VS Code
+
 [Visual Studio](https://code.visualstudio.com/Download) Code is a lightweight but powerful source code editor which runs on your desktop and is available for Windows, macOS and Linux. It comes with built-in support for JavaScript, TypeScript and Node.js
 
 1. Download Visual Studio
 2. Move the app from downloads folder to application folder
 3. Open Visual studio
-4. Turn on **Settings sync**
+4. Install CLI integration
+   - Press <kbd>⌘</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>
+   - Type `Shell Command: Install 'code' command in PATH` and press <kbd>Enter</kbd>
+5. Turn on **Settings sync**
+
    ![](https://code.visualstudio.com/assets/docs/editor/settings-sync/turn-on-sync.png)
 
 ## Terminal theme
@@ -43,7 +61,7 @@ The Xcode Command Line Tools are part of Xcode. Installation of many common Unix
 1. Create file called `one-dark.itermcolors` on the `~/Desktop` and open it
 
    ```sh
-   code  ~/Desktop/one-dark.itermcolors
+   zed  ~/Desktop/one-dark.itermcolors
    ```
 
 2. Copy and paste [**One Dark theme** code](https://raw.githubusercontent.com/one-dark/iterm-one-dark-theme/master/One%20Dark.itermcolors) into the file
@@ -69,81 +87,78 @@ Packages are bundles of source code distributed by developers of software, which
 
 (**Note**: the absolute paths will not be used after the next step, but might not be needed if they already have `/usr/local/bin` in their \$PATH)
 
-## Zsh
+## Fish Shell
 
-### What is a shell?
-
-We will go into a bit more detail about the shell later on in the course but a shell is a very basic user interface for accessing an operating system's services.
-
-### bash vs zsh
-
-Macs before OSX Catalina came shipped with a shell called 'bash' by default. Bash stands for **'Bourne-again shell'**, referring to its objective as a free replacement for the Bourne shell which was developed by [Steven Bourne](https://en.wikipedia.org/wiki/Stephen_R._Bourne).
-
-<details>
-  <summary>
-    ⚠️ If you are using Catalina or a greater version skip these inside steps ⚠️
-  </summary>
-
-We are going to use another shell called zsh because it has some extra features to make our web-development easier.
-
-The American English pronunciation of Z is "zee", so Z shell rhymes with C shell, which sounds like seashell. zsh was also the login of the original developer Paul Falstad's Yale professor Zhong Shao.
-
-#### Install
-
-1.  Type `brew install zsh` Type `0` if the prompt ask you about .zshrc
-2.  Type `zsh` . You should have a different prompt
-3.  Type `exit` to return to bash
-4.  Type `which zsh` to determine where your new shell has installed
-5.  Type `code /etc/shells` and add `/YOUR/PATH/TO/zsh`. (Lists trusted shells. The chsh command allows users to change their login shell only to shells listed in this file)
-6.  In a new tab, type `chsh -s /YOUR/PATH/TO/zsh`, then close and reopen your terminal application to This will enable zsh by default.
-7.  Type `echo $SHELL`. this should return `/YOUR/PATH/TO/zsh`
-</details>
-
-## Oh-My-Zsh
-
-Oh My Zsh is an open source, community-driven framework for managing your zsh configuration. Here is the link to the [Github](https://github.com/robbyrussell/oh-my-zsh).
-
-The `PATH` environment variable is a colon-delimited list of directories that your shell searches through when you enter a command.
-
-1. Type
+1. Install Fish shell
 
    ```sh
-   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+   brew install fish
    ```
 
-2. Restart the terminal (close and open)
-
-3. Add following to `.zshrc` file to make VSCode the default text editor:
+2. Add the shell to `/etc/shells` with
 
    ```sh
-   export EDITOR='code -w -n'
+    echo /usr/local/bin/fish | sudo tee -a /etc/shells
+   ```
+
+3. Change the default shell to Fish
+
+   ```sh
+    chsh -s /usr/local/bin/fish
+   ```
+
+4. Confiigure iTerm to use Fish shell
+   - Open iTerm
+   - Press <kbd>⌘</kbd> + <kbd>,</kbd>
+   - Navigate to **Profiles** > **General** > **Command**
+   - Select **Command** `Custom Shell` and type `/usr/local/bin/fish`
+   - Check `Load integration automatically`
+
+### Install [Fisher](https://github.com/jorgebucaran/fisher) plugin manager
+
+Run the following command to install Fisher:
+
+```sh
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+```
+
+### Install [Bass](https://github.com/edc/bass) plugin
+
+Bass makes it easy to use utilities written for Bash in fish shell.
+
+```sh
+fisher install edc/bass
+```
+
+### Install [onedark-fish](https://github.com/rkbk60/onedark-fish) theme
+
+```sh
+fisher rkbk60/onedark-fish
+```
+
+### Configure Fish shell
+
+1. Create a file called `config.fish` in the `~/.config/fish` directory
+
+   ```sh
+    zed ~/.config/fish/config.fish
+   ```
+
+2. Add the following to the file
+
+   ```sh
+   if status is-interactive
+      # Commands to run in interactive sessions can go here
+      set_onedark
+   end
+
+   # Homebrew
+   export HOMEBREW_PREFIX="/opt/homebrew"
+
+   # set editor
+   export EDITOR='zed -w -n'
    export PAGER='less -f'
    ```
-
-4. 2. Restart the terminal (close and open) the prompt should be a tilde (**~**), and in colour.
-
-### Increase ZSH history
-
-1. Add following to `.zshrc` file to increase ZSH history:
-
-   ```sh
-   # History
-   export HISTFILE=~/.zsh_history
-   ## Increase history size
-   export HISTFILESIZE=1000000000
-   export HISTSIZE=1000000000
-   ## Immediate append
-   setopt INC_APPEND_HISTORY
-   export HISTTIMEFORMAT="[%F %T] "
-   ## Handling duplicate commands
-   setopt EXTENDED_HISTORY
-   setopt HIST_FIND_NO_DUPS
-   setopt HIST_IGNORE_ALL_DUPS
-   ```
-
-## Install personal ZSH scripts
-
-- Follow this instructions https://github.com/pataruco/sh-scripts
 
 ## Install [Starship 🚀](https://starship.rs/)
 
@@ -153,10 +168,11 @@ The `PATH` environment variable is a colon-delimited list of directories that yo
    brew install starship
    ```
 
-2. Add following to `.zshrc` to make Starship run on ZSH init
+2. Add following to `~/.config/fish/config.fish`
 
    ```sh
-   eval "$(starship init zsh)"
+    # Starship configuration
+    starship init fish | source
    ```
 
 3. To get started configuring starship, create the following file:`~/.config/starship.toml`
@@ -210,73 +226,6 @@ A cat(1) clone with syntax highlighting and Git integration.
    brew install bat
    ```
 
-## Ruby Environment (Rbenv)
-
-A Ruby version manager, is a programme designed to manage multiple installations of Ruby on the same device.
-
-### Rbenv vs Rvm
-
-There are two main Ruby version managers, Rbenv and rvm. Both have advantages and disadvantages. On this course we are going to be using rvm.
-
-**Note**: If a student does have rvm installed:
-
-```sh
-rvm implode
-gem uninstall rvm
-```
-
-### Install Rbenv
-
-1. Install rbenv (the Ruby version manager) and ruby-build (the Ruby version builder) from Homebrew:
-   ```sh
-    brew install ruby-build rbenv
-   ```
-2. Ensure that rbenv is loaded whenever we open a command line session:
-
-   ```sh
-   echo 'if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi' >> ~/.zshrc
-
-   ```
-
-3. Move the rbenv environment higher in the load order:
-   ```sh
-    echo 'export PATH=$HOME/.rbenv/shims:$PATH' >> ~/.zshrc
-   ```
-4. Quit the current terminal (Cmd+Q)
-5. And then reopen the terminal application, ensuring there are no errors - you should be able to type `rbenv -v` and get a version number.
-
-### Install a version of Ruby with ruby-build
-
-Ruby-build is an rbenv plugin that provides an rbenv install command to compile and install different versions of Ruby on UNIX-like systems.
-
-1. OS X 10.9 comes with Ruby baked in, but it's version is not the latest one. We could upgrade that version of Ruby to a newer one, but what if we needed to run one version of Ruby for one app, and a different version for another?
-2. Install Ruby 2.2.3. This is the latest stable version of Ruby:
-   `rbenv install 2.2.3`
-3. This is required every time we install a new Ruby or install a gem with a binary:
-   `rbenv rehash`
-4. Set the global Ruby to the one we've just installed, which is a sensible default:
-   `rbenv global 2.2.3`
-5. Test you have the right version with `ruby -v`
-
-### Skip gem rdoc generation
-
-Whenever we install a gem, it also installs a bunch of documentation we probably don't want - the following command allows us to avoid this:
-
-```sh
-echo 'gem: --no-rdoc --no-ri' >> ~/.gemrc
-```
-
-### Bundler
-
-Bundler manages Ruby gems per-project/application, and makes it trivial to install all the dependencies for an application:
-
-```sh
-gem install bundler
-rbenv rehash
-```
-
-If you install a gem that includes 'binaries' (or any generally available command line scripts), you need to run `rbenv rehash` so that rbenv can create the necessary shim files, (a shim file ensures there's no threat of incompatibilities between libraries or systems like Bundler and rbenv.)
-
 ## Install pyenv
 
 [pyenv](https://github.com/pyenv/pyenv) lets you easily switch between multiple versions of Python.
@@ -286,12 +235,15 @@ If you install a gem that includes 'binaries' (or any generally available comman
    brew install pyenv
    brew install pyenv-virtualenv
    ```
-2. Set up shell environment for Pyenv
+2. Set up shell environment for Pyenv in `~/.config/fish/config.fish`
+
    ```sh
-   echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
-   echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
-   echo 'eval "$(pyenv init -)"' >> ~/.zshrc
-   echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.zshrc
+   if status is-interactive
+      pyenv virtualenv-init - | source
+      pyenv init - | source
+   end
+
+    alias brew="env PATH=(string replace (pyenv root)/shims '' \"\$PATH\") brew"
    ```
 
 ## Install python
@@ -311,15 +263,63 @@ If you install a gem that includes 'binaries' (or any generally available comman
    pip install -upgrade pip
    ```
 
-## Install nvm
+## [NVM](https://github.com/nvm-sh/nvm) Node Version Manager
+
+### Install
 
 1. Open a terminal window and type:
 
+   > Check the latest [nvm](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating)
+
    ```sh
-   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
    ```
 
 2. Type `source ~/.nvmrc` to include the new folders to the current `$PATH`
+
+### Deeper shell integration
+
+> Read more [here](https://github.com/nvm-sh/nvm?tab=readme-ov-file#deeper-shell-integration)
+
+1. Create the following fish functions
+
+```sh
+# ~/.config/fish/functions/nvm.fish
+function nvm
+  bass source ~/.nvm/nvm.sh --no-use ';' nvm $argv
+end
+
+# ~/.config/fish/functions/nvm_find_nvmrc.fish
+function nvm_find_nvmrc
+  bass source ~/.nvm/nvm.sh --no-use ';' nvm_find_nvmrc
+end
+
+# ~/.config/fish/functions/load_nvm.fish
+function load_nvm --on-variable="PWD"
+  set -l default_node_version (nvm version default)
+  set -l node_version (nvm version)
+  set -l nvmrc_path (nvm_find_nvmrc)
+  if test -n "$nvmrc_path"
+    set -l nvmrc_node_version (nvm version (cat $nvmrc_path))
+    if test "$nvmrc_node_version" = "N/A"
+      nvm install (cat $nvmrc_path)
+    else if test "$nvmrc_node_version" != "$node_version"
+      nvm use $nvmrc_node_version
+    end
+  else if test "$node_version" != "$default_node_version"
+    echo "Reverting to default Node version"
+    nvm use default
+  end
+end
+```
+
+2. Invoke on `~/.config/fish/config.fish` by
+
+```sh
+load_nvm > /dev/stderr
+```
+
+### Using NVM
 
 3. Now that nvm is installed, we want to list the available versions, type:
 
@@ -342,7 +342,7 @@ If you install a gem that includes 'binaries' (or any generally available comman
 
    - You should see the last version number that you've installed
 
-6. To use `nvm use` automatically in a directory with a `.nvmrc` file add [this script](https://github.com/nvm-sh/nvm#zsh) to `.zshrc`
+6. To use `nvm use` automatically in a directory with a `.nvmrc` file add
 
 ## Install PNPM
 
@@ -354,16 +354,34 @@ Since v16.13, Node.js is shipping [Corepack](https://nodejs.org/api/corepack.htm
    corepack enable
    ```
 
-1. Install pnpm
+2. Install pnpm
 
    ```sh
    corepack prepare pnpm@latest --activate
    ```
 
-1. Configure PNPM to work globally
+3. Configure PNPM to work globally
    ```sh
    pnpm setup
    ```
+4. Add the following to `~/.config/fish/config.fish`
+
+   ```sh
+   # pnpm
+   set -gx PNPM_HOME "/Users/pataruco/Library/pnpm"
+   if not string match -q -- $PNPM_HOME $PATH
+      set -gx PATH "$PNPM_HOME" $PATH
+   end
+   # pnpm end
+   ```
+
+## Biome
+
+Install Biome
+
+```sh
+brew install biome
+```
 
 ## Prettier
 
@@ -371,20 +389,12 @@ Since v16.13, Node.js is shipping [Corepack](https://nodejs.org/api/corepack.htm
 
 - Let define some rules for `prettier`
 
-  ```sh
-  code ~/.prettierrc
-  ```
+```sh
+zed ~/.prettierrc
+```
 
-- Copy and paste
-  ```json
-  {
-    "trailingComma": "all",
-    "tabWidth": 2,
-    "semi": true,
-    "singleQuote": true,
-    "endOfLine": "lf"
-  }
-  ```
+- Copy and paste this [configuration](./configs/prettier/prettierrc.json)
+
 - Save file <kbd>command </kbd> + <kbd>S</kbd>.
 
 ### Install `prettier` packages
@@ -472,27 +482,26 @@ git config --global init.defaultBranch main
         file-decoration-style = none
    ```
 
-## `git lb` Git alias for recent branches
-
-1. Paste the following in `~/.gitconfig`
-
-```toml
-[alias]
-    lb = !git reflog show --pretty=format:'%gs ~ %gd' --date=relative | grep 'checkout:' | grep -oE '[^ ]+ ~ .*' | awk -F~ '!seen[$1]++' | head -n 10 | awk -F' ~ HEAD@{' '{printf(\"  \\033[33m%s: \\033[37m %s\\033[0m\\n\", substr($2, 1, length($2)-1), $1)}'
-```
-
 ## `git-clean`
 
-1. Paste the following in `~/.zshrc`
+> Based on # Git Remove tracking branches no longer on remotE https://stackoverflow.com/a/33548037/4842303
 
-```sh
-# Git Remove tracking branches no longer on remote
-# https://stackoverflow.com/a/33548037/4842303
+1. Create a fish file function
 
-git-clean(){
-  git fetch -p && for branch in $(git for-each-ref --format '%(refname) %(upstream:track)' refs/heads | awk '$2 == "[gone]" {sub("refs/heads/", "", $1); print $1}'); do git branch -D $branch; done
-}
-```
+   ```sh
+   zed ~/.config/fish/functions/git_clean.fish
+   ```
+
+2. Add the following function
+
+   ```sh
+   function git-clean
+    git fetch -p
+    for branch in (git for-each-ref --format '%(refname) %(upstream:track)' refs/heads | awk '$2 == "[gone]" {sub("refs/heads/", "", $1); print $1}')
+      git branch -D $branch
+    end
+   end
+   ```
 
 ## Global `.gitignore`
 
