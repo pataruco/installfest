@@ -226,27 +226,36 @@ A cat(1) clone with syntax highlighting and Git integration.
    brew install bat
    ```
 
-## Install pyenv
+## Install `pyenv` Python Version Manager
 
 [pyenv](https://github.com/pyenv/pyenv) lets you easily switch between multiple versions of Python.
 
 1. Install
+
    ```sh
    brew install pyenv
    brew install pyenv-virtualenv
    ```
-2. Set up shell environment for Pyenv in `~/.config/fish/config.fish`
+
+2. Set up your shell environment for Pyenv, run this
+   ```sh
+   set -Ux PYENV_ROOT $HOME/.pyenv
+   fish_add_path $PYENV_ROOT/bin
+   ```
+3. Set up shell environment for Pyenv in `~/.config/fish/config.fish`
 
    ```sh
-   if status is-interactive
-      pyenv virtualenv-init - | source
-      pyenv init - | source
-   end
-
+    # Load pyenv
+    pyenv init - | source
     alias brew="env PATH=(string replace (pyenv root)/shims '' \"\$PATH\") brew"
    ```
 
-## Install python
+4. Restart the shell
+   ```sh
+   exec "$SHELL"
+   ```
+
+## Install Python
 
 > Check the latest [python](https://www.python.org/downloads/) version and replace the semver number
 
