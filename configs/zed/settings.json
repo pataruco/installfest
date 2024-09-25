@@ -7,19 +7,26 @@
 // custom settings, run `zed: open default settings` from the
 // command palette
 {
-	"assistant": {
-		"default_model": {
-			"provider": "copilot_chat",
-			"model": "gpt-4o"
-		},
-		"version": "2"
-	},
-	"ui_font_size": 16,
-	"buffer_font_size": 16,
-	"buffer_font_family": "Monaco",
-	"theme": {
-		"mode": "system",
-		"light": "One Light",
-		"dark": "One Dark Pro"
-	}
+  "assistant": {
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4o"
+    },
+    "version": "2"
+  },
+  "buffer_font_size": 16,
+  "buffer_font_family": "Monaco",
+  "code_actions_on_format": {
+    "source.fixAll.biome": true,
+    "source.organizeImports.biome": true,
+    "source.organizeImports": true
+  },
+  "format_on_save": "on",
+  "language_servers": ["!eslint", "prettier"],
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "One Dark Pro"
+  },
+  "ui_font_size": 16
 }
