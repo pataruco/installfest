@@ -9,10 +9,13 @@ This document describes the calibration for 2 displays Dell U2415 in my setup.
 - Open the display settings and select the new configuration
 - Open the display configuration in your monitor by clicking on the menu button
 - Navigate to `Brightness/Contrast` and set the following values:
-  - Brightness: `100`
+  - Brightness: `75`
   - Contrast: `75`
 - Navigate to `Color` and set the following values:
-  - Preset mode: `Color temp`
-  - Gamma: `Mac`
+  - Preset mode: `Custom color`
+    - R: `100`
+    - G: `100`
+    - B: `100`
+  - Gamma: `PC`
 - Navigate to `Display` and set the following value
 - Sharpness: `100`
