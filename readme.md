@@ -98,20 +98,20 @@ Packages are bundles of source code distributed by developers of software, which
 2. Add the shell to `/etc/shells` with
 
    ```sh
-    echo /usr/local/bin/fish | sudo tee -a /etc/shells
+    echo $(which fish) | sudo tee -a /etc/shells
    ```
 
 3. Change the default shell to Fish
 
    ```sh
-    chsh -s /usr/local/bin/fish
+    chsh -s $(which fish)
    ```
 
-4. Confiigure iTerm to use Fish shell
+4. Configure iTerm to use Fish shell
    - Open iTerm
    - Press <kbd>⌘</kbd> + <kbd>,</kbd>
    - Navigate to **Profiles** > **General** > **Command**
-   - Select **Command** `Custom Shell` and type `/usr/local/bin/fish`
+   - Select **Command** `Login Shell`
    - Check `Load integration automatically`
 
 ### Install [Fisher](https://github.com/jorgebucaran/fisher) plugin manager
@@ -149,6 +149,7 @@ fisher rkbk60/onedark-fish
    ```sh
    if status is-interactive
       # Commands to run in interactive sessions can go here
+      fish_add_path /opt/homebrew/bin
       set_onedark
    end
 
@@ -170,9 +171,11 @@ fisher rkbk60/onedark-fish
 
 2. Add following to `~/.config/fish/config.fish`
 
-   ```sh
-    # Starship configuration
-    starship init fish | source
+   ```fish
+    if status is-interactive
+        # ... other commands
+        starship init fish | source
+    end
    ```
 
 3. To get started configuring starship, create the following file:`~/.config/starship.toml`
@@ -324,8 +327,11 @@ end
 
 2. Invoke on `~/.config/fish/config.fish` by
 
-```sh
-load_nvm > /dev/stderr
+```fish
+if status is-interactive
+    # ... other commands
+    load_nvm > /dev/stderr
+end
 ```
 
 ### Using NVM
@@ -375,7 +381,7 @@ Since v16.13, Node.js is shipping [Corepack](https://nodejs.org/api/corepack.htm
    ```
 4. Add the following to `~/.config/fish/config.fish`
 
-   ```sh
+   ```fish
    # pnpm
    set -gx PNPM_HOME "/Users/pataruco/Library/pnpm"
    if not string match -q -- $PNPM_HOME $PATH
