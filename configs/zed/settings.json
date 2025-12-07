@@ -7,6 +7,10 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+	"agent": {
+		"default_profile": "ask",
+		"model_parameters": []
+	},
 	"icon_theme": "Catppuccin Mocha",
 	"base_keymap": "VSCode",
 	"buffer_font_family": "Monaco",
@@ -23,45 +27,61 @@
 			"code_actions_on_format": {
 				"source.fixAll.biome": true,
 				"source.organizeImports.biome": true
-			}
+			},
+			"colorize_brackets": true
 		},
 		"TypeScript": {
 			"formatter": { "language_server": { "name": "biome" } },
 			"code_actions_on_format": {
 				"source.fixAll.biome": true,
 				"source.organizeImports.biome": true
-			}
+			},
+			"colorize_brackets": true
 		},
 		"TSX": {
 			"formatter": { "language_server": { "name": "biome" } },
 			"code_actions_on_format": {
 				"source.fixAll.biome": true,
 				"source.organizeImports.biome": true
-			}
+			},
+			"colorize_brackets": true
 		},
 		"JSON": {
 			"formatter": { "language_server": { "name": "biome" } },
 			"code_actions_on_format": {
 				"source.fixAll.biome": true
-			}
+			},
+			"colorize_brackets": true
 		},
 		"JSONC": {
 			"formatter": { "language_server": { "name": "biome" } },
 			"code_actions_on_format": {
 				"source.fixAll.biome": true
-			}
+			},
+			"colorize_brackets": true
 		},
 		"CSS": {
 			"formatter": { "language_server": { "name": "biome" } },
 			"code_actions_on_format": {
 				"source.fixAll.biome": true
-			}
+			},
+			"colorize_brackets": true
 		},
 		"GraphQL": {
 			"formatter": { "language_server": { "name": "biome" } },
 			"code_actions_on_format": {
 				"source.fixAll.biome": true
-			}
+			},
+			"colorize_brackets": true
+		},
+		"HCL": {
+			"colorize_brackets": true
+		},
+		"Terraform": {
+			"colorize_brackets": true
+		},
+		"Helm": {
+			"colorize_brackets": true
 		}
 	}
 }
