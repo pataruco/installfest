@@ -7,8 +7,18 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+	"edit_predictions": {
+		"disabled_globs": ["**/.env"],
+		"mode": "eager"
+	},
 	"agent": {
-		"default_profile": "ask",
+		"default_model": {
+			"provider": "zed.dev",
+			"model": "claude-opus-4-6-thinking",
+			"enable_thinking": true,
+			"effort": "high"
+		},
+		"favorite_models": [],
 		"model_parameters": []
 	},
 	"icon_theme": "Catppuccin Mocha",
@@ -49,7 +59,12 @@
 		"JSON": {
 			"formatter": { "language_server": { "name": "biome" } },
 			"code_actions_on_format": {
-				"source.fixAll.biome": true
+				"source.fixAll.biome": true,
+				"source.organizeImports.biome": true,
+				"source.sortImports.biome": true,
+				"source.sortProperties.biome": true,
+				"source.sortKeys.biome": true,
+				"source.sortAttributes.biome": true
 			},
 			"colorize_brackets": true
 		},
@@ -82,6 +97,32 @@
 		},
 		"Helm": {
 			"colorize_brackets": true
+		},
+		"YAML": {
+			"formatter": "language_server"
+		}
+	},
+	"lsp": {
+		"yaml-language-server": {
+			"settings": {
+				"yaml": {
+					"format": {
+						"enable": true,
+						"singleQuote": false
+					}
+				}
+			}
+		},
+		"rust-analyzer": {
+			"initialization_options": {
+				"cargo": {
+					"features": "all"
+				},
+				"check": {
+					"command": "clippy",
+					"extraArgs": ["--", "-W", "clippy::pedantic", "clippy::nursery"]
+				}
+			}
 		}
 	}
 }
