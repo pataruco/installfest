@@ -1,6 +1,7 @@
 # Content Design Principles — Full Reference
 
 ## Table of Contents
+
 1. Start with user needs
 2. Front-loading
 3. Plain language
@@ -65,10 +66,12 @@ Good: "You can apply online if you have a valid passport."
 **In lists:** front-load each item so users can scan the first word or two.
 
 Bad:
+
 - To submit your application, click the green button
 - For checking your status, use the dashboard
 
 Good:
+
 - Submit your application — click the green button
 - Check your status — use the dashboard
 
@@ -83,20 +86,20 @@ and the information they need.
 
 Use everyday words. If a simpler synonym exists and means the same thing, use it.
 
-| Instead of       | Use             |
-|-------------------|-----------------|
-| commence          | start           |
-| terminate         | end / stop      |
-| utilise           | use             |
-| facilitate        | help            |
-| in order to       | to              |
-| prior to          | before          |
-| subsequent to     | after           |
-| in the event of   | if              |
-| at this point in time | now         |
-| a number of       | some            |
-| in excess of      | more than       |
-| with regard to    | about           |
+| Instead of            | Use        |
+| --------------------- | ---------- |
+| commence              | start      |
+| terminate             | end / stop |
+| utilise               | use        |
+| facilitate            | help       |
+| in order to           | to         |
+| prior to              | before     |
+| subsequent to         | after      |
+| in the event of       | if         |
+| at this point in time | now        |
+| a number of           | some       |
+| in excess of          | more than  |
+| with regard to        | about      |
 
 ### Jargon
 
@@ -298,6 +301,7 @@ Content should not exclude, stereotype, or cause harm.
 ### Assumptions about the user
 
 Don't assume:
+
 - Technical knowledge (unless writing for a technical audience)
 - Familiarity with your service or organisation
 - English as a first language
@@ -316,6 +320,7 @@ Tone should be appropriate to the context, not uniform across all content.
 **Celebratory (with restraint):** task completion, milestones — don't overdo it
 
 The underlying voice should be clear, confident, and respectful. Avoid:
+
 - Overfamiliarity ("Hey there! Oops, something went wrong 😅")
 - Corporate emptiness ("We value your patience during this process")
 - Condescension ("It's easy! Just follow these simple steps")

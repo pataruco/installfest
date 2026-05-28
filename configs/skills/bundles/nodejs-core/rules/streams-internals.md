@@ -327,8 +327,7 @@ Duplex streams combine Readable and Writable:
 // lib/internal/streams/duplex.js
 
 function Duplex(options) {
-  if (!(this instanceof Duplex))
-    return new Duplex(options);
+  if (!(this instanceof Duplex)) return new Duplex(options);
 
   Readable.call(this, options);
   Writable.call(this, options);
@@ -409,7 +408,7 @@ function pipeline(...streams) {
     return destroyer(stream, !isLast, isLast, (err) => {
       if (!error) error = err;
       if (err) {
-        destroys.forEach(d => d());
+        destroys.forEach((d) => d());
       }
       if (isLast) {
         callback(error);
@@ -494,7 +493,7 @@ console.log({
   flowing: state.flowing,
   ended: state.ended,
   reading: state.reading,
-  needReadable: state.needReadable
+  needReadable: state.needReadable,
 });
 
 const writable = getWritableStream();
@@ -505,7 +504,7 @@ console.log({
   writing: wState.writing,
   ended: wState.ended,
   finished: wState.finished,
-  bufferProcessing: wState.bufferProcessing
+  bufferProcessing: wState.bufferProcessing,
 });
 ```
 
@@ -515,7 +514,7 @@ console.log({
 const { EventEmitter } = require('node:events');
 
 const originalEmit = EventEmitter.prototype.emit;
-EventEmitter.prototype.emit = function(event, ...args) {
+EventEmitter.prototype.emit = function (event, ...args) {
   if (this._readableState || this._writableState) {
     console.log(`[${this.constructor.name}] ${event}`, args.slice(0, 1));
   }
@@ -530,7 +529,7 @@ EventEmitter.prototype.emit = function(event, ...args) {
 ```javascript
 // BAD: Ignoring write() return value
 for (const chunk of chunks) {
-  stream.write(chunk);  // May buffer indefinitely!
+  stream.write(chunk); // May buffer indefinitely!
 }
 
 // GOOD: Respect backpressure
@@ -548,7 +547,7 @@ async function writeWithBackpressure(stream, chunks) {
 ```javascript
 // BAD: Data lost
 stream.on('data', (chunk) => {
-  processAsync(chunk);  // Not awaited
+  processAsync(chunk); // Not awaited
 });
 stream.on('end', () => {
   // Processing may not be complete!

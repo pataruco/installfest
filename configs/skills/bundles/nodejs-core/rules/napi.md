@@ -26,17 +26,17 @@ napi_create_string_utf8(env, "hello", NAPI_AUTO_LENGTH, &str);
 
 N-API has versioned features:
 
-| N-API Version | Node.js Version | Key Features |
-|---------------|-----------------|--------------|
-| 1 | 8.0.0 | Core API |
-| 2 | 8.10.0 | async hooks integration |
-| 3 | 10.0.0 | BigInt support |
-| 4 | 10.16.0 | Instance data |
-| 5 | 12.11.0 | Date, finalization |
-| 6 | 12.17.0 | Object freeze/seal |
-| 7 | 14.12.0 | Detached ArrayBuffer |
-| 8 | 15.0.0 | Type tagging |
-| 9 | 18.17.0 | Extended Buffer API |
+| N-API Version | Node.js Version | Key Features            |
+| ------------- | --------------- | ----------------------- |
+| 1             | 8.0.0           | Core API                |
+| 2             | 8.10.0          | async hooks integration |
+| 3             | 10.0.0          | BigInt support          |
+| 4             | 10.16.0         | Instance data           |
+| 5             | 12.11.0         | Date, finalization      |
+| 6             | 12.17.0         | Object freeze/seal      |
+| 7             | 14.12.0         | Detached ArrayBuffer    |
+| 8             | 15.0.0          | Type tagging            |
+| 9             | 18.17.0         | Extended Buffer API     |
 
 ```cpp
 // Check N-API version at compile time
@@ -162,7 +162,7 @@ NAPI_MODULE(NODE_GYP_MODULE_NAME, Init)
 ```javascript
 const addon = require('./build/Release/addon');
 
-console.log(addon.add(1, 2));  // 3
+console.log(addon.add(1, 2)); // 3
 ```
 
 ## Error Handling
@@ -487,7 +487,7 @@ Usage:
 const { Counter } = require('./build/Release/addon');
 
 const counter = new Counter();
-console.log(counter.value);     // 0
+console.log(counter.value); // 0
 console.log(counter.increment()); // 1
 console.log(counter.increment()); // 2
 ```

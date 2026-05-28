@@ -47,7 +47,7 @@ setTimeout(() => console.log('first'), 100);
 setTimeout(() => console.log('second'), 100);
 ```
 
-**Important**: Timers specify a *minimum* delay, not exact timing:
+**Important**: Timers specify a _minimum_ delay, not exact timing:
 
 ```javascript
 const start = Date.now();
@@ -87,6 +87,7 @@ Used for internal housekeeping before polling for I/O.
 ### 4. Poll Phase
 
 The poll phase:
+
 1. Calculates how long to block waiting for I/O
 2. Processes events in the poll queue
 
@@ -107,6 +108,7 @@ socket.on('data', (chunk) => {
 ```
 
 **Poll behavior**:
+
 - If poll queue is not empty: execute callbacks synchronously until queue is empty or system limit reached
 - If poll queue is empty:
   - If `setImmediate()` is scheduled: end poll phase and move to check phase
@@ -256,7 +258,7 @@ const hook = async_hooks.createHook({
     asyncTiming.set(asyncId, {
       type,
       start: Date.now(),
-      trigger: triggerAsyncId
+      trigger: triggerAsyncId,
     });
   },
   destroy(asyncId) {
@@ -268,7 +270,7 @@ const hook = async_hooks.createHook({
       }
       asyncTiming.delete(asyncId);
     }
-  }
+  },
 });
 
 hook.enable();
@@ -288,7 +290,7 @@ setInterval(() => {
     max: histogram.max / 1e6 + 'ms',
     mean: histogram.mean / 1e6 + 'ms',
     stddev: histogram.stddev / 1e6 + 'ms',
-    p99: histogram.percentile(99) / 1e6 + 'ms'
+    p99: histogram.percentile(99) / 1e6 + 'ms',
   });
   histogram.reset();
 }, 5000);

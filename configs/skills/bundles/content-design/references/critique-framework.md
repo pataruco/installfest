@@ -4,6 +4,7 @@ A structured approach to reviewing user-facing content. Use this when performing
 review, audit, or critique.
 
 ## Table of Contents
+
 1. Before you start — context gathering
 2. The critique dimensions
 3. Readability assessment

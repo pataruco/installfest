@@ -17,7 +17,7 @@ Type narrowing is TypeScript's ability to refine types based on control flow ana
 
 ```typescript
 function processValue(value: string | number) {
-  if (typeof value === "string") {
+  if (typeof value === 'string') {
     // value is string here
     return value.toUpperCase();
   }
@@ -75,7 +75,7 @@ interface Bird {
 }
 
 function move(animal: Fish | Bird) {
-  if ("swim" in animal) {
+  if ('swim' in animal) {
     // animal is Fish here
     animal.swim();
   } else {
@@ -91,18 +91,18 @@ Use a common property to discriminate between types:
 
 ```typescript
 interface Circle {
-  kind: "circle";
+  kind: 'circle';
   radius: number;
 }
 
 interface Rectangle {
-  kind: "rectangle";
+  kind: 'rectangle';
   width: number;
   height: number;
 }
 
 interface Triangle {
-  kind: "triangle";
+  kind: 'triangle';
   base: number;
   height: number;
 }
@@ -111,13 +111,13 @@ type Shape = Circle | Rectangle | Triangle;
 
 function getArea(shape: Shape): number {
   switch (shape.kind) {
-    case "circle":
+    case 'circle':
       // shape is Circle here
       return Math.PI * shape.radius ** 2;
-    case "rectangle":
+    case 'rectangle':
       // shape is Rectangle here
       return shape.width * shape.height;
-    case "triangle":
+    case 'triangle':
       // shape is Triangle here
       return (shape.base * shape.height) / 2;
   }
@@ -131,11 +131,11 @@ Use `never` to ensure all cases are handled:
 ```typescript
 function getArea(shape: Shape): number {
   switch (shape.kind) {
-    case "circle":
+    case 'circle':
       return Math.PI * shape.radius ** 2;
-    case "rectangle":
+    case 'rectangle':
       return shape.width * shape.height;
-    case "triangle":
+    case 'triangle':
       return (shape.base * shape.height) / 2;
     default:
       // If a new shape is added, this will error
@@ -192,14 +192,14 @@ const filtered = values.filter(isNotNull);
 ```typescript
 function hasProperty<T extends object, K extends string>(
   obj: T,
-  key: K
+  key: K,
 ): obj is T & Record<K, unknown> {
   return key in obj;
 }
 
-const data: unknown = { name: "Alice" };
+const data: unknown = { name: 'Alice' };
 
-if (typeof data === "object" && data !== null && hasProperty(data, "name")) {
+if (typeof data === 'object' && data !== null && hasProperty(data, 'name')) {
   // data.name is now accessible
   console.log(data.name);
 }
@@ -211,7 +211,7 @@ Functions that throw on invalid input:
 
 ```typescript
 function assertIsString(value: unknown): asserts value is string {
-  if (typeof value !== "string") {
+  if (typeof value !== 'string') {
     throw new Error(`Expected string, got ${typeof value}`);
   }
 }
@@ -233,12 +233,12 @@ interface User {
 
 function assertIsUser(value: unknown): asserts value is User {
   if (
-    typeof value !== "object" ||
+    typeof value !== 'object' ||
     value === null ||
-    !("id" in value) ||
-    !("name" in value)
+    !('id' in value) ||
+    !('name' in value)
   ) {
-    throw new Error("Invalid user object");
+    throw new Error('Invalid user object');
   }
 }
 
@@ -257,12 +257,12 @@ Must use `function` declaration, not arrow functions:
 // Error: Assertions require every name in the call target to be
 // declared with an explicit type annotation.
 const assertString = (value: unknown): asserts value is string => {
-  if (typeof value !== "string") throw new Error("Not a string");
+  if (typeof value !== 'string') throw new Error('Not a string');
 };
 
 // Correct
 function assertString(value: unknown): asserts value is string {
-  if (typeof value !== "string") throw new Error("Not a string");
+  if (typeof value !== 'string') throw new Error('Not a string');
 }
 ```
 
@@ -271,10 +271,10 @@ function assertString(value: unknown): asserts value is string {
 Combine type predicates with opaque types for validated data:
 
 ```typescript
-type ValidEmail = string & { __brand: "ValidEmail" };
+type ValidEmail = string & { __brand: 'ValidEmail' };
 
 function isValidEmail(email: string): email is ValidEmail {
-  return email.includes("@") && email.includes(".");
+  return email.includes('@') && email.includes('.');
 }
 
 function sendEmail(email: ValidEmail) {
@@ -283,7 +283,7 @@ function sendEmail(email: ValidEmail) {
 
 function handleSubmit(email: string) {
   if (!isValidEmail(email)) {
-    throw new Error("Invalid email");
+    throw new Error('Invalid email');
   }
   // email is ValidEmail here
   sendEmail(email);
@@ -293,16 +293,16 @@ function handleSubmit(email: string) {
 ## Array Filtering with Type Guards
 
 ```typescript
-type Item = { type: "a"; value: string } | { type: "b"; count: number };
+type Item = { type: 'a'; value: string } | { type: 'b'; count: number };
 
 const items: Item[] = [
-  { type: "a", value: "hello" },
-  { type: "b", count: 42 },
+  { type: 'a', value: 'hello' },
+  { type: 'b', count: 42 },
 ];
 
 // Filter to specific type
 const typeAItems = items.filter(
-  (item): item is { type: "a"; value: string } => item.type === "a"
+  (item): item is { type: 'a'; value: string } => item.type === 'a',
 );
 // typeAItems is { type: "a"; value: string }[]
 ```
@@ -313,7 +313,7 @@ TypeScript can't always track narrowing across function calls:
 
 ```typescript
 function isString(x: unknown): x is string {
-  return typeof x === "string";
+  return typeof x === 'string';
 }
 
 function example(value: string | number) {
@@ -335,12 +335,12 @@ function example(value: string | number) {
 
 ```typescript
 interface SuccessResponse<T> {
-  status: "success";
+  status: 'success';
   data: T;
 }
 
 interface ErrorResponse {
-  status: "error";
+  status: 'error';
   error: {
     code: string;
     message: string;
@@ -349,8 +349,10 @@ interface ErrorResponse {
 
 type ApiResponse<T> = SuccessResponse<T> | ErrorResponse;
 
-function isSuccess<T>(response: ApiResponse<T>): response is SuccessResponse<T> {
-  return response.status === "success";
+function isSuccess<T>(
+  response: ApiResponse<T>,
+): response is SuccessResponse<T> {
+  return response.status === 'success';
 }
 
 async function fetchUser(): Promise<ApiResponse<User>> {
@@ -372,14 +374,14 @@ async function handleUser() {
 
 ## When to Use Each Technique
 
-| Technique | Use Case |
-|-----------|----------|
-| `typeof` | Primitive type checks |
-| `instanceof` | Class instance checks |
-| `in` operator | Property existence checks |
+| Technique            | Use Case                                        |
+| -------------------- | ----------------------------------------------- |
+| `typeof`             | Primitive type checks                           |
+| `instanceof`         | Class instance checks                           |
+| `in` operator        | Property existence checks                       |
 | Discriminated unions | Multiple related types with common discriminant |
-| Type predicates | Custom narrowing logic |
-| Assertion functions | Validation with early error throwing |
+| Type predicates      | Custom narrowing logic                          |
+| Assertion functions  | Validation with early error throwing            |
 
 ## Common Pitfalls
 
@@ -403,12 +405,12 @@ function example(value: string | null) {
 ```typescript
 // Wrong - doesn't narrow
 function isFish(pet: Fish | Bird) {
-  return "swim" in pet; // Just returns boolean
+  return 'swim' in pet; // Just returns boolean
 }
 
 // Correct - narrows the type
 function isFish(pet: Fish | Bird): pet is Fish {
-  return "swim" in pet;
+  return 'swim' in pet;
 }
 ```
 

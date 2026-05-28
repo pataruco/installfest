@@ -67,15 +67,15 @@ gh issue list --label "good first issue" --repo nodejs/node
 
 ### Issue Labels
 
-| Label | Description |
-|-------|-------------|
+| Label              | Description            |
+| ------------------ | ---------------------- |
 | `good first issue` | Suitable for newcomers |
-| `help wanted` | Needs contributor help |
-| `confirmed-bug` | Verified bug |
-| `feature request` | New feature proposal |
-| `semver-major` | Breaking change |
-| `semver-minor` | New feature |
-| `semver-patch` | Bug fix |
+| `help wanted`      | Needs contributor help |
+| `confirmed-bug`    | Verified bug           |
+| `feature request`  | New feature proposal   |
+| `semver-major`     | Breaking change        |
+| `semver-minor`     | New feature            |
+| `semver-patch`     | Bug fix                |
 
 ### Where to Contribute
 
@@ -158,10 +158,14 @@ const fs = require('fs');
 
   fs.writeFileSync(file, expected);
 
-  fs.readFile(file, 'utf8', common.mustCall((err, data) => {
-    assert.ifError(err);
-    assert.strictEqual(data, expected);
-  }));
+  fs.readFile(
+    file,
+    'utf8',
+    common.mustCall((err, data) => {
+      assert.ifError(err);
+      assert.strictEqual(data, expected);
+    }),
+  );
 }
 
 // Use common.mustCall() to ensure callbacks are called
@@ -352,7 +356,7 @@ CHECK_GE(length, 0);
 ### Style
 
 ```javascript
-'use strict';  // Always include
+'use strict'; // Always include
 
 // Use const/let, never var
 const x = 1;
@@ -368,10 +372,7 @@ const { a, b } = obj;
 const message = `Value is ${value}`;
 
 // Use primordials for built-ins in internal code
-const {
-  ArrayPrototypeMap,
-  ObjectDefineProperty,
-} = primordials;
+const { ArrayPrototypeMap, ObjectDefineProperty } = primordials;
 ```
 
 ### Internal Modules
@@ -380,18 +381,13 @@ const {
 // lib/internal/my_module.js
 'use strict';
 
-const {
-  ArrayIsArray,
-} = primordials;
+const { ArrayIsArray } = primordials;
 
 // Internal binding
 const { myBinding } = internalBinding('my_binding');
 
 // Validators
-const {
-  validateString,
-  validateNumber,
-} = require('internal/validators');
+const { validateString, validateNumber } = require('internal/validators');
 
 function myFunction(arg) {
   validateString(arg, 'arg');

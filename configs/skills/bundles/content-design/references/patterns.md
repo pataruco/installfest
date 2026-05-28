@@ -4,6 +4,7 @@ Patterns for specific content types. Each pattern includes the principle, struct
 examples, and common mistakes.
 
 ## Table of Contents
+
 1. Error messages
 2. Empty states
 3. Form labels and hint text
@@ -80,6 +81,7 @@ an opportunity, not a dead end.
 ### Purpose
 
 An empty state should:
+
 1. Explain why there's nothing here (is it new? filtered to nothing? an error?)
 2. Guide the user toward the action that will fill this space
 3. Reassure them this is expected (if it is)
@@ -146,7 +148,7 @@ additional context the user needs to fill in the field correctly.
 
 - If most fields are required, mark the optional ones "(optional)"
 - If most fields are optional, mark the required ones "(required)"
-- Don't use asterisks (*) without explanation — not everyone knows what they mean
+- Don't use asterisks (\*) without explanation — not everyone knows what they mean
 - Don't use colour alone to indicate required fields
 
 ### Grouping
@@ -260,6 +262,7 @@ Use a verb that describes what will happen: "Save changes", "Download receipt",
 "Send application"
 
 Avoid:
+
 - "Click here" — meaningless, and assumes a mouse
 - "Submit" — vague. Submit what?
 - "Learn more" — learn more about what? Be specific

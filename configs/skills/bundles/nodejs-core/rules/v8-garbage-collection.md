@@ -88,11 +88,11 @@ After GC (B and D are dead):
 ```javascript
 // BAD: Creating many short-lived objects triggers frequent Scavenger runs
 function processData(items) {
-  return items.map(item => ({
+  return items.map((item) => ({
     ...item,
     processed: true,
     timestamp: new Date(), // New object each time
-    meta: { source: 'api' } // New object each time
+    meta: { source: 'api' }, // New object each time
   }));
 }
 
@@ -106,7 +106,7 @@ function processData(items) {
       ...items[i],
       processed: true,
       timestamp: Date.now(), // Primitive, not object
-      meta: META // Shared reference
+      meta: META, // Shared reference
     };
   }
   return results;
@@ -129,9 +129,7 @@ class ObjectPool {
   }
 
   acquire() {
-    return this.pool.length > 0
-      ? this.pool.pop()
-      : this.factory();
+    return this.pool.length > 0 ? this.pool.pop() : this.factory();
   }
 
   release(obj) {
@@ -143,7 +141,7 @@ class ObjectPool {
 // Usage
 const bufferPool = new ObjectPool(
   () => Buffer.allocUnsafe(4096),
-  (buf) => buf.fill(0)
+  (buf) => buf.fill(0),
 );
 
 const buf = bufferPool.acquire();
@@ -239,13 +237,13 @@ V8's GC is based on the generational hypothesis: most objects die young.
 // Short-lived objects (ideal case)
 function handleRequest(req) {
   const data = JSON.parse(req.body); // Dies quickly
-  const result = processData(data);  // Dies quickly
-  return JSON.stringify(result);     // Dies quickly
+  const result = processData(data); // Dies quickly
+  return JSON.stringify(result); // Dies quickly
 }
 
 // Long-lived objects (cache, connections)
 const connectionPool = new Pool(); // Lives forever
-const cache = new LRUCache();      // Lives forever
+const cache = new LRUCache(); // Lives forever
 ```
 
 ### Allocation Site Feedback
@@ -331,7 +329,7 @@ class MemoryMonitor {
     this.history.push({
       timestamp: Date.now(),
       used,
-      delta: used - this.baseline
+      delta: used - this.baseline,
     });
 
     // Keep last 100 measurements
@@ -342,8 +340,8 @@ class MemoryMonitor {
     // Check for consistent growth
     if (this.history.length >= 10) {
       const recent = this.history.slice(-10);
-      const allGrowing = recent.every((m, i) =>
-        i === 0 || m.used >= recent[i-1].used
+      const allGrowing = recent.every(
+        (m, i) => i === 0 || m.used >= recent[i - 1].used,
       );
 
       if (allGrowing) {
@@ -388,7 +386,7 @@ function processData(data) {
 }
 
 // GOOD: Use strict mode and proper declarations
-'use strict';
+('use strict');
 function processData(data) {
   const results = data.map(transform);
   return results;
@@ -456,7 +454,9 @@ For long-lived data structures:
 // This helps V8 understand the object shape
 const cache = Object.create(null);
 const INITIAL_KEYS = ['user:', 'session:', 'token:'];
-INITIAL_KEYS.forEach(k => { cache[k] = undefined; });
+INITIAL_KEYS.forEach((k) => {
+  cache[k] = undefined;
+});
 
 // Use Map for dynamic keys (better for old space)
 const dynamicCache = new Map();

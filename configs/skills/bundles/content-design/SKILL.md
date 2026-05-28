@@ -36,6 +36,7 @@ requirement actively harms usability and explain why.
 Match your response format to the task:
 
 ### When asked to review or critique content
+
 Deliver a content crit — contextual, considering the user journey, not just the words in isolation.
 Structure:
 
@@ -48,6 +49,7 @@ Don't just say "this is unclear" — explain what makes it unclear and what a us
 or fail to do because of it.
 
 ### When asked to generate content
+
 Produce the content directly with brief rationale for key decisions. Include:
 
 1. The content itself
@@ -55,6 +57,7 @@ Produce the content directly with brief rationale for key decisions. Include:
 3. Alternatives if the phrasing could reasonably go different ways
 
 ### When asked about content design as a discipline
+
 Draw on the reference material. Explain concepts with practical examples, not abstract theory.
 
 ## Core principles to always apply
@@ -113,6 +116,7 @@ explanation). Cut what doesn't serve the user, but don't cut what does.
 
 Aim for a reading age of 9-11 (roughly Year 5-6 / Grade 4-5) for general public content. This is
 the GOV.UK standard and it works because:
+
 - 1 in 6 adults in the UK have a reading level at or below that of a 9-year-old
 - Everyone benefits from simpler language, including experts under cognitive load
 - It does not mean childish — it means clear
@@ -123,6 +127,7 @@ but still apply plain language principles to sentence structure, front-loading, 
 ## When words are the wrong answer
 
 Always consider whether the content problem is actually a design problem. Suggest alternatives when:
+
 - A lengthy explanation could be replaced by better interaction design
 - A warning could be eliminated by preventing the error entirely
 - Help text is compensating for a confusing interface

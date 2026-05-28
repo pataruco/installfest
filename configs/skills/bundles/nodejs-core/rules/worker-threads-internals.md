@@ -48,7 +48,7 @@ class Worker extends EventEmitter {
       options.env,
       options.execArgv,
       options.resourceLimits,
-      options.trackUnmanagedFds
+      options.trackUnmanagedFds,
     );
 
     // Set up message channel
@@ -155,7 +155,7 @@ port1.postMessage({
 
 ```javascript
 // Transfer ownership instead of copying
-const buffer = new ArrayBuffer(1024 * 1024);  // 1MB
+const buffer = new ArrayBuffer(1024 * 1024); // 1MB
 
 // Without transfer: copies entire buffer
 port.postMessage({ buffer });
@@ -211,7 +211,7 @@ const sharedBuffer = new SharedArrayBuffer(1024);
 const sharedArray = new Int32Array(sharedBuffer);
 
 const worker = new Worker('./worker.js', {
-  workerData: { sharedBuffer }
+  workerData: { sharedBuffer },
 });
 
 // Both threads can now access sharedArray
@@ -223,8 +223,8 @@ sharedArray[0] = 42;
 const { workerData } = require('worker_threads');
 
 const sharedArray = new Int32Array(workerData.sharedBuffer);
-console.log(sharedArray[0]);  // 42
-sharedArray[1] = 100;  // Visible to main thread
+console.log(sharedArray[0]); // 42
+sharedArray[1] = 100; // Visible to main thread
 ```
 
 ### Memory Layout
@@ -249,14 +249,14 @@ SharedArrayBuffer
 const shared = new Int32Array(new SharedArrayBuffer(4));
 
 // Atomic operations are thread-safe
-Atomics.add(shared, 0, 1);      // Atomic increment
-Atomics.sub(shared, 0, 1);      // Atomic decrement
+Atomics.add(shared, 0, 1); // Atomic increment
+Atomics.sub(shared, 0, 1); // Atomic decrement
 Atomics.exchange(shared, 0, 5); // Atomic swap, returns old value
-Atomics.compareExchange(shared, 0, 5, 10);  // CAS
+Atomics.compareExchange(shared, 0, 5, 10); // CAS
 
 // Load and store
-Atomics.load(shared, 0);        // Atomic read
-Atomics.store(shared, 0, 42);   // Atomic write
+Atomics.load(shared, 0); // Atomic read
+Atomics.store(shared, 0, 42); // Atomic write
 ```
 
 ### Wait and Notify (Futex)
@@ -268,7 +268,7 @@ const result = Atomics.wait(shared, 0, 0);
 
 // Main: Wake waiting workers
 Atomics.store(shared, 0, 1);
-Atomics.notify(shared, 0, 1);  // Wake 1 worker
+Atomics.notify(shared, 0, 1); // Wake 1 worker
 ```
 
 ### Spinlock Implementation
@@ -303,7 +303,7 @@ class Mutex {
     while (true) {
       // Try to acquire (0 -> 1)
       if (Atomics.compareExchange(this.state, 0, 0, 1) === 0) {
-        return;  // Acquired
+        return; // Acquired
       }
 
       // Wait until state might be 0
@@ -327,13 +327,13 @@ class Mutex {
 const worker = new Worker('./worker.js', {
   workerData: {
     config: { port: 8080 },
-    sharedBuffer: new SharedArrayBuffer(1024)
-  }
+    sharedBuffer: new SharedArrayBuffer(1024),
+  },
 });
 
 // Worker
 const { workerData } = require('worker_threads');
-console.log(workerData.config);  // { port: 8080 }
+console.log(workerData.config); // { port: 8080 }
 ```
 
 ### Resource Limits
@@ -341,11 +341,11 @@ console.log(workerData.config);  // { port: 8080 }
 ```javascript
 const worker = new Worker('./worker.js', {
   resourceLimits: {
-    maxOldGenerationSizeMb: 128,    // V8 old space limit
-    maxYoungGenerationSizeMb: 32,   // V8 young space limit
-    codeRangeSizeMb: 32,            // V8 code space limit
-    stackSizeMb: 4                  // Stack size
-  }
+    maxOldGenerationSizeMb: 128, // V8 old space limit
+    maxYoungGenerationSizeMb: 32, // V8 young space limit
+    codeRangeSizeMb: 32, // V8 code space limit
+    stackSizeMb: 4, // Stack size
+  },
 });
 ```
 
@@ -392,12 +392,12 @@ class SharedQueue {
     const head = Atomics.load(this.meta, 0);
 
     if (newTail === head) {
-      return false;  // Queue full
+      return false; // Queue full
     }
 
     this.items[tail] = value;
     Atomics.store(this.meta, 1, newTail);
-    Atomics.notify(this.meta, 1, 1);  // Wake consumers
+    Atomics.notify(this.meta, 1, 1); // Wake consumers
     return true;
   }
 
@@ -436,7 +436,7 @@ worker.postMessage(items);
 
 // BEST: Shared memory for frequent updates
 const shared = new Float64Array(new SharedArrayBuffer(items.length * 8));
-items.forEach((v, i) => shared[i] = v);
+items.forEach((v, i) => (shared[i] = v));
 worker.postMessage({ ready: true });
 ```
 
@@ -504,7 +504,7 @@ class WorkerPool {
   }
 
   terminate() {
-    return Promise.all(this.workers.map(w => w.terminate()));
+    return Promise.all(this.workers.map((w) => w.terminate()));
   }
 }
 ```
@@ -553,7 +553,7 @@ process.on('SIGTERM', async () => {
 ```javascript
 // BAD: Growing message queue
 setInterval(() => {
-  worker.postMessage(data);  // If worker is slow, messages queue up
+  worker.postMessage(data); // If worker is slow, messages queue up
 }, 1);
 
 // GOOD: Flow control
@@ -574,7 +574,7 @@ function sendIfRoom(data) {
 
 ```javascript
 // BAD: Main thread waiting
-Atomics.wait(shared, 0, 0);  // Never use on main thread!
+Atomics.wait(shared, 0, 0); // Never use on main thread!
 
 // GOOD: Only workers should wait
 // Main thread uses Atomics.waitAsync (or don't wait at all)

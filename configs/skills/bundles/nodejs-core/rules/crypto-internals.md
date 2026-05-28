@@ -259,13 +259,19 @@ const key = crypto.pbkdf2Sync('password', 'salt', 100000, 64, 'sha512');
 
 ```javascript
 // More resistant to hardware attacks
-crypto.scrypt('password', 'salt', 64, {
-  N: 16384,  // CPU/memory cost
-  r: 8,      // Block size
-  p: 1       // Parallelization
-}, (err, key) => {
-  console.log(key.toString('hex'));
-});
+crypto.scrypt(
+  'password',
+  'salt',
+  64,
+  {
+    N: 16384, // CPU/memory cost
+    r: 8, // Block size
+    p: 1, // Parallelization
+  },
+  (err, key) => {
+    console.log(key.toString('hex'));
+  },
+);
 ```
 
 ### Performance Comparison
@@ -281,8 +287,8 @@ async function benchmark() {
   // PBKDF2
   console.time('pbkdf2');
   for (let i = 0; i < 100; i++) {
-    await new Promise(resolve =>
-      crypto.pbkdf2(password, salt, 100000, 64, 'sha512', resolve)
+    await new Promise((resolve) =>
+      crypto.pbkdf2(password, salt, 100000, 64, 'sha512', resolve),
     );
   }
   console.timeEnd('pbkdf2');
@@ -290,9 +296,7 @@ async function benchmark() {
   // Scrypt
   console.time('scrypt');
   for (let i = 0; i < 100; i++) {
-    await new Promise(resolve =>
-      crypto.scrypt(password, salt, 64, resolve)
-    );
+    await new Promise((resolve) => crypto.scrypt(password, salt, 64, resolve));
   }
   console.timeEnd('scrypt');
 }
@@ -305,8 +309,8 @@ async function benchmark() {
 ```javascript
 // BAD: Create new hash for each piece of data
 function hashMany(items) {
-  return items.map(item =>
-    crypto.createHash('sha256').update(item).digest('hex')
+  return items.map((item) =>
+    crypto.createHash('sha256').update(item).digest('hex'),
   );
 }
 
@@ -315,7 +319,7 @@ function hashCombined(items) {
   const hash = crypto.createHash('sha256');
   for (const item of items) {
     hash.update(item);
-    hash.update('\n');  // Separator
+    hash.update('\n'); // Separator
   }
   return hash.digest('hex');
 }
@@ -354,7 +358,13 @@ app.post('/login', (req, res) => {
 
 // GOOD: Use async
 app.post('/login', async (req, res) => {
-  const hash = await promisify(crypto.pbkdf2)(password, salt, 100000, 64, 'sha512');
+  const hash = await promisify(crypto.pbkdf2)(
+    password,
+    salt,
+    100000,
+    64,
+    'sha512',
+  );
 });
 ```
 
@@ -372,7 +382,7 @@ async function encryptWithWebCrypto(data, password) {
     Buffer.from(password),
     'PBKDF2',
     false,
-    ['deriveBits', 'deriveKey']
+    ['deriveBits', 'deriveKey'],
   );
 
   const key = await subtle.deriveKey(
@@ -380,12 +390,12 @@ async function encryptWithWebCrypto(data, password) {
       name: 'PBKDF2',
       salt: Buffer.from('salt'),
       iterations: 100000,
-      hash: 'SHA-256'
+      hash: 'SHA-256',
     },
     keyMaterial,
     { name: 'AES-GCM', length: 256 },
     false,
-    ['encrypt', 'decrypt']
+    ['encrypt', 'decrypt'],
   );
 
   const iv = crypto.randomBytes(12);
@@ -393,7 +403,7 @@ async function encryptWithWebCrypto(data, password) {
   const encrypted = await subtle.encrypt(
     { name: 'AES-GCM', iv },
     key,
-    Buffer.from(data)
+    Buffer.from(data),
   );
 
   return { encrypted: Buffer.from(encrypted), iv };
@@ -437,8 +447,9 @@ try {
 
 ```javascript
 function isAlgorithmSupported(name) {
-  return crypto.getHashes().includes(name) ||
-         crypto.getCiphers().includes(name);
+  return (
+    crypto.getHashes().includes(name) || crypto.getCiphers().includes(name)
+  );
 }
 
 // Check before use
@@ -454,15 +465,12 @@ if (!isAlgorithmSupported('sha3-256')) {
 ```javascript
 // BAD: Vulnerable to timing attack
 function checkSignature(expected, actual) {
-  return expected === actual;  // Short-circuits on first difference
+  return expected === actual; // Short-circuits on first difference
 }
 
 // GOOD: Constant-time comparison
 function checkSignature(expected, actual) {
-  return crypto.timingSafeEqual(
-    Buffer.from(expected),
-    Buffer.from(actual)
-  );
+  return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(actual));
 }
 ```
 
@@ -471,10 +479,10 @@ function checkSignature(expected, actual) {
 ```javascript
 // BAD: Reusing IV
 const iv = crypto.randomBytes(12);
-messages.forEach(msg => encrypt(msg, key, iv));  // Security vulnerability!
+messages.forEach((msg) => encrypt(msg, key, iv)); // Security vulnerability!
 
 // GOOD: Unique IV per message
-messages.forEach(msg => {
+messages.forEach((msg) => {
   const iv = crypto.randomBytes(12);
   encrypt(msg, key, iv);
 });
@@ -489,7 +497,7 @@ function secureEncrypt(data, password) {
   try {
     return encrypt(data, key);
   } finally {
-    key.fill(0);  // Overwrite key in memory
+    key.fill(0); // Overwrite key in memory
   }
 }
 ```

@@ -59,6 +59,7 @@ Statistical profiling result from isolate-0x1234.log
 ```
 
 Key indicators:
+
 - `*` before function name = optimized
 - `~` before function name = interpreted (not optimized)
 - High ticks in C++ = possible native bottleneck
@@ -335,7 +336,9 @@ function benchmark(name, fn, iterations = 100000) {
   performance.measure(name, 'start', 'end');
 
   const [measure] = performance.getEntriesByName(name);
-  console.log(`${name}: ${(measure.duration / iterations * 1000).toFixed(3)}µs per call`);
+  console.log(
+    `${name}: ${((measure.duration / iterations) * 1000).toFixed(3)}µs per call`,
+  );
   performance.clearMarks();
   performance.clearMeasures();
 }
@@ -352,14 +355,14 @@ benchmark('myFunction', myFunction);
 ```javascript
 const Benchmark = require('benchmark');
 
-const suite = new Benchmark.Suite;
+const suite = new Benchmark.Suite();
 
 suite
   .add('RegExp#test', () => /o/.test('Hello World!'))
   .add('String#indexOf', () => 'Hello World!'.indexOf('o') > -1)
   .add('String#includes', () => 'Hello World!'.includes('o'))
   .on('cycle', (event) => console.log(String(event.target)))
-  .on('complete', function() {
+  .on('complete', function () {
     console.log('Fastest is ' + this.filter('fastest').map('name'));
   })
   .run({ async: true });
@@ -412,11 +415,11 @@ class ContinuousProfiler {
       session.post('Profiler.stop', (err, { profile }) => {
         this.profiles.push({
           timestamp: Date.now(),
-          profile
+          profile,
         });
         session.disconnect();
       });
-    }, 10000);  // Profile for 10 seconds
+    }, 10000); // Profile for 10 seconds
   }
 
   stop() {
@@ -432,13 +435,13 @@ class ContinuousProfiler {
 ```javascript
 // BAD: Function keeps getting deoptimized and reoptimized
 function process(value) {
-  return value.x + value.y;  // Different object shapes
+  return value.x + value.y; // Different object shapes
 }
 
 // Called with different shapes
 process({ x: 1, y: 2 });
-process({ y: 2, x: 1 });  // Different property order!
-process({ x: 1, y: 2, z: 3 });  // Extra property!
+process({ y: 2, x: 1 }); // Different property order!
+process({ x: 1, y: 2, z: 3 }); // Extra property!
 ```
 
 ### Megamorphic Call Site
@@ -450,7 +453,7 @@ function getLength(obj) {
 }
 
 getLength([1, 2, 3]);
-getLength("string");
+getLength('string');
 getLength({ length: 5 });
 getLength(new Uint8Array(10));
 // IC becomes megamorphic - no caching

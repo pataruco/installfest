@@ -39,7 +39,7 @@ const result = someFunction(arg);
 Navigate to type definitions to understand what's expected:
 
 ```typescript
-document.querySelector("body");
+document.querySelector('body');
 //       ^ Go-to-definition to see overloads
 ```
 
@@ -62,18 +62,19 @@ type Step3 = Step2[number];
 ### "Type 'X' is not assignable to type 'Y'"
 
 The most common error. Check:
+
 1. Are you missing properties?
 2. Are property types incompatible?
 3. Is there a literal vs widened type mismatch?
 
 ```typescript
 // Example: Literal type mismatch
-const status = "active"; // Type: string (widened)
-function setStatus(s: "active" | "inactive") {}
+const status = 'active'; // Type: string (widened)
+function setStatus(s: 'active' | 'inactive') {}
 setStatus(status); // Error!
 
 // Fix: Use as const
-const status = "active" as const; // Type: "active"
+const status = 'active' as const; // Type: "active"
 setStatus(status); // OK
 ```
 
@@ -89,7 +90,7 @@ function process(data: unknown) {
 
 // Fix: Add type guard
 function process(data: unknown) {
-  if (typeof data === "object" && data !== null && "name" in data) {
+  if (typeof data === 'object' && data !== null && 'name' in data) {
     data.name; // OK
   }
 }
@@ -116,7 +117,7 @@ Function argument type mismatch:
 
 ```typescript
 // Often happens with narrower function signatures
-const items = ["a", "b", "c"] as const;
+const items = ['a', 'b', 'c'] as const;
 items.includes(someString);
 // Error: 'string' not assignable to '"a" | "b" | "c"'
 
@@ -187,7 +188,7 @@ const result: ExpectedResultType = data.process(); // Error if process returns w
 ```typescript
 // If you think this should error:
 // @ts-expect-error - string is not assignable to number
-const x: number = "hello";
+const x: number = 'hello';
 
 // If the @ts-expect-error is unused, TypeScript will tell you
 // meaning the code is actually valid
@@ -201,7 +202,7 @@ For library types, check the actual definitions:
 // In lib.dom.d.ts
 interface Document {
   querySelector<K extends keyof HTMLElementTagNameMap>(
-    selectors: K
+    selectors: K,
   ): HTMLElementTagNameMap[K] | null;
   querySelector(selectors: string): Element | null;
 }
@@ -249,7 +250,7 @@ type Expected = ExpectedType;
 Look for `(+N overload)` in tooltips:
 
 ```typescript
-document.addEventListener("click", handler);
+document.addEventListener('click', handler);
 //       ^ Shows (+1 overload)
 
 // Go-to-definition to see all overloads
@@ -264,14 +265,14 @@ Sometimes library types are wrong or incomplete:
 
 ```typescript
 // When you know better than TypeScript
-const element = document.getElementById("root") as HTMLDivElement;
+const element = document.getElementById('root') as HTMLDivElement;
 ```
 
 ### Solution 2: Declaration Merging
 
 ```typescript
 // Extend existing types
-declare module "some-library" {
+declare module 'some-library' {
   interface SomeType {
     missingProperty: string;
   }

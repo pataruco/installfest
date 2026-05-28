@@ -18,15 +18,15 @@ The combination of `as const` and `typeof` is one of the most powerful patterns 
 ```typescript
 // Without as const - types are widened
 const config = {
-  GROUP: "group",
-  ANNOUNCEMENT: "announcement",
+  GROUP: 'group',
+  ANNOUNCEMENT: 'announcement',
 };
 // Type: { GROUP: string; ANNOUNCEMENT: string }
 
 // With as const - literal types are preserved
 const config = {
-  GROUP: "group",
-  ANNOUNCEMENT: "announcement",
+  GROUP: 'group',
+  ANNOUNCEMENT: 'announcement',
 } as const;
 // Type: { readonly GROUP: "group"; readonly ANNOUNCEMENT: "announcement" }
 ```
@@ -38,7 +38,7 @@ const config = {
 3. **Array tuple inference**: Arrays become readonly tuples with literal types
 
 ```typescript
-const routes = ["home", "about", "contact"] as const;
+const routes = ['home', 'about', 'contact'] as const;
 // Type: readonly ["home", "about", "contact"]
 // Without as const: string[]
 ```
@@ -49,10 +49,10 @@ Use `typeof` to extract the type from a runtime value:
 
 ```typescript
 const programModeEnumMap = {
-  GROUP: "group",
-  ANNOUNCEMENT: "announcement",
-  ONE_ON_ONE: "1on1",
-  SELF_DIRECTED: "selfDirected",
+  GROUP: 'group',
+  ANNOUNCEMENT: 'announcement',
+  ONE_ON_ONE: '1on1',
+  SELF_DIRECTED: 'selfDirected',
 } as const;
 
 // Extract the type of the object
@@ -63,7 +63,8 @@ type BackendProgram = keyof typeof programModeEnumMap;
 // Type: "GROUP" | "ANNOUNCEMENT" | "ONE_ON_ONE" | "SELF_DIRECTED"
 
 // Extract values as a union type using indexed access
-type FrontendProgram = typeof programModeEnumMap[keyof typeof programModeEnumMap];
+type FrontendProgram =
+  (typeof programModeEnumMap)[keyof typeof programModeEnumMap];
 // Type: "group" | "announcement" | "1on1" | "selfDirected"
 ```
 
@@ -79,7 +80,7 @@ const statusCodes = {
   NOT_FOUND: 404,
 } as const;
 
-type StatusCode = typeof statusCodes[keyof typeof statusCodes];
+type StatusCode = (typeof statusCodes)[keyof typeof statusCodes];
 // Type: 200 | 201 | 400 | 404
 ```
 
@@ -89,16 +90,16 @@ You can select a subset of values by using a union of specific keys:
 
 ```typescript
 const programModeEnumMap = {
-  GROUP: "group",
-  ANNOUNCEMENT: "announcement",
-  ONE_ON_ONE: "1on1",
-  SELF_DIRECTED: "selfDirected",
+  GROUP: 'group',
+  ANNOUNCEMENT: 'announcement',
+  ONE_ON_ONE: '1on1',
+  SELF_DIRECTED: 'selfDirected',
 } as const;
 
 type ProgramMap = typeof programModeEnumMap;
 
 // Select only individual program types
-type IndividualProgram = ProgramMap["ONE_ON_ONE" | "SELF_DIRECTED"];
+type IndividualProgram = ProgramMap['ONE_ON_ONE' | 'SELF_DIRECTED'];
 // Type: "1on1" | "selfDirected"
 ```
 
@@ -119,17 +120,17 @@ Without `as const`, you lose literal type inference:
 ```typescript
 // BAD - values are widened to string
 const colors = {
-  RED: "#ff0000",
-  GREEN: "#00ff00",
+  RED: '#ff0000',
+  GREEN: '#00ff00',
 };
-type Color = typeof colors[keyof typeof colors]; // string
+type Color = (typeof colors)[keyof typeof colors]; // string
 
 // GOOD - literal types preserved
 const colors = {
-  RED: "#ff0000",
-  GREEN: "#00ff00",
+  RED: '#ff0000',
+  GREEN: '#00ff00',
 } as const;
-type Color = typeof colors[keyof typeof colors]; // "#ff0000" | "#00ff00"
+type Color = (typeof colors)[keyof typeof colors]; // "#ff0000" | "#00ff00"
 ```
 
 ### Attempting to Mutate
@@ -149,26 +150,30 @@ config.timeout = 10000; // Error: Cannot assign to 'timeout' because it is a rea
 ```typescript
 // Single source of truth for HTTP methods
 const HTTP_METHODS = {
-  GET: "GET",
-  POST: "POST",
-  PUT: "PUT",
-  DELETE: "DELETE",
-  PATCH: "PATCH",
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  DELETE: 'DELETE',
+  PATCH: 'PATCH',
 } as const;
 
-type HttpMethod = typeof HTTP_METHODS[keyof typeof HTTP_METHODS];
+type HttpMethod = (typeof HTTP_METHODS)[keyof typeof HTTP_METHODS];
 // Type: "GET" | "POST" | "PUT" | "DELETE" | "PATCH"
 
-type SafeMethod = typeof HTTP_METHODS["GET"];
+type SafeMethod = (typeof HTTP_METHODS)['GET'];
 // Type: "GET"
 
-type MutatingMethod = typeof HTTP_METHODS["POST" | "PUT" | "DELETE" | "PATCH"];
+type MutatingMethod = (typeof HTTP_METHODS)[
+  | 'POST'
+  | 'PUT'
+  | 'DELETE'
+  | 'PATCH'];
 // Type: "POST" | "PUT" | "DELETE" | "PATCH"
 
 function makeRequest(method: HttpMethod, url: string): void {
   // method is type-safe
 }
 
-makeRequest(HTTP_METHODS.GET, "/api/users"); // OK
-makeRequest("INVALID", "/api/users"); // Error
+makeRequest(HTTP_METHODS.GET, '/api/users'); // OK
+makeRequest('INVALID', '/api/users'); // Error
 ```

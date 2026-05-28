@@ -142,19 +142,19 @@ function fork(modulePath, args, options) {
 
 function setupChannel(target, channel, serializationMode) {
   // Set up message handling
-  channel.onread = function(arrayBuffer) {
+  channel.onread = function (arrayBuffer) {
     const message = deserialize(arrayBuffer);
     target.emit('message', message.message, message.handle);
   };
 
   // Set up send function
-  target.send = function(message, handle, options, callback) {
+  target.send = function (message, handle, options, callback) {
     const serialized = serialize({ message, handle });
     return channel.writeUtf8String(serialized);
   };
 
   // Handle disconnect
-  channel.onDisconnect = function() {
+  channel.onDisconnect = function () {
     target.connected = false;
     target.emit('disconnect');
   };
@@ -243,23 +243,23 @@ int StreamBase::SendFD(uv_stream_t* handle, int fd) {
 ```javascript
 // Different stdio configurations
 spawn('cmd', args, {
-  stdio: 'inherit'           // Share parent's stdio
+  stdio: 'inherit', // Share parent's stdio
 });
 
 spawn('cmd', args, {
-  stdio: 'pipe'              // Create pipes (default)
+  stdio: 'pipe', // Create pipes (default)
 });
 
 spawn('cmd', args, {
-  stdio: ['pipe', 'pipe', 'pipe', 'ipc']  // With IPC
+  stdio: ['pipe', 'pipe', 'pipe', 'ipc'], // With IPC
 });
 
 spawn('cmd', args, {
-  stdio: [0, 1, 2]           // Inherit specific fds
+  stdio: [0, 1, 2], // Inherit specific fds
 });
 
 spawn('cmd', args, {
-  stdio: ['pipe', fs.openSync('out.log', 'w'), 'pipe']
+  stdio: ['pipe', fs.openSync('out.log', 'w'), 'pipe'],
 });
 ```
 
@@ -307,17 +307,19 @@ void ProcessWrap::ParseStdioOptions(Environment* env,
 
 function exec(command, options, callback) {
   // Use shell
-  return execFile(options.shell || '/bin/sh',
-                  ['-c', command],
-                  options,
-                  callback);
+  return execFile(
+    options.shell || '/bin/sh',
+    ['-c', command],
+    options,
+    callback,
+  );
 }
 
 function execFile(file, args, options, callback) {
   options = {
     ...options,
     shell: false,
-    maxBuffer: options.maxBuffer || 1024 * 1024  // 1MB
+    maxBuffer: options.maxBuffer || 1024 * 1024, // 1MB
   };
 
   const child = spawn(file, args, options);
@@ -338,9 +340,11 @@ function execFile(file, args, options, callback) {
   });
 
   child.on('close', (code, signal) => {
-    callback(code === 0 ? null : new Error(`Exit code ${code}`),
-             stdout,
-             stderr);
+    callback(
+      code === 0 ? null : new Error(`Exit code ${code}`),
+      stdout,
+      stderr,
+    );
   });
 
   return child;
@@ -356,11 +360,11 @@ function execFile(file, args, options, callback) {
 const { spawnSync } = require('child_process');
 
 const result = spawnSync('ls', ['-la'], {
-  encoding: 'utf8'
+  encoding: 'utf8',
 });
 
 console.log(result.stdout);
-console.log(result.status);  // Exit code
+console.log(result.status); // Exit code
 ```
 
 ```cpp
@@ -412,10 +416,10 @@ void ProcessWrap::Kill(const FunctionCallbackInfo<Value>& args) {
 // Create daemon process
 const child = spawn('daemon-process', [], {
   detached: true,
-  stdio: 'ignore'
+  stdio: 'ignore',
 });
 
-child.unref();  // Allow parent to exit
+child.unref(); // Allow parent to exit
 ```
 
 ```cpp
@@ -471,11 +475,11 @@ class ProcessPool {
   }
 
   getAvailableWorker() {
-    return this.workers.find(w => !w.currentTask);
+    return this.workers.find((w) => !w.currentTask);
   }
 
   destroy() {
-    this.workers.forEach(w => w.kill());
+    this.workers.forEach((w) => w.kill());
   }
 }
 ```
@@ -484,10 +488,10 @@ class ProcessPool {
 
 ```javascript
 // BAD: Shell spawning overhead
-exec('ls -la', (err, stdout) => { });
+exec('ls -la', (err, stdout) => {});
 
 // GOOD: Direct execution
-execFile('ls', ['-la'], (err, stdout) => { });
+execFile('ls', ['-la'], (err, stdout) => {});
 
 // BETTER: spawn with streaming
 const child = spawn('ls', ['-la']);
@@ -532,12 +536,12 @@ child.send = (msg, ...args) => {
 ### EPERM on Kill
 
 ```javascript
-child.kill('SIGTERM');  // May fail with EPERM
+child.kill('SIGTERM'); // May fail with EPERM
 
 // Check if process is still alive
 if (child.exitCode === null && child.signalCode === null) {
   try {
-    process.kill(child.pid, 0);  // Check existence
+    process.kill(child.pid, 0); // Check existence
   } catch (e) {
     if (e.code !== 'ESRCH') throw e;
   }
@@ -548,7 +552,7 @@ if (child.exitCode === null && child.signalCode === null) {
 
 ```javascript
 // BAD: Large messages
-child.send({ data: largeBuffer });  // May fail or be slow
+child.send({ data: largeBuffer }); // May fail or be slow
 
 // GOOD: Use shared memory or files for large data
 const shm = createSharedArrayBuffer(size);
@@ -566,8 +570,8 @@ child.on('exit', () => {
 // Or with spawn options
 spawn('cmd', args, {
   detached: true,
-  stdio: 'ignore'
-}).unref();  // Won't keep parent alive
+  stdio: 'ignore',
+}).unref(); // Won't keep parent alive
 ```
 
 ## References

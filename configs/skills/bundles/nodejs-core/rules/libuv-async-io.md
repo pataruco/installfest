@@ -13,12 +13,12 @@ libuv provides cross-platform asynchronous I/O using the best available mechanis
 
 libuv uses different mechanisms per platform:
 
-| Platform | Mechanism | Description |
-|----------|-----------|-------------|
-| Linux | epoll | Scalable I/O event notification |
-| macOS/BSD | kqueue | Kernel event notification |
-| Windows | IOCP | I/O Completion Ports |
-| SunOS | event ports | Solaris event ports |
+| Platform  | Mechanism   | Description                     |
+| --------- | ----------- | ------------------------------- |
+| Linux     | epoll       | Scalable I/O event notification |
+| macOS/BSD | kqueue      | Kernel event notification       |
+| Windows   | IOCP        | I/O Completion Ports            |
+| SunOS     | event ports | Solaris event ports             |
 
 ```c
 // libuv abstracts these differences
@@ -319,6 +319,7 @@ int main() {
 ```
 
 In JavaScript, this is used internally for:
+
 - Worker thread communication
 - N-API async callbacks
 - Signal handlers
@@ -357,7 +358,7 @@ server.on('connection', (socket) => {
 });
 
 // Set TCP backlog (connection queue size)
-server.listen(3000, '0.0.0.0', 511);  // 511 is default
+server.listen(3000, '0.0.0.0', 511); // 511 is default
 ```
 
 ### Buffer Allocation
@@ -414,10 +415,10 @@ const handles = process._getActiveHandles();
 const requests = process._getActiveRequests();
 
 console.log('Active handles:', handles.length);
-handles.forEach(h => console.log(' ', h.constructor.name));
+handles.forEach((h) => console.log(' ', h.constructor.name));
 
 console.log('Active requests:', requests.length);
-requests.forEach(r => console.log(' ', r.constructor.name));
+requests.forEach((r) => console.log(' ', r.constructor.name));
 ```
 
 ## Common Patterns

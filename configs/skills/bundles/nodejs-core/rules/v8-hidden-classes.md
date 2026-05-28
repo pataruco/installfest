@@ -15,9 +15,9 @@ JavaScript objects are dynamic, but V8 optimizes them by creating hidden classes
 
 ```javascript
 // V8 creates hidden classes as properties are added
-const obj = {};        // Map M0: empty object
-obj.x = 1;             // Map M1: { x: number }
-obj.y = 2;             // Map M2: { x: number, y: number }
+const obj = {}; // Map M0: empty object
+obj.x = 1; // Map M1: { x: number }
+obj.y = 2; // Map M2: { x: number, y: number }
 ```
 
 ```
@@ -49,17 +49,17 @@ V8 uses inline caching to speed up property access. When code accesses a propert
 
 ```javascript
 function getX(obj) {
-  return obj.x;  // First call: look up 'x', cache result
-                 // Subsequent calls: use cached offset if same Map
+  return obj.x; // First call: look up 'x', cache result
+  // Subsequent calls: use cached offset if same Map
 }
 
 const a = { x: 1 };
 const b = { x: 2 };
-const c = { x: 3, y: 4 };  // Different Map!
+const c = { x: 3, y: 4 }; // Different Map!
 
-getX(a);  // Monomorphic IC
-getX(b);  // Still monomorphic (same Map)
-getX(c);  // IC becomes polymorphic (different Map)
+getX(a); // Monomorphic IC
+getX(b); // Still monomorphic (same Map)
+getX(c); // IC becomes polymorphic (different Map)
 ```
 
 ### IC States
@@ -105,8 +105,8 @@ function Point(x, y, z) {
 // BAD: Object literals with different shapes
 const points = [
   { x: 1, y: 2 },
-  { x: 1, y: 2, z: 3 },  // Different Map
-  { y: 2, x: 1 },        // Different Map (different order!)
+  { x: 1, y: 2, z: 3 }, // Different Map
+  { y: 2, x: 1 }, // Different Map (different order!)
 ];
 
 // GOOD: Use a class to ensure consistent shape
@@ -121,7 +121,7 @@ class Point {
 const points = [
   new Point(1, 2),
   new Point(1, 2, 3),
-  new Point(1, 2),  // Same Map as first!
+  new Point(1, 2), // Same Map as first!
 ];
 ```
 
@@ -131,14 +131,14 @@ const points = [
 // BAD: Adding properties later fragments Maps
 const obj = { x: 1, y: 2 };
 if (condition) {
-  obj.z = 3;  // Creates new Map
+  obj.z = 3; // Creates new Map
 }
 
 // GOOD: Initialize all properties upfront
 const obj = {
   x: 1,
   y: 2,
-  z: condition ? 3 : undefined
+  z: condition ? 3 : undefined,
 };
 ```
 
@@ -147,11 +147,11 @@ const obj = {
 ```javascript
 // BAD: Delete causes transition to slow mode
 const obj = { x: 1, y: 2, z: 3 };
-delete obj.y;  // Object may become slow/dictionary mode
+delete obj.y; // Object may become slow/dictionary mode
 
 // GOOD: Set to undefined instead
 const obj = { x: 1, y: 2, z: 3 };
-obj.y = undefined;  // Keeps fast properties
+obj.y = undefined; // Keeps fast properties
 ```
 
 ## Property Types and Transitions
@@ -161,11 +161,11 @@ obj.y = undefined;  // Keeps fast properties
 ```javascript
 // BAD: Changing property types causes Map transitions
 const obj = { value: 42 };
-obj.value = "string";  // Type change! New Map
+obj.value = 'string'; // Type change! New Map
 
 // GOOD: Keep types consistent
 const obj = { value: 42 };
-obj.value = 100;  // Same type, same Map
+obj.value = 100; // Same type, same Map
 ```
 
 ### SMI (Small Integer) Optimization
@@ -177,9 +177,9 @@ V8 optimizes small integers (31-bit on 64-bit systems):
 const obj = { count: 42 };
 
 // HeapNumber: Requires heap allocation
-const obj = { value: 1.5 };           // Float
-const obj = { big: 2147483648 };      // Exceeds SMI range
-const obj = { neg: -2147483649 };     // Exceeds SMI range
+const obj = { value: 1.5 }; // Float
+const obj = { big: 2147483648 }; // Exceeds SMI range
+const obj = { neg: -2147483649 }; // Exceeds SMI range
 ```
 
 ```javascript
@@ -188,11 +188,11 @@ function Counter() {
   this.count = 0;
 }
 const c = new Counter();
-c.count = 1.5;  // Transitions from SMI to HeapNumber
+c.count = 1.5; // Transitions from SMI to HeapNumber
 
 // GOOD: Be consistent with number types
 function Counter() {
-  this.count = 0.0;  // Start as double if doubles are needed
+  this.count = 0.0; // Start as double if doubles are needed
 }
 ```
 
@@ -211,7 +211,7 @@ const b = [1.1, 2.2, 3.3];
 const c = [1, 'two', {}];
 
 // HOLEY_SMI_ELEMENTS (has holes)
-const d = [1, , 3];  // Hole at index 1
+const d = [1, , 3]; // Hole at index 1
 ```
 
 ### Elements Kind Transitions
@@ -227,25 +227,25 @@ const d = [1, , 3];  // Hole at index 1
 // HOLEY_ELEMENTS
 
 // Once transitioned, arrays don't go back!
-const arr = [1, 2, 3];        // PACKED_SMI_ELEMENTS
-arr.push(4.5);                // PACKED_DOUBLE_ELEMENTS
-arr[10] = 5;                  // HOLEY_DOUBLE_ELEMENTS (hole at 4-9)
+const arr = [1, 2, 3]; // PACKED_SMI_ELEMENTS
+arr.push(4.5); // PACKED_DOUBLE_ELEMENTS
+arr[10] = 5; // HOLEY_DOUBLE_ELEMENTS (hole at 4-9)
 ```
 
 ### Array Best Practices
 
 ```javascript
 // BAD: Create holes
-const arr = new Array(1000);  // HOLEY_SMI_ELEMENTS
+const arr = new Array(1000); // HOLEY_SMI_ELEMENTS
 arr[0] = 1;
 
 // GOOD: Pre-allocate and fill
-const arr = new Array(1000).fill(0);  // PACKED_SMI_ELEMENTS
+const arr = new Array(1000).fill(0); // PACKED_SMI_ELEMENTS
 
 // BAD: Push different types
 const arr = [];
 arr.push(1);
-arr.push('string');  // Transitions to PACKED_ELEMENTS
+arr.push('string'); // Transitions to PACKED_ELEMENTS
 
 // GOOD: Consistent types
 const nums = [];
@@ -275,10 +275,10 @@ node --trace-deopt app.js
 function checkMaps() {
   const a = { x: 1, y: 2 };
   const b = { x: 3, y: 4 };
-  const c = { y: 1, x: 2 };  // Different order!
+  const c = { y: 1, x: 2 }; // Different order!
 
-  console.log(%HaveSameMap(a, b));  // true
-  console.log(%HaveSameMap(a, c));  // false
+  console.log(%HaveSameMap(a, b)); // true
+  console.log(%HaveSameMap(a, c)); // false
 }
 ```
 
@@ -317,7 +317,7 @@ function processEntity(entity) {
 
 processEntity({ id: 1, name: 'A' });
 processEntity({ id: 2, name: 'B', extra: true });
-processEntity({ name: 'C', id: 3 });  // Different order
+processEntity({ name: 'C', id: 3 }); // Different order
 // IC becomes megamorphic!
 
 // GOOD: Normalize input shapes
@@ -342,13 +342,13 @@ processEntity(new Entity(2, 'B'));
 ```javascript
 // BAD: Dynamic property access defeats IC
 function getValue(obj, key) {
-  return obj[key];  // Can't cache, always megamorphic
+  return obj[key]; // Can't cache, always megamorphic
 }
 
 // BETTER: Use Map for truly dynamic keys
 const data = new Map();
 data.set('key1', 'value1');
-data.get('key1');  // Map access is optimized differently
+data.get('key1'); // Map access is optimized differently
 ```
 
 ### Object.assign and Spread
@@ -356,14 +356,14 @@ data.get('key1');  // Map access is optimized differently
 ```javascript
 // Object.assign and spread create new Maps
 const base = { a: 1, b: 2 };
-const extended = { ...base, c: 3 };  // New Map
+const extended = { ...base, c: 3 }; // New Map
 
 // For hot paths, prefer explicit construction
 function extend(base) {
   return {
     a: base.a,
     b: base.b,
-    c: 3
+    c: 3,
   };
 }
 ```
@@ -374,7 +374,9 @@ V8 caches prototype chain lookups:
 
 ```javascript
 class Base {
-  getValue() { return this.value; }
+  getValue() {
+    return this.value;
+  }
 }
 
 class Derived extends Base {
@@ -386,10 +388,12 @@ class Derived extends Base {
 
 // Prototype method lookup is cached
 const d = new Derived(42);
-d.getValue();  // Prototype lookup cached
+d.getValue(); // Prototype lookup cached
 
 // BAD: Modifying prototype invalidates caches
-Base.prototype.getValue = function() { return this.value * 2; };
+Base.prototype.getValue = function () {
+  return this.value * 2;
+};
 // All caches for getValue are invalidated!
 ```
 

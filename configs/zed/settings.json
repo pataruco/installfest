@@ -7,16 +7,37 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+	"cli_default_open_behavior": "new_window",
+ "project_panel": {
+  "dock": "left"
+ },
+ "outline_panel": {
+  "dock": "right"
+ },
+ "collaboration_panel": {
+  "dock": "right"
+ },
+ "git_panel": {
+  "dock": "right"
+ },
+ "agent_servers": {
+		"claude-acp": {
+			"type": "registry"
+		}
+	},
 	"edit_predictions": {
+		"provider": "zed",
 		"disabled_globs": ["**/.env"],
 		"mode": "eager"
 	},
 	"agent": {
+		"dock": "right",
+  "default_profile": "write",
 		"default_model": {
+			"effort": "max",
 			"provider": "zed.dev",
-			"model": "claude-opus-4-6-thinking",
-			"enable_thinking": true,
-			"effort": "high"
+			"model": "claude-opus-4-6",
+			"enable_thinking": true
 		},
 		"favorite_models": [],
 		"model_parameters": []
@@ -40,6 +61,9 @@
 			},
 			"colorize_brackets": true
 		},
+  "Markdown": {
+      "format_on_save": "on"
+    },
 		"TypeScript": {
 			"formatter": { "language_server": { "name": "biome" } },
 			"code_actions_on_format": {
@@ -103,6 +127,11 @@
 		}
 	},
 	"lsp": {
+		"biome": {
+			"settings": {
+				"require_config_file": true
+			}
+		},
 		"yaml-language-server": {
 			"settings": {
 				"yaml": {

@@ -90,7 +90,7 @@ function onconnection(err, clientHandle) {
   const socket = new Socket({
     handle: clientHandle,
     allowHalfOpen: self.allowHalfOpen,
-    pauseOnCreate: self.pauseOnConnect
+    pauseOnCreate: self.pauseOnConnect,
   });
 
   self._connections++;
@@ -157,7 +157,7 @@ void TCPWrap::OnConnection(uv_stream_t* handle, int status) {
 ```javascript
 // lib/net.js
 
-Socket.prototype.connect = function(options, callback) {
+Socket.prototype.connect = function (options, callback) {
   const self = this;
 
   // Create handle if not exists
@@ -437,9 +437,8 @@ void UDPWrap::OnRecv(uv_udp_t* handle,
 ```javascript
 // Get active socket handles
 const handles = process._getActiveHandles();
-const sockets = handles.filter(h =>
-  h.constructor.name === 'TCP' ||
-  h.constructor.name === 'Socket'
+const sockets = handles.filter(
+  (h) => h.constructor.name === 'TCP' || h.constructor.name === 'Socket',
 );
 
 console.log(`Active sockets: ${sockets.length}`);
@@ -469,7 +468,7 @@ server.on('connection', (socket) => {
   });
 
   const originalWrite = socket.write.bind(socket);
-  socket.write = function(data, encoding, callback) {
+  socket.write = function (data, encoding, callback) {
     socket._bytesSent += Buffer.byteLength(data);
     return originalWrite(data, encoding, callback);
   };
@@ -479,8 +478,10 @@ server.on('connection', (socket) => {
 setInterval(() => {
   console.log(`Active connections: ${connections.size}`);
   for (const socket of connections) {
-    console.log(`  ${socket.remoteAddress}:${socket.remotePort} - ` +
-                `rx: ${socket._bytesReceived}, tx: ${socket._bytesSent}`);
+    console.log(
+      `  ${socket.remoteAddress}:${socket.remotePort} - ` +
+        `rx: ${socket._bytesReceived}, tx: ${socket._bytesSent}`,
+    );
   }
 }, 5000);
 ```
@@ -494,8 +495,8 @@ const socket = net.connect(port, host);
 
 // Increase kernel buffer sizes
 // Must be done before connection
-socket.setRecvBufferSize?.(1024 * 1024);  // Node 12+
-socket.setSendBufferSize?.(1024 * 1024);  // Node 12+
+socket.setRecvBufferSize?.(1024 * 1024); // Node 12+
+socket.setSendBufferSize?.(1024 * 1024); // Node 12+
 ```
 
 ### Connection Reuse (HTTP Keep-Alive)
@@ -507,7 +508,7 @@ const agent = new http.Agent({
   keepAlive: true,
   keepAliveMsecs: 60000,
   maxSockets: 100,
-  maxFreeSockets: 10
+  maxFreeSockets: 10,
 });
 
 // All requests share connections
@@ -533,7 +534,7 @@ console.log({
   localAddress: socket.localAddress,
   localPort: socket.localPort,
   remoteAddress: socket.remoteAddress,
-  remotePort: socket.remotePort
+  remotePort: socket.remotePort,
 });
 ```
 

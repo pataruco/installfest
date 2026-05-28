@@ -27,12 +27,12 @@ type IsString<T> = T extends string ? true : false;
 
 type Test1 = IsString<string>; // true
 type Test2 = IsString<number>; // false
-type Test3 = IsString<"hello">; // true (literal extends string)
+type Test3 = IsString<'hello'>; // true (literal extends string)
 
 // Check type relationships
-type Result1 = string extends string ? "yes" : "no"; // "yes"
-type Result2 = string extends number ? "yes" : "no"; // "no"
-type Result3 = "hello" extends string ? "yes" : "no"; // "yes"
+type Result1 = string extends string ? 'yes' : 'no'; // "yes"
+type Result2 = string extends number ? 'yes' : 'no'; // "no"
+type Result3 = 'hello' extends string ? 'yes' : 'no'; // "yes"
 ```
 
 ## Practical Example: Null Checking
@@ -50,16 +50,16 @@ type Test3 = IsNullable<undefined>; // false (null !== undefined)
 ```typescript
 // Return different types based on input
 type TypeName<T> = T extends string
-  ? "string"
+  ? 'string'
   : T extends number
-  ? "number"
-  : T extends boolean
-  ? "boolean"
-  : T extends undefined
-  ? "undefined"
-  : T extends Function
-  ? "function"
-  : "object";
+    ? 'number'
+    : T extends boolean
+      ? 'boolean'
+      : T extends undefined
+        ? 'undefined'
+        : T extends Function
+          ? 'function'
+          : 'object';
 
 type T1 = TypeName<string>; // "string"
 type T2 = TypeName<number>; // "number"
@@ -104,25 +104,27 @@ type TupleToSearchParams<T extends string[]> = {
 };
 
 // Only convert if search is defined and is a string array
-type SearchParams<TConfig extends BaseRouterConfig, TRoute extends keyof TConfig> =
-  TConfig[TRoute]["search"] extends string[]
-    ? TupleToSearchParams<TConfig[TRoute]["search"]>
-    : undefined;
+type SearchParams<
+  TConfig extends BaseRouterConfig,
+  TRoute extends keyof TConfig,
+> = TConfig[TRoute]['search'] extends string[]
+  ? TupleToSearchParams<TConfig[TRoute]['search']>
+  : undefined;
 ```
 
 ## Using Conditionals in Function Arguments
 
 ```typescript
 const makeRouter = <TConfig extends Record<string, { search?: string[] }>>(
-  config: TConfig
+  config: TConfig,
 ) => {
   return {
     goTo: <TRoute extends keyof TConfig>(
       route: TRoute,
       // Only allow search params if route has search defined
-      search?: TConfig[TRoute]["search"] extends string[]
-        ? { [K in TConfig[TRoute]["search"][number]]?: string }
-        : never
+      search?: TConfig[TRoute]['search'] extends string[]
+        ? { [K in TConfig[TRoute]['search'][number]]?: string }
+        : never,
     ) => {
       // Implementation
     },
@@ -130,12 +132,12 @@ const makeRouter = <TConfig extends Record<string, { search?: string[] }>>(
 };
 
 const router = makeRouter({
-  "/": {},
-  "/search": { search: ["query", "page"] },
+  '/': {},
+  '/search': { search: ['query', 'page'] },
 });
 
-router.goTo("/"); // No search param allowed
-router.goTo("/search", { query: "test", page: "1" }); // Search params required
+router.goTo('/'); // No search param allowed
+router.goTo('/search', { query: 'test', page: '1' }); // Search params required
 ```
 
 ## Filtering with Conditionals
@@ -145,7 +147,7 @@ Use `never` to filter out types:
 ```typescript
 type ExtractStrings<T> = T extends string ? T : never;
 
-type Mixed = "a" | "b" | 1 | 2 | true;
+type Mixed = 'a' | 'b' | 1 | 2 | true;
 type OnlyStrings = ExtractStrings<Mixed>; // "a" | "b"
 ```
 
@@ -163,8 +165,8 @@ type Exclude<T, U> = T extends U ? never : T;
 type DeepReadonly<T> = T extends Function
   ? T
   : T extends object
-  ? { readonly [K in keyof T]: DeepReadonly<T[K]> }
-  : T;
+    ? { readonly [K in keyof T]: DeepReadonly<T[K]> }
+    : T;
 
 interface User {
   name: string;
@@ -187,8 +189,8 @@ type ReadonlyUser = DeepReadonly<User>;
 type IsEmptyArray<T extends any[]> = T extends []
   ? true
   : T extends [any, ...any[]]
-  ? false
-  : boolean; // Unknown length arrays
+    ? false
+    : boolean; // Unknown length arrays
 
 type Test1 = IsEmptyArray<[]>; // true
 type Test2 = IsEmptyArray<[1]>; // false
@@ -204,14 +206,16 @@ type NonEmptyArray<T extends any[]> = T extends [infer First, ...infer Rest]
   : never;
 
 type Config = {
-  fields: ["name", "email"]; // Non-empty
+  fields: ['name', 'email']; // Non-empty
 };
 
 // Use in conditional
-type HasFields<T extends { fields?: string[] }> =
-  T["fields"] extends [string, ...string[]]
-    ? true
-    : false;
+type HasFields<T extends { fields?: string[] }> = T['fields'] extends [
+  string,
+  ...string[],
+]
+  ? true
+  : false;
 ```
 
 ## Common Patterns
@@ -270,15 +274,15 @@ Sometimes union types or overloads are simpler:
 ```typescript
 // Over-complicated
 type ProcessResult<T> = T extends string
-  ? { type: "string"; value: string }
+  ? { type: 'string'; value: string }
   : T extends number
-  ? { type: "number"; value: number }
-  : never;
+    ? { type: 'number'; value: number }
+    : never;
 
 // Simpler with discriminated union
 type Result =
-  | { type: "string"; value: string }
-  | { type: "number"; value: number };
+  | { type: 'string'; value: string }
+  | { type: 'number'; value: number };
 ```
 
 ### Forgetting the False Branch

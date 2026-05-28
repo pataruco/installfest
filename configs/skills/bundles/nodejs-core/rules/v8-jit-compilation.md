@@ -28,6 +28,7 @@ JavaScript Source
 ### Ignition (Interpreter)
 
 Ignition is V8's bytecode interpreter. It:
+
 - Compiles JavaScript to bytecode quickly
 - Executes code immediately
 - Collects type feedback for optimization
@@ -83,6 +84,7 @@ Hot Code (compiled by TurboFan)
 ### Tier-Up Thresholds
 
 V8 decides to optimize based on:
+
 - Invocation count
 - Loop iterations
 - Collected type feedback quality
@@ -116,10 +118,10 @@ function add(a, b) {
 }
 
 for (let i = 0; i < 100000; i++) {
-  add(i, i + 1);  // Optimized for numbers
+  add(i, i + 1); // Optimized for numbers
 }
 
-add("hello", "world");  // Type mismatch!
+add('hello', 'world'); // Type mismatch!
 // DEOPTIMIZATION: eager - not a number
 ```
 
@@ -134,14 +136,14 @@ node --trace-deopt app.js
 
 ### Common Deoptimization Reasons
 
-| Reason | Description | Fix |
-|--------|-------------|-----|
-| `not a number` | Expected number, got something else | Type consistency |
-| `wrong map` | Object shape changed | Consistent object structure |
-| `out of bounds` | Array access beyond length | Bounds checking |
-| `minus zero` | Operation produced -0 | Avoid -0 producing operations |
-| `overflow` | Integer overflow | Use BigInt for large numbers |
-| `hole` | Accessed array hole | Avoid sparse arrays |
+| Reason          | Description                         | Fix                           |
+| --------------- | ----------------------------------- | ----------------------------- |
+| `not a number`  | Expected number, got something else | Type consistency              |
+| `wrong map`     | Object shape changed                | Consistent object structure   |
+| `out of bounds` | Array access beyond length          | Bounds checking               |
+| `minus zero`    | Operation produced -0               | Avoid -0 producing operations |
+| `overflow`      | Integer overflow                    | Use BigInt for large numbers  |
+| `hole`          | Accessed array hole                 | Avoid sparse arrays           |
 
 ## Writing Optimizable Code
 
@@ -153,7 +155,7 @@ function process(value) {
   if (typeof value === 'number') {
     return value * 2;
   }
-  return value + value;  // String concatenation
+  return value + value; // String concatenation
 }
 
 // GOOD: Type-stable code
@@ -174,15 +176,19 @@ function getLength(obj) {
   return obj.length;
 }
 
-getLength([1, 2, 3]);      // Array
-getLength("hello");         // String
-getLength({ length: 5 });   // Object
+getLength([1, 2, 3]); // Array
+getLength('hello'); // String
+getLength({ length: 5 }); // Object
 getLength(new Set([1, 2])); // Set (has size, not length!)
 // Call site becomes megamorphic
 
 // GOOD: Separate functions for different types
-function getArrayLength(arr) { return arr.length; }
-function getStringLength(str) { return str.length; }
+function getArrayLength(arr) {
+  return arr.length;
+}
+function getStringLength(str) {
+  return str.length;
+}
 ```
 
 ### Loop Optimization
@@ -192,7 +198,7 @@ function getStringLength(str) { return str.length; }
 function sum(arr) {
   let result = 0;
   for (let i = 0; i < arr.length; i++) {
-    result = result + arr[i];  // If arr has non-numbers, deopt
+    result = result + arr[i]; // If arr has non-numbers, deopt
   }
   return result;
 }
@@ -261,7 +267,7 @@ function square(x) {
 }
 
 function processValues(arr) {
-  return arr.map(square);  // square may be inlined
+  return arr.map(square); // square may be inlined
 }
 ```
 
@@ -282,7 +288,7 @@ function noInline(x) {
 function mergeAll(objects) {
   let result = {};
   for (const obj of objects) {
-    result = { ...result, ...obj };  // Creates new object each time
+    result = { ...result, ...obj }; // Creates new object each time
   }
   return result;
 }
@@ -291,7 +297,7 @@ function mergeAll(objects) {
 function mergeAll(objects) {
   const result = {};
   for (const obj of objects) {
-    Object.assign(result, obj);  // Mutates in place
+    Object.assign(result, obj); // Mutates in place
   }
   return result;
 }
@@ -341,7 +347,9 @@ runBenchmark();
 ```javascript
 // With --allow-natives-syntax
 function testOptimization() {
-  function add(a, b) { return a + b; }
+  function add(a, b) {
+    return a + b;
+  }
 
   // Warm up
   for (let i = 0; i < 10000; i++) {
@@ -367,11 +375,10 @@ TurboFan can eliminate heap allocations when objects don't "escape":
 ```javascript
 // Object may be stack-allocated (escape analysis)
 function getDistance(x1, y1, x2, y2) {
-  const point1 = { x: x1, y: y1 };  // Doesn't escape
-  const point2 = { x: x2, y: y2 };  // Doesn't escape
+  const point1 = { x: x1, y: y1 }; // Doesn't escape
+  const point2 = { x: x2, y: y2 }; // Doesn't escape
   return Math.sqrt(
-    Math.pow(point2.x - point1.x, 2) +
-    Math.pow(point2.y - point1.y, 2)
+    Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2),
   );
 }
 ```
@@ -381,8 +388,8 @@ function getDistance(x1, y1, x2, y2) {
 ```javascript
 // Redundant loads can be eliminated
 function process(obj) {
-  const a = obj.value;  // Load
-  const b = obj.value;  // Eliminated - use previous load
+  const a = obj.value; // Load
+  const b = obj.value; // Eliminated - use previous load
   return a + b;
 }
 ```
@@ -393,9 +400,9 @@ function process(obj) {
 // V8 can eliminate redundant bounds checks
 function sum(arr) {
   let result = 0;
-  const len = arr.length;  // Cached length
+  const len = arr.length; // Cached length
   for (let i = 0; i < len; i++) {
-    result += arr[i];  // V8 knows i < len, may eliminate check
+    result += arr[i]; // V8 knows i < len, may eliminate check
   }
   return result;
 }
@@ -406,7 +413,7 @@ function sum(arr) {
 ```javascript
 // V8 moves invariant code out of loops
 function process(arr, multiplier) {
-  const factor = multiplier * 2;  // Moved before loop
+  const factor = multiplier * 2; // Moved before loop
   for (let i = 0; i < arr.length; i++) {
     // const factor = multiplier * 2;  // If here, moved out
     arr[i] = arr[i] * factor;
@@ -431,6 +438,7 @@ node --trace-deopt app.js 2>&1
 ```
 
 Key fields:
+
 - `bailout_type`: `eager` (immediate), `lazy` (at next call), `soft` (for profiling)
 - `source_position`: Byte offset in source
 - `deopt_reason`: Why deoptimization occurred
