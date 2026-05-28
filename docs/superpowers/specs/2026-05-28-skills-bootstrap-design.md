@@ -15,7 +15,7 @@ There are no hand-authored skill files under `~/.claude/skills/` or `~/.agents/s
 
 | Source | What it is | Reproducibility today |
 |---|---|---|
-| `~/.claude/plugins/cache/*` (15 plugins, 14 enabled + `firebase` disabled) | Plugin-managed, auto-updating skill bundles | Captured by `~/.claude/settings.json` `enabledPlugins` |
+| `~/.claude/plugins/cache/*` (16 plugins, 15 enabled + `firebase` disabled) | Plugin-managed, auto-updating skill bundles | Captured by `~/.claude/settings.json` `enabledPlugins` |
 | `~/.claude/agents/code-challenge-reviewer.md` | One custom subagent | Not anywhere reproducible |
 | `~/Downloads/*.skill` (5 zip archives) | Hand-curated skill bundles in the standard `.skill` zip format | Only on this Mac |
 
