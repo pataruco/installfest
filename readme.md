@@ -42,6 +42,69 @@ high-performance collaboration with humans and AI, written in Rust 🦀.
 5. Copy and paste the contents of this [`settings.json`](./configs/zed/settings.json) file into the settings
 6. Install the CLI integration by press `Zed > Install CLI Integration`
 
+### Agent Skills
+
+[Agent Skills](https://zed.dev/docs/ai/skills) are reusable instruction packages the AI agent loads on demand. Zed reads them from `~/.agents/skills/`, Claude Code reads them from `~/.claude/skills/`. This installfest puts the canonical set at `~/.agents/skills/` and symlinks `~/.claude/skills/` to it so both tools see the same skills.
+
+This requires the [Claude CLI](https://docs.claude.com/en/docs/claude-code) (set up later in this installfest); if you have not installed it yet, do that first and come back.
+
+1. Register the two extra plugin marketplaces:
+
+   ```sh
+   claude plugin marketplace add accesslint/claude-marketplace
+   claude plugin marketplace add anthropics/skills
+   ```
+
+2. Install the Claude Code plugins listed in [`configs/skills/claude-plugins.txt`](./configs/skills/claude-plugins.txt):
+
+   ```sh
+   xargs -L1 claude plugin install < configs/skills/claude-plugins.txt
+   ```
+
+   `firebase@claude-plugins-official` ships in the list. Disable it from the Claude UI if you do not need it.
+
+3. Install the custom subagent:
+
+   ```sh
+   mkdir -p ~/.claude/agents
+   cp configs/skills/agents/code-challenge-reviewer.md ~/.claude/agents/
+   ```
+
+4. Create the shared skills directory and symlink `~/.claude/skills/` to it:
+
+   ```sh
+   mkdir -p ~/.agents/skills
+   ln -sfn ~/.agents/skills ~/.claude/skills
+   ```
+
+   `ln -sfn` overwrites any existing `~/.claude/skills/` entry. If you already have skills there from another setup, back them up first.
+
+5. Copy the vendored skill bundles into the shared directory:
+
+   ```sh
+   cp -R configs/skills/bundles/* ~/.agents/skills/
+   ```
+
+6. Sparse-clone the curated subset of the [Anthropic skills registry](https://github.com/anthropics/skills) listed in [`configs/skills/anthropic-skills.txt`](./configs/skills/anthropic-skills.txt):
+
+   ```sh
+   git clone --filter=blob:none --sparse https://github.com/anthropics/skills /tmp/anthropic-skills
+   git -C /tmp/anthropic-skills sparse-checkout set $(sed 's|^|skills/|' configs/skills/anthropic-skills.txt | tr '\n' ' ')
+   while read -r skill; do
+     cp -R "/tmp/anthropic-skills/skills/$skill" ~/.agents/skills/
+   done < configs/skills/anthropic-skills.txt
+   rm -rf /tmp/anthropic-skills
+   ```
+
+7. Verify. Open Zed and type `/` in the agent panel — your installed skills should appear in the completion menu. Optional CLI sanity checks:
+
+   ```sh
+   claude plugin list
+   readlink ~/.claude/skills      # should print the path to ~/.agents/skills
+   ls ~/.agents/skills            # should list all installed skill folders
+   ls ~/.claude/agents            # should include code-challenge-reviewer.md
+   ```
+
 ### VS Code
 
 [Visual Studio](https://code.visualstudio.com/Download) Code is a lightweight but powerful source code editor which runs on your desktop and is available for Windows, macOS and Linux. It comes with built-in support for JavaScript, TypeScript and Node.js

@@ -1,0 +1,16 @@
+accesslint@accesslint
+claude-code-setup@claude-plugins-official
+code-simplifier@claude-plugins-official
+commit-commands@claude-plugins-official
+explanatory-output-style@claude-plugins-official
+feature-dev@claude-plugins-official
+firebase@claude-plugins-official
+firecrawl@claude-plugins-official
+frontend-design@claude-plugins-official
+github@claude-plugins-official
+ralph-loop@claude-plugins-official
+rust-analyzer-lsp@claude-plugins-official
+security-guidance@claude-plugins-official
+skill-creator@claude-plugins-official
+superpowers@claude-plugins-official
+typescript-lsp@claude-plugins-official
