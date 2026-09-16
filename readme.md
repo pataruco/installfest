@@ -28,6 +28,21 @@ The Xcode Command Line Tools are part of Xcode. Installation of many common Unix
    - Navigate to **Profiles** > **Text** > **Font**
    - Increase the font size
 
+## AI
+
+### [Claude Code](https://code.claude.com/docs/en/quickstart#native-install-recommended)
+
+1. Install
+
+   ```sh
+   curl -fsSL https://claude.ai/install.sh | bash
+   ```
+
+2. Login
+   ```sh
+   claude login
+   ```
+
 ## Text editor
 
 ### Zed
@@ -50,10 +65,10 @@ This requires the [Claude CLI](https://docs.claude.com/en/docs/claude-code) (set
 
 1. Register the two extra plugin marketplaces:
 
-   ```sh
-   claude plugin marketplace add accesslint/claude-marketplace
-   claude plugin marketplace add anthropics/skills
-   ```
+```sh
+claude plugin marketplace add accesslint/claude-marketplace
+claude plugin marketplace add anthropics/skills
+```
 
 2. Install the Claude Code plugins listed in [`configs/skills/claude-plugins.txt`](./configs/skills/claude-plugins.txt):
 
@@ -104,20 +119,6 @@ This requires the [Claude CLI](https://docs.claude.com/en/docs/claude-code) (set
    ls ~/.agents/skills            # should list all installed skill folders
    ls ~/.claude/agents            # should include code-challenge-reviewer.md
    ```
-
-### VS Code
-
-[Visual Studio](https://code.visualstudio.com/Download) Code is a lightweight but powerful source code editor which runs on your desktop and is available for Windows, macOS and Linux. It comes with built-in support for JavaScript, TypeScript and Node.js
-
-1. Download Visual Studio
-2. Move the app from downloads folder to application folder
-3. Open Visual studio
-4. Install CLI integration
-   - Press <kbd>⌘</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>
-   - Type `Shell Command: Install 'code' command in PATH` and press <kbd>Enter</kbd>
-5. Turn on **Settings sync**
-
-   ![](https://code.visualstudio.com/assets/docs/editor/settings-sync/turn-on-sync.png)
 
 ## Terminal theme
 
@@ -292,33 +293,11 @@ A cat(1) clone with syntax highlighting and Git integration.
    brew install bat
    ```
 
-## Install `pyenv` Python Version Manager
+## Install [`uv`](https://docs.astral.sh/uv/#highlights)
 
-[pyenv](https://github.com/pyenv/pyenv) lets you easily switch between multiple versions of Python.
-
-1. Install
-
+1. Type
    ```sh
-   brew install pyenv
-   brew install pyenv-virtualenv
-   ```
-
-2. Set up your shell environment for Pyenv, run this
-   ```sh
-   set -Ux PYENV_ROOT $HOME/.pyenv
-   fish_add_path $PYENV_ROOT/bin
-   ```
-3. Set up shell environment for Pyenv in `~/.config/fish/config.fish`
-
-   ```sh
-    # Load pyenv
-    pyenv init - | source
-    alias brew="env PATH=(string replace (pyenv root)/shims '' \"\$PATH\") brew"
-   ```
-
-4. Restart the shell
-   ```sh
-   exec "$SHELL"
+   curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
 
 ## Install Python
@@ -327,15 +306,11 @@ A cat(1) clone with syntax highlighting and Git integration.
 
 1. Install
    ```sh
-   pyenv install 3.11.1
+   uv python install 3.14 3.13
    ```
 2. Set the global version
    ```sh
-   pyenv global 3.11.1
-   ```
-3. Python doesn't ship with the most up to date version of package manager pip, so upgrade pip
-   ```sh
-   pip install -upgrade pip
+   uv python pin 3.14
    ```
 
 ## [NVM](https://github.com/nvm-sh/nvm) Node Version Manager
@@ -347,7 +322,7 @@ A cat(1) clone with syntax highlighting and Git integration.
    > Check the latest [nvm](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating)
 
    ```sh
-   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.7/install.sh | bash
    ```
 
 2. Type `source ~/.nvmrc` to include the new folders to the current `$PATH`
@@ -424,34 +399,17 @@ end
 
 ## Install PNPM
 
-Since v16.13, Node.js is shipping [Corepack](https://nodejs.org/api/corepack.html) for managing package managers.
-
-1. Enable corepack
+1. Install pnpm
 
    ```sh
-   corepack enable
+    curl -fsSL https://get.pnpm.io/install.sh | sh -
    ```
 
-2. Install pnpm
-
+2. To update
    ```sh
-   corepack prepare pnpm@latest --activate
+   pnpm self-update
    ```
-
-3. Configure PNPM to work globally
-   ```sh
-   pnpm setup
-   ```
-4. Add the following to `~/.config/fish/config.fish`
-
-   ```fish
-   # pnpm
-   set -gx PNPM_HOME "/Users/pataruco/Library/pnpm"
-   if not string match -q -- $PNPM_HOME $PATH
-      set -gx PATH "$PNPM_HOME" $PATH
-   end
-   # pnpm end
-   ```
+3. Add the following to `~/.config/fish/config.fish`
 
 ## Biome
 
@@ -480,7 +438,7 @@ zed ~/.prettierrc
 Install the following **prettier** packages
 
 ```sh
-pnpm --global add prettier
+pnpm add --global prettier@latest
 ```
 
 ## Install Rust 🦀
@@ -658,6 +616,17 @@ GitHub is a web-based Git repository hosting service. It allows us to keep a rem
 6. To set your SSH signing key in Git with the path to the public key you'd like to use.
    ```sh
    git config --global user.signingkey ~/.ssh/id_rsa.pub
+   ```
+
+### Install GitHub CLI
+
+1. Install the GitHub CLI with the terminal command:
+   ```sh
+   brew install gh
+   ```
+2. Log in to GitHub CLI with the terminal command:
+   ```sh
+   gh auth login
    ```
 
 ## Speed up your cursor
