@@ -438,7 +438,7 @@ zed ~/.prettierrc
 Install the following **prettier** packages
 
 ```sh
-pnpm --global add prettier
+pnpm add --global prettier@latest
 ```
 
 ## Install Rust 🦀
@@ -616,6 +616,17 @@ GitHub is a web-based Git repository hosting service. It allows us to keep a rem
 6. To set your SSH signing key in Git with the path to the public key you'd like to use.
    ```sh
    git config --global user.signingkey ~/.ssh/id_rsa.pub
+   ```
+
+### Install GitHub CLI
+
+1. Install the GitHub CLI with the terminal command:
+   ```sh
+   brew install gh
+   ```
+2. Log in to GitHub CLI with the terminal command:
+   ```sh
+   gh auth login
    ```
 
 ## Speed up your cursor
