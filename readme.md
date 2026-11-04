@@ -482,7 +482,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 ### Delta
 
-[Delta](https://delta.dev/) is Zed's agent workspace. An agent works in a separate checkout of your repository; you review and comment on the result, pull it in, and can invite teammates into the thread. It needs macOS 13 or later on Apple Silicon and a Zed account.
+[Delta](https://delta.dev/) is Zed's agent workspace
 
 1. Sign in or create an account on the [Zed dashboard](https://dashboard.zed.dev/delta-beta) and accept the Delta Early Access Agreement.
 2. Install the app and the `delta` command
