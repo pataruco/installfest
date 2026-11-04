@@ -224,14 +224,6 @@ Run the following command to install Fisher:
 curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
 ```
 
-### Install [Bass](https://github.com/edc/bass) plugin
-
-Bass makes it easy to use utilities written for Bash in fish shell.
-
-```sh
-fisher install edc/bass
-```
-
 ### Install [onedark-fish](https://github.com/rkbk60/onedark-fish) theme
 
 ```sh
@@ -390,89 +382,65 @@ A cat(1) clone with syntax highlighting and Git integration.
    uv python pin 3.14
    ```
 
-## [NVM](https://github.com/nvm-sh/nvm) Node Version Manager
+## [fnm](https://github.com/Schniz/fnm) Node version manager
+
+fnm is a fast, Rust-based replacement for nvm. It reads the same `.nvmrc` (and `.node-version`) files and switches Node version on `cd` in a few milliseconds. The previous nvm + bass setup took ~450 ms on every `cd` and on every new shell.
 
 ### Install
 
-1. Open a terminal window and type:
-
-   > Check the latest [nvm](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating)
+1. Install fnm
 
    ```sh
-   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.7/install.sh | bash
+   brew install fnm
    ```
 
-2. Type `source ~/.nvmrc` to include the new folders to the current `$PATH`
+2. Add the following to `~/.config/fish/config.fish`. `--use-on-cd` switches version automatically when entering a directory with a version file; `--version-file-strategy=recursive` also finds one in a parent directory.
 
-### Deeper shell integration
+   ```fish
+   if status is-interactive
+       # ... other commands
+       fnm env --use-on-cd --version-file-strategy=recursive | source
+   end
+   ```
 
-> Read more [here](https://github.com/nvm-sh/nvm?tab=readme-ov-file#deeper-shell-integration)
+3. Open a new shell (or `source ~/.config/fish/config.fish`)
 
-1. Create the following fish functions
+### Using fnm
 
-```sh
-# ~/.config/fish/functions/nvm.fish
-function nvm
-  bass source ~/.nvm/nvm.sh --no-use ';' nvm $argv
-end
-
-# ~/.config/fish/functions/nvm_find_nvmrc.fish
-function nvm_find_nvmrc
-  bass source ~/.nvm/nvm.sh --no-use ';' nvm_find_nvmrc
-end
-
-# ~/.config/fish/functions/load_nvm.fish
-function load_nvm --on-variable="PWD"
-  set -l default_node_version (nvm version default)
-  set -l node_version (nvm version)
-  set -l nvmrc_path (nvm_find_nvmrc)
-  if test -n "$nvmrc_path"
-    set -l nvmrc_node_version (nvm version (cat $nvmrc_path))
-    if test "$nvmrc_node_version" = "N/A"
-      nvm install (cat $nvmrc_path)
-    else if test "$nvmrc_node_version" != "$node_version"
-      nvm use $nvmrc_node_version
-    end
-  else if test "$node_version" != "$default_node_version"
-    echo "Reverting to default Node version"
-    nvm use default
-  end
-end
-```
-
-2. Invoke on `~/.config/fish/config.fish` by
-
-```fish
-if status is-interactive
-    # ... other commands
-    load_nvm > /dev/stderr
-end
-```
-
-### Using NVM
-
-3. Now that nvm is installed, we want to list the available versions, type:
+1. List the available versions
 
    ```sh
-   nvm ls-remote
+   fnm list-remote
    ```
 
-   - And you will be shown a list of all the available versions of node
+2. Install the current **Long term support** (_LTS_) release and the latest release, and make the LTS the default
 
-4. Install the latest version of node and the current **Long term support** (_LTS_)
    ```sh
-   nvm install node
-   nvm install --lts
+   fnm install --lts
+   fnm install latest
+   fnm default lts-latest
    ```
-5. Check that Node is installed, type
+
+3. Check that Node is installed
 
    ```sh
    node --version
+   fnm list
    ```
 
-   - You should see the last version number that you've installed
+4. In a project, `fnm use` reads the `.nvmrc`; with `--use-on-cd` this happens automatically. `fnm install` with no argument installs the version the project asks for.
 
-6. To use `nvm use` automatically in a directory with a `.nvmrc` file add
+### Migrating from nvm
+
+If you had nvm installed: `fnm list` shows nothing yet, so reinstall the versions you need (`fnm install 24`, etc). Global npm packages live inside each Node version, so reinstall those too (`npm ls -g` in the old version shows them). Then remove nvm and its fish glue:
+
+```sh
+rm -rf ~/.nvm
+rm -f ~/.config/fish/functions/{nvm,nvm_find_nvmrc,load_nvm}.fish
+fisher remove edc/bass
+```
+
+and delete the `load_nvm` line from `~/.config/fish/config.fish`.
 
 ## Install PNPM
 
