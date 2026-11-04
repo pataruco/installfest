@@ -168,7 +168,7 @@ cd ~/dev/installfest
 - **Windows and panes are numbered from 1** and renumber when one closes.
 - **Links.** Hold <kbd>⌘</kbd> + <kbd>⇧</kbd> while hovering a URL and click it. <kbd>⇧</kbd> is how Ghostty bypasses tmux's mouse handling for one click ([ghostty#1040](https://github.com/ghostty-org/ghostty/issues/1040)). Outside tmux it is <kbd>⌘</kbd> + click.
 
-All tmux shortcuts use the default prefix <kbd>Ctrl</kbd> + <kbd>b</kbd>:
+tmux commands use a **two-step sequence**: press the prefix <kbd>Ctrl</kbd> + <kbd>b</kbd> together, **release both keys**, then press the command key (not all keys simultaneously):
 
 | Key                         | Does                                                     |
 | --------------------------- | -------------------------------------------------------- |

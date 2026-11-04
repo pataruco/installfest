@@ -21,6 +21,10 @@ theme = Atom One Dark
 # automatically. Uncomment only to force fish regardless of login shell.
 # command = /opt/homebrew/bin/fish
 
+# Environment: GUI apps on macOS don't inherit shell PATH, so make sure
+# Homebrew binaries are in PATH for tmux and child processes.
+env = PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
 # tmux: Ghostty has no status bar, so the tmux section of the installfest
 # provides CPU/memory/network meters instead. Every new Ghostty window
 # attaches to the shared `main` tmux session (creating it if needed).
