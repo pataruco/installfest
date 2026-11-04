@@ -161,7 +161,7 @@ claude plugin marketplace add anthropics/skills
 
 ### Ghostty (experimental)
 
-Ghostty's built-in `Atom One Dark` is a different palette from the iTerm preset above, so this repo ships [`configs/ghostty/themes/one-dark`](./configs/ghostty/themes/one-dark), a direct conversion of that `.itermcolors` file. The `theme = one-dark` line in the Ghostty config already points at it.
+Ghostty's built-in `Atom One Dark` is a different palette from what iTerm shows here, so this repo ships [`configs/ghostty/themes/one-dark`](./configs/ghostty/themes/one-dark). It combines the `.itermcolors` preset above with the colours that [`set_onedark`](#install-onedark-fish-theme) applies on top of it at every shell start, which is what you actually see in iTerm. The `theme = one-dark` line in the Ghostty config already points at it.
 
 ```sh
 mkdir -p ~/.config/ghostty/themes
@@ -355,7 +355,9 @@ fisher rkbk60/onedark-fish
 
 5. The Ghostty config from this repo already opens every new Ghostty window straight into the shared `main` tmux session (`command = … tmux new-session -A -s main`), so the meters are there from the start. Comment that line out in `~/.config/ghostty/config` if you want a plain fish shell instead. It also remaps <kbd>⌘</kbd> + <kbd>K</kbd> to send <kbd>Ctrl</kbd> + <kbd>L</kbd>, so clearing the terminal works inside tmux like it does in iTerm2.
 
-6. <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>A</kbd> copies the output of the last command to the clipboard, the closest thing to iTerm2's click-to-select command blocks. tmux finds the start of the output from the prompt marks fish emits; the end is worked out from the 2-line Starship prompt, so adjust the two `cursor-up` steps in `tmux.conf` if you change the prompt height. Ghostty has no hover toolbar or click-to-select for commands; outside tmux its native gesture is <kbd>⌘</kbd> + triple-click on the output.
+6. To open a URL inside tmux, hold <kbd>⌘</kbd> + <kbd>⇧</kbd> while hovering it (it underlines) and click. Outside tmux it is plain <kbd>⌘</kbd> + click, as in iTerm2. tmux owns the mouse (`mouse on`), and <kbd>⇧</kbd> is how Ghostty bypasses that for a single click; see [ghostty#1040](https://github.com/ghostty-org/ghostty/issues/1040).
+
+7. <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>A</kbd> copies the output of the last command to the clipboard, the closest thing to iTerm2's click-to-select command blocks. tmux finds the start of the output from the prompt marks fish emits; the end is worked out from the 2-line Starship prompt, so adjust the two `cursor-up` steps in `tmux.conf` if you change the prompt height. Ghostty has no hover toolbar or click-to-select for commands; outside tmux its native gesture is <kbd>⌘</kbd> + triple-click on the output.
 
 Useful keys (all after <kbd>Ctrl</kbd> + <kbd>b</kbd>): <kbd>c</kbd> new window, <kbd>n</kbd>/<kbd>p</kbd> next/previous window, <kbd>%</kbd> split left/right, <kbd>"</kbd> split top/bottom, <kbd>d</kbd> detach (session keeps running; `tmux attach` to return), <kbd>U</kbd> update plugins.
 
