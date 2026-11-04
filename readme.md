@@ -233,6 +233,7 @@ To get a plain Fish shell instead of tmux, comment out the `command = …` line 
 - Homebrew and `~/.local/bin` on the `PATH`.
 - `EDITOR` is `zed -w -n`, so Git and other tools open files in Zed and wait for you to close them.
 - fnm is loaded **outside** the `if status is-interactive` block, because scripts, editors and `pnpm` shims run non-interactive shells and need `node` too. `--use-on-cd` switches Node version when you enter a directory with a `.nvmrc` or `.node-version`; `--version-file-strategy=recursive` also looks in parent directories.
+- **Transient prompt**: `enable_transience` collapses previous prompts in your scrollback into a clean `❯` once executed, keeping terminal history tidy while preserving the full prompt on the active line.
 
 Fuzzy search and `cd`:
 
