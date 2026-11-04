@@ -233,6 +233,7 @@ To get a plain Fish shell instead of tmux, comment out the `command = …` line 
 - Homebrew and `~/.local/bin` on the `PATH`.
 - `EDITOR` is `zed -w -n`, so Git and other tools open files in Zed and wait for you to close them.
 - fnm is loaded **outside** the `if status is-interactive` block, because scripts, editors and `pnpm` shims run non-interactive shells and need `node` too. `--use-on-cd` switches Node version when you enter a directory with a `.nvmrc` or `.node-version`; `--version-file-strategy=recursive` also looks in parent directories.
+- **Transient prompt**: `enable_transience` collapses previous prompts in your scrollback into a clean `❯` once executed, keeping terminal history tidy while preserving the full prompt on the active line.
 
 Fuzzy search and `cd`:
 
@@ -252,6 +253,7 @@ fzf's <kbd>Option</kbd> + <kbd>C</kbd> binding is turned off because <kbd>Option
 - **Git**: `⇡2` ahead, `⇣1` behind, `⇕⇡2⇣1` diverged. The repository root in the path is bold cyan.
 - **gcloud** shows the active project instead of the account e-mail.
 - **sudo** is off. Its credential check added about 14 ms to every prompt.
+- **Claude Code**: Starship powers the Claude Code statusline with the active model, Git branch, context window gauge and session cost (configured in the [Claude Code](#claude-code) section).
 
 ## Editor: Zed
 
@@ -472,6 +474,21 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
    ```sh
    claude login
    ```
+
+3. Configure the [Starship statusline](https://starship.rs/advanced-config/#statusline-for-claude-code)
+
+   ```sh
+   mkdir -p ~/.claude
+   cp configs/claude/settings.json ~/.claude/settings.json
+   ```
+
+   If `~/.claude/settings.json` already exists, add the `statusLine` setting to it:
+
+   ```sh
+   jq '.statusLine = {"type": "command", "command": "starship statusline claude-code"}' ~/.claude/settings.json > ~/.claude/settings.json.tmp && mv ~/.claude/settings.json.tmp ~/.claude/settings.json
+   ```
+
+   The statusline displays the active model, Git branch, context window usage gauge and session cost in Claude Code.
 
 ### Delta
 

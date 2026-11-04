@@ -10,6 +10,7 @@ if status is-interactive
 
     # Prompt
     starship init fish | source
+    enable_transience
 
     # fzf: Ctrl+R fuzzy history, Ctrl+T fuzzy file picker, Shift+Tab fuzzy completion
     set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --strip-cwd-prefix --exclude .git'
