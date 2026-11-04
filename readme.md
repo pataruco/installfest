@@ -117,15 +117,14 @@ cd ~/dev/installfest
    brew install --cask ghostty
    ```
 
-2. Copy the config and the One Dark theme from this repo
+2. Copy the config from this repo
 
    ```sh
-   mkdir -p ~/.config/ghostty/themes
+   mkdir -p ~/.config/ghostty
    cp configs/ghostty/config ~/.config/ghostty/config
-   cp configs/ghostty/themes/one-dark ~/.config/ghostty/themes/one-dark
    ```
 
-   The config sets Monaco 14pt, bold text in bright colours and the One Dark theme. Ghostty's built-in `Atom One Dark` uses different colours, so the repo ships its own `one-dark` file. It takes the [One Dark iTerm preset](https://github.com/one-dark/iterm-one-dark-theme) and adds the colours that [`set_onedark`](#shell-fish-and-starship) applies at every shell start.
+   The config sets Monaco 14pt, bold text in bright colours and Ghostty's built-in `Atom One Dark` theme.
 
 3. Do not open Ghostty yet. The config starts tmux in every new window, and tmux is installed in the next section.
 
@@ -186,7 +185,7 @@ To get a plain Fish shell instead of tmux, comment out the `command = …` line 
 
 ## Shell: Fish and Starship
 
-[Fish](https://fishshell.com/) is the shell. On top of it: One Dark colours, the [Starship](https://starship.rs/) prompt, fuzzy search with [fzf](https://github.com/junegunn/fzf), a `cd` that remembers where you go with [zoxide](https://github.com/ajeetdsouza/zoxide), and Node versions with [fnm](https://github.com/Schniz/fnm). Install everything first; one config file then turns it all on.
+[Fish](https://fishshell.com/) is the shell. On top of it: the [Starship](https://starship.rs/) prompt, fuzzy search with [fzf](https://github.com/junegunn/fzf), a `cd` that remembers where you go with [zoxide](https://github.com/ajeetdsouza/zoxide), and Node versions with [fnm](https://github.com/Schniz/fnm). Install everything first; one config file then turns it all on.
 
 1. Install Fish and the tools the config uses
 
@@ -204,18 +203,7 @@ To get a plain Fish shell instead of tmux, comment out the `command = …` line 
    chsh -s $(which fish)
    ```
 
-3. Start Fish, then install the [Fisher](https://github.com/jorgebucaran/fisher) plugin manager and the [onedark-fish](https://github.com/rkbk60/onedark-fish) theme
-
-   ```sh
-   fish
-   ```
-
-   ```fish
-   curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
-   fisher install rkbk60/onedark-fish
-   ```
-
-4. Copy the Fish, Starship and `git-clean` configs from this repo
+3. Copy the Fish, Starship and `git-clean` configs from this repo
 
    ```sh
    mkdir -p ~/.config/fish/functions
@@ -224,7 +212,7 @@ To get a plain Fish shell instead of tmux, comment out the `command = …` line 
    cp configs/starship/starship.toml ~/.config/starship.toml
    ```
 
-5. Restart tmux so it picks up the new default shell, then open a new Ghostty window
+4. Restart tmux so it picks up the new default shell, then open a new Ghostty window
 
    ```sh
    tmux kill-server
@@ -237,7 +225,6 @@ To get a plain Fish shell instead of tmux, comment out the `command = …` line 
 [`config.fish`](./configs/fish/config.fish):
 
 - Homebrew and `~/.local/bin` on the `PATH`.
-- `set_onedark` repaints the terminal palette at every start.
 - `EDITOR` is `zed -w -n`, so Git and other tools open files in Zed and wait for you to close them.
 - fnm is loaded **outside** the `if status is-interactive` block, because scripts, editors and `pnpm` shims run non-interactive shells and need `node` too. `--use-on-cd` switches Node version when you enter a directory with a `.nvmrc` or `.node-version`; `--version-file-strategy=recursive` also looks in parent directories.
 

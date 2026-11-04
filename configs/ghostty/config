@@ -3,21 +3,18 @@
 # Reload with cmd+shift+, after editing.
 # Reference: https://ghostty.org/docs/config/reference
 
-# Terminal: same font and size as the iTerm2 profile ("Profiles > Text").
-# Ghostty's default is its bundled JetBrains Mono, which looks noticeably
-# different from Monaco. Monaco has no bold/italic faces; Ghostty synthesises
-# them like iTerm does (font-synthetic-style, on by default).
+# Font: Monaco 14pt. Monaco has no bold/italic faces; Ghostty synthesises
+# them (font-synthetic-style, on by default).
 font-family = Monaco
 font-size = 14
 
-# iTerm2's "Use Bright Bold": bold text is drawn in the bright palette
-# colours. Starship styles its segments as `bold <colour>`, so without this
-# they render in the darker normal colours and the prompt looks different.
+# Bold text is drawn in the bright palette colours. Starship styles its
+# segments as `bold <colour>`, so without this they render in the darker
+# normal colours and the prompt looks different.
 bold-color = bright
 
-# Terminal theme: loaded from ~/.config/ghostty/themes/one-dark
-# (see ./themes/one-dark in this repo)
-theme = one-dark
+# Terminal theme: built-in Atom One Dark
+theme = Atom One Dark
 
 # Fish shell: not needed. Ghostty uses $SHELL / the passwd entry, so
 # `chsh -s (which fish)` is enough, and fish shell integration is injected
@@ -32,17 +29,17 @@ command = /opt/homebrew/bin/tmux new-session -A -s main
 
 # Cmd+K inside tmux: Ghostty's default `clear_screen` wipes Ghostty's own
 # buffer, which tmux immediately redraws. Send Ctrl+L (\x0c) instead so the
-# tmux config's `bind -n C-l` clears the pane and its scrollback, like iTerm.
+# tmux config's `bind -n C-l` clears the pane and its scrollback.
 # Outside tmux, fish's own Ctrl+L binding clears the screen.
 keybind = super+k=text:\x0c
 
 # URLs inside tmux: tmux owns the mouse (`mouse on`), so hold Cmd+Shift to
 # highlight and click a link there; Shift bypasses tmux's mouse capture for
-# one click. Outside tmux, Cmd+click works as in iTerm2. Nothing to configure.
+# one click. Outside tmux, Cmd+click works directly. Nothing to configure.
 
-# Cmd+Shift+A copies the output of the last command, like iTerm2's "Select
-# Output of Last Command". Sends Alt+O (ESC o), which the tmux config binds.
-# Outside tmux, Ghostty's own equivalent is Cmd+triple-click on the output.
+# Cmd+Shift+A copies the output of the last command. Sends Alt+O (ESC o),
+# which the tmux config binds. Outside tmux, Ghostty's own equivalent is
+# Cmd+triple-click on the output.
 keybind = super+shift+a=text:\x1bo
 
 # Quick terminal: toggles a drop-down terminal window from anywhere with Cmd+`

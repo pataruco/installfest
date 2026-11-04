@@ -2,14 +2,11 @@
 # Install to ~/.config/fish/config.fish
 #
 # Everything referenced here is installed in the "Shell" section of the
-# installfest readme: onedark-fish, starship, fzf, fd, bat, zoxide and fnm.
+# installfest readme: starship, fzf, fd, bat, zoxide and fnm.
 
 if status is-interactive
     fish_add_path /opt/homebrew/bin
     fish_add_path ~/.local/bin # uv and other per-user installs
-
-    # One Dark palette for the terminal (rkbk60/onedark-fish)
-    set_onedark
 
     # Prompt
     starship init fish | source
