@@ -353,6 +353,52 @@ fisher rkbk60/onedark-fish
 
 Useful keys (all after <kbd>Ctrl</kbd> + <kbd>b</kbd>): <kbd>c</kbd> new window, <kbd>n</kbd>/<kbd>p</kbd> next/previous window, <kbd>%</kbd> split left/right, <kbd>"</kbd> split top/bottom, <kbd>d</kbd> detach (session keeps running; `tmux attach` to return), <kbd>U</kbd> update plugins.
 
+## Install [fzf](https://github.com/junegunn/fzf), [fd](https://github.com/sharkdp/fd) and [zoxide](https://github.com/ajeetdsouza/zoxide)
+
+- **fzf** is a fuzzy finder for the command line: fuzzy history search, file picking and completion.
+- **fd** is a fast `find`; fzf uses it to list files (it respects `.gitignore`).
+- **zoxide** is a smarter `cd` that remembers the directories you use most. It replaces the `jethrokuan/z` fisher plugin.
+
+1. Install
+
+   ```sh
+   brew install fzf fd zoxide
+   ```
+
+2. Add the following to `~/.config/fish/config.fish`
+
+   ```fish
+   if status is-interactive
+       # ... other commands
+
+       # fzf: Ctrl+R fuzzy history, Ctrl+T fuzzy file picker, Shift+Tab fuzzy completion
+       set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --strip-cwd-prefix --exclude .git'
+       set -gx FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
+       set -gx FZF_CTRL_T_OPTS "--preview 'bat --color=always --style=numbers --line-range=:200 {}'"
+       # Option is a normal key on macOS (Option+C types ç), so skip fzf's Alt+C; use `zi` instead
+       set -gx FZF_ALT_C_COMMAND ''
+       fzf --fish | source
+
+       # zoxide: `z <part of a path>` jumps to the best match, `zi` picks interactively with fzf
+       zoxide init fish | source
+   end
+   ```
+
+3. Open a new shell and try it
+   - <kbd>Ctrl</kbd> + <kbd>R</kbd>: fuzzy search the command history
+   - <kbd>Ctrl</kbd> + <kbd>T</kbd>: fuzzy pick a file (with a `bat` preview) and insert its path at the cursor
+   - <kbd>Shift</kbd> + <kbd>Tab</kbd>: fuzzy completion for the word at the cursor
+   - `z inst` jumps to the most used directory matching `inst`; `zi` opens an interactive list
+
+### Migrating from `jethrokuan/z`
+
+If you had the `z` fisher plugin, import its history into zoxide first, then remove it:
+
+```sh
+_Z_DATA=~/.local/share/z/data zoxide import z
+fisher remove jethrokuan/z
+```
+
 ## Install [Bat 🦇](https://github.com/sharkdp/bat)
 
 A cat(1) clone with syntax highlighting and Git integration.
@@ -394,13 +440,11 @@ fnm is a fast, Rust-based replacement for nvm. It reads the same `.nvmrc` (and `
    brew install fnm
    ```
 
-2. Add the following to `~/.config/fish/config.fish`. `--use-on-cd` switches version automatically when entering a directory with a version file; `--version-file-strategy=recursive` also finds one in a parent directory.
+2. Add the following to `~/.config/fish/config.fish`, **outside** the `if status is-interactive` block so that scripts, editors and `pnpm` shims (non-interactive shells) also get `node` on their `PATH`. `--use-on-cd` switches version automatically when entering a directory with a version file; `--version-file-strategy=recursive` also finds one in a parent directory.
 
    ```fish
-   if status is-interactive
-       # ... other commands
-       fnm env --use-on-cd --version-file-strategy=recursive | source
-   end
+   # after the `if status is-interactive ... end` block
+   fnm env --use-on-cd --version-file-strategy=recursive | source
    ```
 
 3. Open a new shell (or `source ~/.config/fish/config.fish`)
