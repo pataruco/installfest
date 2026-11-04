@@ -1,0 +1,68 @@
+# Don't print a new line at the start of the prompt
+add_newline = false
+
+# Right-aligned prompt showing command duration, exit status, battery, and time
+right_format = "$cmd_duration$status$battery$time"
+
+# Disable the package module, hiding it from the prompt completely
+[package]
+format = "via [🎁 $version](208 bold) "
+
+[git_branch]
+symbol = "🌱 "
+
+[git_status]
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+
+[nodejs]
+format = "via [🤖 $version](bold green) "
+
+[directory]
+truncation_length = 8
+truncation_symbol = "…/"
+repo_root_style = "bold cyan"
+
+[docker_context]
+format = "via [🐋 $context](blue bold) "
+
+[kotlin]
+symbol = "🅺 "
+
+[kubernetes]
+format = 'on [🐳 $context \($namespace\)](bold green) '
+disabled = false
+
+[rust]
+format = "via [⚙️ $version](red bold) "
+
+# Sudo credentials check adds ~14ms of latency to each prompt; disabled by default
+[sudo]
+style = "bold green"
+symbol = "👩‍💻 "
+disabled = true
+
+[terraform]
+format = "[🏎💨 $workspace]($style) "
+
+[gcloud]
+format = "on [$symbol$project]($style) "
+symbol = "☁️ "
+
+[cmd_duration]
+min_time = 2_000
+show_notifications = true
+min_time_to_notify = 45_000
+
+[status]
+disabled = false
+style = "bold red"
+symbol = "💥 "
+format = "[$symbol$status]($style) "
+
+[time]
+disabled = false
+format = "[$time]($style)"
+time_format = "%T"
+style = "dimmed white"

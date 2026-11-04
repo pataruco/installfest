@@ -1,0 +1,47 @@
+# One Dark theme for Ghostty
+# Install to ~/.config/ghostty/themes/one-dark
+#
+# This reproduces what iTerm2 actually shows with this installfest, which is
+# two layers:
+#
+# 1. The iTerm2 preset (background, cursor, selection):
+#    https://raw.githubusercontent.com/one-dark/iterm-one-dark-theme/master/One%20Dark.itermcolors
+# 2. onedark-fish's `set_onedark`, run from config.fish on every shell start,
+#    which overrides the 16 ANSI colours and the foreground with escape
+#    sequences. Its palette differs from the preset's (e.g. red #be5046 vs
+#    #e06c75), so the preset alone looks wrong.
+#
+# Baking layer 2 in here means Ghostty looks right even where the escape
+# sequences do not arrive. Inside tmux they never do: onedark-fish's tmux
+# branch emits a malformed `\e]40;...` (missing `;` after the 4) instead of
+# `\e]4;0;...`. Upstream bug, not a Ghostty or tmux one.
+#
+# cursor-text deviates from the preset: iTerm sets it to the cursor colour
+# and relies on "smart cursor color"; Ghostty has no such option, so the
+# background is used to keep text under a block cursor readable.
+
+# ANSI palette (from set_onedark)
+palette = 0=#282c34
+palette = 1=#be5046
+palette = 2=#699959
+palette = 3=#d19a66
+palette = 4=#2e6399
+palette = 5=#9918a6
+palette = 6=#23878c
+palette = 7=#abb2bf
+palette = 8=#5c6370
+palette = 9=#e06c75
+palette = 10=#98c379
+palette = 11=#e5c07b
+palette = 12=#61afef
+palette = 13=#c678dd
+palette = 14=#56b6c2
+palette = 15=#cfd7e6
+
+# Foreground (from set_onedark); the rest from the iTerm2 preset
+foreground = #cfd7e6
+background = #21252b
+cursor-color = #abb2bf
+cursor-text = #21252b
+selection-background = #323844
+selection-foreground = #abb2bf

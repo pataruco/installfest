@@ -22,11 +22,38 @@ The Xcode Command Line Tools are part of Xcode. Installation of many common Unix
 
 ## Terminal
 
+> Ghostty is being trialled side by side with iTerm2 until it reaches feature parity. Both can be installed at the same time; they do not share any configuration. The **Ghostty (experimental)** steps below mirror each iTerm step. Known gap: Ghostty has no status bar, so the CPU/memory/network meters come from [tmux](#tmux-experimental) instead.
+
+### iTerm2
+
 1. Install [iTerm2](https://www.iterm2.com/downloads.html)
 2. Set the font size to be **14pt**
    - Press <kbd>⌘</kbd> + <kbd>,</kbd>
    - Navigate to **Profiles** > **Text** > **Font**
    - Increase the font size
+
+### Ghostty (experimental)
+
+[Ghostty](https://ghostty.org/) has no preferences UI; everything lives in `~/.config/ghostty/config`.
+
+1. Install Ghostty
+
+   ```sh
+   brew install --cask ghostty
+   ```
+
+2. Copy the config from this repo. It matches the iTerm2 profile: **Monaco 14pt**, bold text in bright colours, and the One Dark theme installed in the [Terminal theme](#terminal-theme) section.
+
+   ```sh
+   mkdir -p ~/.config/ghostty
+   cp configs/ghostty/config ~/.config/ghostty/config
+   ```
+
+3. After editing the config, reload it in Ghostty with <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>,</kbd>
+
+4. Two extras are already in the config:
+   - <kbd>⌘</kbd> + <kbd>`</kbd> toggles a drop-down **quick terminal** from any app. Because the key is global, macOS asks for Accessibility permission the first time (`System Settings > Privacy & Security > Accessibility`).
+   - `shell-integration-features = ssh-env,ssh-terminfo` makes `ssh` work on hosts that do not know `xterm-ghostty`: Ghostty installs its terminfo on the remote host, or falls back to `xterm-256color`.
 
 ## AI
 
@@ -122,6 +149,8 @@ claude plugin marketplace add anthropics/skills
 
 ## Terminal theme
 
+### iTerm2
+
 1. Create file called `one-dark.itermcolors` on the `~/Desktop` and open it
 
    ```sh
@@ -133,6 +162,17 @@ claude plugin marketplace add anthropics/skills
    - Press <kbd>⌘</kbd> + <kbd>,</kbd>
    - Navigate to **Profiles** > **Colors** > **Color presets...**
    - Select **one-dark**
+
+### Ghostty (experimental)
+
+Ghostty's built-in `Atom One Dark` is a different palette from what iTerm shows here, so this repo ships [`configs/ghostty/themes/one-dark`](./configs/ghostty/themes/one-dark). It combines the `.itermcolors` preset above with the colours that [`set_onedark`](#install-onedark-fish-theme) applies on top of it at every shell start, which is what you actually see in iTerm. The `theme = one-dark` line in the Ghostty config already points at it.
+
+```sh
+mkdir -p ~/.config/ghostty/themes
+cp configs/ghostty/themes/one-dark ~/.config/ghostty/themes/one-dark
+```
+
+Reload with <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>,</kbd>.
 
 ## Homebrew Package Manager
 
@@ -178,20 +218,14 @@ Packages are bundles of source code distributed by developers of software, which
    - Select **Command** `Login Shell`
    - Check `Load integration automatically`
 
+   **Ghostty (experimental):** nothing to configure. Ghostty launches `$SHELL` (now Fish, after `chsh`) and injects its Fish shell integration automatically. Open a new Ghostty window to pick up the change.
+
 ### Install [Fisher](https://github.com/jorgebucaran/fisher) plugin manager
 
 Run the following command to install Fisher:
 
 ```sh
 curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
-```
-
-### Install [Bass](https://github.com/edc/bass) plugin
-
-Bass makes it easy to use utilities written for Bash in fish shell.
-
-```sh
-fisher install edc/bass
 ```
 
 ### Install [onedark-fish](https://github.com/rkbk60/onedark-fish) theme
@@ -242,47 +276,105 @@ fisher rkbk60/onedark-fish
     end
    ```
 
-3. To get started configuring starship, create the following file:`~/.config/starship.toml`
+3. Copy the config from this repo to `~/.config/starship.toml`
 
-   ```toml
-   # Don't print a new line at the start of the prompt
-   add_newline = false
-
-   # Disable the package module, hiding it from the prompt completely
-   [package]
-   format = "via [🎁 $version](208 bold) "
-
-   [git_branch]
-   symbol = "🌱 "
-
-   [nodejs]
-   format = "via [🤖 $version](bold green) "
-
-   [directory]
-   truncation_length = 8
-   truncation_symbol = "…/"
-
-   [docker_context]
-   format = "via [🐋 $context](blue bold)"
-
-   [kotlin]
-   symbol = "🅺 "
-
-   [kubernetes]
-   format = 'on [🐳 $context \($namespace\)](bold green) '
-   disabled = false
-
-   [rust]
-   format = "via [⚙️ $version](red bold)"
-
-   [sudo]
-   style = "bold green"
-   symbol = "👩‍💻 "
-   disabled = false
-
-   [terraform]
-   format = "[🏎💨 $workspace]($style) "
+   ```sh
+   cp configs/starship/starship.toml ~/.config/starship.toml
    ```
+
+   What it sets up, on top of the per-language symbols:
+   - **Right prompt** (`right_format`): command duration (only when over 2 s), a red `💥 <code>` after a non-zero exit, battery (only when it drops to 10% or less, Starship's default) and the time. A desktop notification fires for commands that run longer than 45 s.
+   - **`git_status`** shows counts: `⇡2` ahead, `⇣1` behind, `⇕⇡2⇣1` diverged.
+   - **`directory`** colours the repository root in bold cyan.
+   - **`gcloud`** shows the active project (`☁️ my-project`) instead of the account e-mail.
+   - **`sudo`** is disabled: its credential check added ~14 ms to every prompt.
+
+## tmux (experimental)
+
+> Only needed with Ghostty. iTerm2 has a built-in status bar with CPU, memory and network meters; Ghostty has none (see [ghostty#2421](https://github.com/ghostty-org/ghostty/discussions/2421)). [tmux](https://github.com/tmux/tmux/wiki) runs inside the terminal and draws its own status line, which plugins can fill with the same meters.
+
+1. Install tmux and the dependencies of the network plugin
+
+   ```sh
+   brew install tmux gawk coreutils
+   ```
+
+2. Install [TPM](https://github.com/tmux-plugins/tpm), the tmux plugin manager. Because the config lives in `~/.config/tmux/`, TPM installs plugins into `~/.config/tmux/plugins/`, so TPM goes there too.
+
+   ```sh
+   git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+   ```
+
+3. Copy the config from this repo. It loads [`tmux-cpu`](https://github.com/tmux-plugins/tmux-cpu) and [`tmux-network-bandwidth`](https://github.com/xamut/tmux-network-bandwidth), puts the meters in a One Dark coloured status line, enables the mouse, allows the `set_onedark` palette through (`allow-passthrough on`) and makes <kbd>Ctrl</kbd> + <kbd>L</kbd> clear the pane and its scrollback. It also numbers windows and panes from 1 (renumbering when one closes) and adds three plugins:
+   - [`tmux-resurrect`](https://github.com/tmux-plugins/tmux-resurrect) and [`tmux-continuum`](https://github.com/tmux-plugins/tmux-continuum) save the sessions every 15 minutes and restore them when tmux starts after a reboot. Save and restore by hand with prefix + <kbd>Ctrl</kbd> + <kbd>s</kbd> / <kbd>Ctrl</kbd> + <kbd>r</kbd>.
+   - [`tmux-yank`](https://github.com/tmux-plugins/tmux-yank) copies to the macOS clipboard: <kbd>y</kbd> in copy mode, and mouse selections are copied on release.
+
+   ```sh
+   mkdir -p ~/.config/tmux
+   cp configs/tmux/tmux.conf ~/.config/tmux/tmux.conf
+   ```
+
+4. Start tmux and install the plugins by pressing the prefix <kbd>Ctrl</kbd> + <kbd>b</kbd>, then <kbd>I</kbd> (capital i)
+
+   ```sh
+   tmux
+   ```
+
+   The status line should now show `CPU`, `MEM` and `↓ ↑` network throughput.
+
+5. The Ghostty config from this repo already opens every new Ghostty window straight into the shared `main` tmux session (`command = … tmux new-session -A -s main`), so the meters are there from the start. Comment that line out in `~/.config/ghostty/config` if you want a plain fish shell instead. It also remaps <kbd>⌘</kbd> + <kbd>K</kbd> to send <kbd>Ctrl</kbd> + <kbd>L</kbd>, so clearing the terminal works inside tmux like it does in iTerm2.
+
+6. To open a URL inside tmux, hold <kbd>⌘</kbd> + <kbd>⇧</kbd> while hovering it (it underlines) and click. Outside tmux it is plain <kbd>⌘</kbd> + click, as in iTerm2. tmux owns the mouse (`mouse on`), and <kbd>⇧</kbd> is how Ghostty bypasses that for a single click; see [ghostty#1040](https://github.com/ghostty-org/ghostty/issues/1040).
+
+7. <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>A</kbd> copies the output of the last command to the clipboard, the closest thing to iTerm2's click-to-select command blocks. tmux finds the start of the output from the prompt marks fish emits; the end is worked out from the 2-line Starship prompt, so adjust the two `cursor-up` steps in `tmux.conf` if you change the prompt height. Ghostty has no hover toolbar or click-to-select for commands; outside tmux its native gesture is <kbd>⌘</kbd> + triple-click on the output.
+
+Useful keys (all after <kbd>Ctrl</kbd> + <kbd>b</kbd>): <kbd>c</kbd> new window, <kbd>n</kbd>/<kbd>p</kbd> next/previous window, <kbd>%</kbd> split left/right, <kbd>"</kbd> split top/bottom, <kbd>d</kbd> detach (session keeps running; `tmux attach` to return), <kbd>U</kbd> update plugins.
+
+## Install [fzf](https://github.com/junegunn/fzf), [fd](https://github.com/sharkdp/fd) and [zoxide](https://github.com/ajeetdsouza/zoxide)
+
+- **fzf** is a fuzzy finder for the command line: fuzzy history search, file picking and completion.
+- **fd** is a fast `find`; fzf uses it to list files (it respects `.gitignore`).
+- **zoxide** is a smarter `cd` that remembers the directories you use most. It replaces the `jethrokuan/z` fisher plugin.
+
+1. Install
+
+   ```sh
+   brew install fzf fd zoxide
+   ```
+
+2. Add the following to `~/.config/fish/config.fish`
+
+   ```fish
+   if status is-interactive
+       # ... other commands
+
+       # fzf: Ctrl+R fuzzy history, Ctrl+T fuzzy file picker, Shift+Tab fuzzy completion
+       set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --strip-cwd-prefix --exclude .git'
+       set -gx FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
+       set -gx FZF_CTRL_T_OPTS "--preview 'bat --color=always --style=numbers --line-range=:200 {}'"
+       # Option is a normal key on macOS (Option+C types ç), so skip fzf's Alt+C; use `zi` instead
+       set -gx FZF_ALT_C_COMMAND ''
+       fzf --fish | source
+
+       # zoxide: `z <part of a path>` jumps to the best match, `zi` picks interactively with fzf
+       zoxide init fish | source
+   end
+   ```
+
+3. Open a new shell and try it
+   - <kbd>Ctrl</kbd> + <kbd>R</kbd>: fuzzy search the command history
+   - <kbd>Ctrl</kbd> + <kbd>T</kbd>: fuzzy pick a file (with a `bat` preview) and insert its path at the cursor
+   - <kbd>Shift</kbd> + <kbd>Tab</kbd>: fuzzy completion for the word at the cursor
+   - `z inst` jumps to the most used directory matching `inst`; `zi` opens an interactive list
+
+### Migrating from `jethrokuan/z`
+
+If you had the `z` fisher plugin, import its history into zoxide first, then remove it:
+
+```sh
+_Z_DATA=~/.local/share/z/data zoxide import z
+fisher remove jethrokuan/z
+```
 
 ## Install [Bat 🦇](https://github.com/sharkdp/bat)
 
@@ -313,89 +405,63 @@ A cat(1) clone with syntax highlighting and Git integration.
    uv python pin 3.14
    ```
 
-## [NVM](https://github.com/nvm-sh/nvm) Node Version Manager
+## [fnm](https://github.com/Schniz/fnm) Node version manager
+
+fnm is a fast, Rust-based replacement for nvm. It reads the same `.nvmrc` (and `.node-version`) files and switches Node version on `cd` in a few milliseconds. The previous nvm + bass setup took ~450 ms on every `cd` and on every new shell.
 
 ### Install
 
-1. Open a terminal window and type:
-
-   > Check the latest [nvm](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating)
+1. Install fnm
 
    ```sh
-   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.7/install.sh | bash
+   brew install fnm
    ```
 
-2. Type `source ~/.nvmrc` to include the new folders to the current `$PATH`
+2. Add the following to `~/.config/fish/config.fish`, **outside** the `if status is-interactive` block so that scripts, editors and `pnpm` shims (non-interactive shells) also get `node` on their `PATH`. `--use-on-cd` switches version automatically when entering a directory with a version file; `--version-file-strategy=recursive` also finds one in a parent directory.
 
-### Deeper shell integration
+   ```fish
+   # after the `if status is-interactive ... end` block
+   fnm env --use-on-cd --version-file-strategy=recursive | source
+   ```
 
-> Read more [here](https://github.com/nvm-sh/nvm?tab=readme-ov-file#deeper-shell-integration)
+3. Open a new shell (or `source ~/.config/fish/config.fish`)
 
-1. Create the following fish functions
+### Using fnm
 
-```sh
-# ~/.config/fish/functions/nvm.fish
-function nvm
-  bass source ~/.nvm/nvm.sh --no-use ';' nvm $argv
-end
-
-# ~/.config/fish/functions/nvm_find_nvmrc.fish
-function nvm_find_nvmrc
-  bass source ~/.nvm/nvm.sh --no-use ';' nvm_find_nvmrc
-end
-
-# ~/.config/fish/functions/load_nvm.fish
-function load_nvm --on-variable="PWD"
-  set -l default_node_version (nvm version default)
-  set -l node_version (nvm version)
-  set -l nvmrc_path (nvm_find_nvmrc)
-  if test -n "$nvmrc_path"
-    set -l nvmrc_node_version (nvm version (cat $nvmrc_path))
-    if test "$nvmrc_node_version" = "N/A"
-      nvm install (cat $nvmrc_path)
-    else if test "$nvmrc_node_version" != "$node_version"
-      nvm use $nvmrc_node_version
-    end
-  else if test "$node_version" != "$default_node_version"
-    echo "Reverting to default Node version"
-    nvm use default
-  end
-end
-```
-
-2. Invoke on `~/.config/fish/config.fish` by
-
-```fish
-if status is-interactive
-    # ... other commands
-    load_nvm > /dev/stderr
-end
-```
-
-### Using NVM
-
-3. Now that nvm is installed, we want to list the available versions, type:
+1. List the available versions
 
    ```sh
-   nvm ls-remote
+   fnm list-remote
    ```
 
-   - And you will be shown a list of all the available versions of node
+2. Install the current **Long term support** (_LTS_) release and the latest release, and make the LTS the default
 
-4. Install the latest version of node and the current **Long term support** (_LTS_)
    ```sh
-   nvm install node
-   nvm install --lts
+   fnm install --lts
+   fnm install latest
+   fnm default lts-latest
    ```
-5. Check that Node is installed, type
+
+3. Check that Node is installed
 
    ```sh
    node --version
+   fnm list
    ```
 
-   - You should see the last version number that you've installed
+4. In a project, `fnm use` reads the `.nvmrc`; with `--use-on-cd` this happens automatically. `fnm install` with no argument installs the version the project asks for.
 
-6. To use `nvm use` automatically in a directory with a `.nvmrc` file add
+### Migrating from nvm
+
+If you had nvm installed: `fnm list` shows nothing yet, so reinstall the versions you need (`fnm install 24`, etc). Global npm packages live inside each Node version, so reinstall those too (`npm ls -g` in the old version shows them). Then remove nvm and its fish glue:
+
+```sh
+rm -rf ~/.nvm
+rm -f ~/.config/fish/functions/{nvm,nvm_find_nvmrc,load_nvm}.fish
+fisher remove edc/bass
+```
+
+and delete the `load_nvm` line from `~/.config/fish/config.fish`.
 
 ## Install PNPM
 
