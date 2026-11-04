@@ -1,6 +1,6 @@
 # 💻 macOS installfest
 
-Set up a new Mac for development: Ghostty and tmux as the terminal, Fish with Starship as the shell, Zed as the editor, Git and GitHub, Node, Python and Rust, and Claude Code and Delta with shared agent skills.
+Set up a new Mac for development: Ghostty and tmux as the terminal, Fish with Starship as the shell, Zed as the editor, Git and GitHub, Node, Python and Rust, then Claude Code and Delta sharing one set of agent skills.
 
 Follow the sections in order. Later steps use tools installed earlier. Where a tool has a config file, this repo ships it under [`configs/`](./configs) and the steps copy it into place, so clone this repo first and run the commands from its root.
 
@@ -72,7 +72,7 @@ macOS ships an old "Apple Git" with the Xcode tools. Install Homebrew's Git now 
    cp configs/ghostty/themes/one-dark ~/.config/ghostty/themes/one-dark
    ```
 
-   The config sets Monaco 14pt, bold text in bright colours and the One Dark theme. Ghostty's built-in `Atom One Dark` uses different colours, so the repo ships its own `one-dark` file, based on the [One Dark iTerm preset](https://github.com/one-dark/iterm-one-dark-theme) plus the colours that [`set_onedark`](#shell-fish-and-starship) applies at every shell start.
+   The config sets Monaco 14pt, bold text in bright colours and the One Dark theme. Ghostty's built-in `Atom One Dark` uses different colours, so the repo ships its own `one-dark` file. It takes the [One Dark iTerm preset](https://github.com/one-dark/iterm-one-dark-theme) and adds the colours that [`set_onedark`](#shell-fish-and-starship) applies at every shell start.
 
 3. Do not open Ghostty yet. The config starts tmux in every new window, and tmux is installed in the next section.
 
@@ -84,7 +84,7 @@ macOS ships an old "Apple Git" with the Xcode tools. Install Homebrew's Git now 
 
 ## tmux
 
-Ghostty has no status bar ([ghostty#2421](https://github.com/ghostty-org/ghostty/discussions/2421)). [tmux](https://github.com/tmux/tmux/wiki) draws one inside the terminal with CPU, memory and network meters, and keeps your sessions alive across reboots.
+Ghostty has no status bar ([ghostty#2421](https://github.com/ghostty-org/ghostty/discussions/2421)). [tmux](https://github.com/tmux/tmux/wiki) draws one inside the terminal with CPU, memory and network meters. It also keeps sessions across reboots.
 
 1. Install tmux and the tools the network meter needs
 
@@ -135,7 +135,7 @@ To get a plain Fish shell instead of tmux, comment out the `command = …` line 
 
 ## Shell: Fish and Starship
 
-[Fish](https://fishshell.com/) is the shell, with the One Dark colours, the [Starship](https://starship.rs/) prompt, fuzzy search with [fzf](https://github.com/junegunn/fzf), a smarter `cd` with [zoxide](https://github.com/ajeetdsouza/zoxide), and Node versions with [fnm](https://github.com/Schniz/fnm). Everything is installed first, then one config file turns it all on.
+[Fish](https://fishshell.com/) is the shell. On top of it: One Dark colours, the [Starship](https://starship.rs/) prompt, fuzzy search with [fzf](https://github.com/junegunn/fzf), a `cd` that remembers where you go with [zoxide](https://github.com/ajeetdsouza/zoxide), and Node versions with [fnm](https://github.com/Schniz/fnm). Install everything first; one config file then turns it all on.
 
 1. Install Fish and the tools the config uses
 
@@ -188,7 +188,7 @@ To get a plain Fish shell instead of tmux, comment out the `command = …` line 
 - Homebrew and `~/.local/bin` on the `PATH`.
 - `set_onedark` repaints the terminal palette at every start.
 - `EDITOR` is `zed -w -n`, so Git and other tools open files in Zed and wait for you to close them.
-- fnm is loaded **outside** the `if status is-interactive` block. Scripts, editors and `pnpm` shims run non-interactive shells and need `node` on their `PATH` too. `--use-on-cd` switches Node version when you enter a directory with a `.nvmrc` or `.node-version`; `--version-file-strategy=recursive` also finds one in a parent directory.
+- fnm is loaded **outside** the `if status is-interactive` block, because scripts, editors and `pnpm` shims run non-interactive shells and need `node` too. `--use-on-cd` switches Node version when you enter a directory with a `.nvmrc` or `.node-version`; `--version-file-strategy=recursive` also looks in parent directories.
 
 Fuzzy search and `cd`:
 
@@ -211,7 +211,7 @@ fzf's <kbd>Option</kbd> + <kbd>C</kbd> binding is turned off because <kbd>Option
 
 ## Editor: Zed
 
-[Zed](https://zed.dev/) is a fast editor with built-in collaboration and AI agents.
+[Zed](https://zed.dev/) is the editor. The Fish config's `EDITOR` and several steps below use its `zed` command.
 
 1. Install Zed
 
@@ -377,7 +377,7 @@ gh auth login
 
 ## Node
 
-fnm was installed in the [Shell](#shell-fish-and-starship) section. It reads the same `.nvmrc` and `.node-version` files as nvm and switches version in a few milliseconds.
+fnm was installed in the [Shell](#shell-fish-and-starship) section. It reads the same `.nvmrc` and `.node-version` files as nvm.
 
 1. Install the current long-term support (LTS) release and the latest release, and make LTS the default
 
@@ -398,7 +398,7 @@ In a project with a `.nvmrc`, fnm switches to that version when you `cd` in. If 
 
 ### pnpm
 
-[pnpm](https://pnpm.io/) is a fast, disk-efficient package manager.
+[pnpm](https://pnpm.io/) is the Node package manager used here. It stores each package once and links it into projects.
 
 1. Install pnpm. The installer appends a `PNPM_HOME` block to `~/.config/fish/config.fish`.
 
@@ -470,7 +470,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 ### Delta
 
-[Delta](https://delta.dev/) is Zed's collaborative agent workspace. An agent works in a separate checkout of your repository, and you review, comment on and pull in the result; teammates can join the thread. It needs macOS 13 or later on Apple Silicon and a Zed account.
+[Delta](https://delta.dev/) is Zed's agent workspace. An agent works in a separate checkout of your repository; you review and comment on the result, pull it in, and can invite teammates into the thread. It needs macOS 13 or later on Apple Silicon and a Zed account.
 
 1. Sign in or create an account on the [Zed dashboard](https://dashboard.zed.dev/delta-beta) and accept the Delta Early Access Agreement.
 2. Install the app and the `delta` command
@@ -489,7 +489,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
    delta
    ```
 
-4. Connect it to Claude Code, so a Claude Code session can be shared as a Delta thread with `/delta share`, or join one with `/delta join`
+4. Add the Claude Code plugin. It lets you share a Claude Code session as a Delta thread with `/delta share`, or join one with `/delta join`.
 
    ```sh
    claude plugin marketplace add zed-industries/delta-claude
@@ -500,7 +500,7 @@ To update later, run `delta update`. See the [Delta docs](https://delta.dev/docs
 
 ### Agent skills
 
-[Agent skills](https://zed.dev/docs/ai/skills) are instruction packages that the AI agent loads when a task matches. Zed and Delta read them from `~/.agents/skills/` and Claude Code from `~/.claude/skills/`. These steps install one set at `~/.agents/skills/` and point `~/.claude/skills/` at it, so all three tools see the same skills. The files are described in [`configs/skills/readme.md`](./configs/skills/readme.md).
+[Agent skills](https://zed.dev/docs/ai/skills) are folders of instructions that an agent loads when a task matches. Zed and Delta read them from `~/.agents/skills/` and Claude Code from `~/.claude/skills/`. These steps install one set at `~/.agents/skills/` and point `~/.claude/skills/` at it, so all three tools see the same skills. The files are described in [`configs/skills/readme.md`](./configs/skills/readme.md).
 
 1. Register the two extra plugin marketplaces
 
@@ -561,4 +561,4 @@ To update later, run `delta update`. See the [Delta docs](https://delta.dev/docs
 
 ## macOS: faster key repeat
 
-Holding a key to move the cursor is slow by default. Open **System Settings > Keyboard** and move **Key repeat rate** to **Fast** and **Delay until repeat** to **Short**.
+Holding an arrow key moves the cursor slowly by default. Open **System Settings > Keyboard** and set **Key repeat rate** to **Fast** and **Delay until repeat** to **Short**.
