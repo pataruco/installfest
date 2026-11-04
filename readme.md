@@ -51,6 +51,10 @@ The Xcode Command Line Tools are part of Xcode. Installation of many common Unix
 
 3. After editing the config, reload it in Ghostty with <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>,</kbd>
 
+4. Two extras are already in the config:
+   - <kbd>⌘</kbd> + <kbd>`</kbd> toggles a drop-down **quick terminal** from any app. Because the key is global, macOS asks for Accessibility permission the first time (`System Settings > Privacy & Security > Accessibility`).
+   - `shell-integration-features = ssh-env,ssh-terminfo` makes `ssh` work on hosts that do not know `xterm-ghostty`: Ghostty installs its terminfo on the remote host, or falls back to `xterm-256color`.
+
 ## AI
 
 ### [Claude Code](https://code.claude.com/docs/en/quickstart#native-install-recommended)
@@ -272,47 +276,18 @@ fisher rkbk60/onedark-fish
     end
    ```
 
-3. To get started configuring starship, create the following file:`~/.config/starship.toml`
+3. Copy the config from this repo to `~/.config/starship.toml`
 
-   ```toml
-   # Don't print a new line at the start of the prompt
-   add_newline = false
-
-   # Disable the package module, hiding it from the prompt completely
-   [package]
-   format = "via [🎁 $version](208 bold) "
-
-   [git_branch]
-   symbol = "🌱 "
-
-   [nodejs]
-   format = "via [🤖 $version](bold green) "
-
-   [directory]
-   truncation_length = 8
-   truncation_symbol = "…/"
-
-   [docker_context]
-   format = "via [🐋 $context](blue bold)"
-
-   [kotlin]
-   symbol = "🅺 "
-
-   [kubernetes]
-   format = 'on [🐳 $context \($namespace\)](bold green) '
-   disabled = false
-
-   [rust]
-   format = "via [⚙️ $version](red bold)"
-
-   [sudo]
-   style = "bold green"
-   symbol = "👩‍💻 "
-   disabled = false
-
-   [terraform]
-   format = "[🏎💨 $workspace]($style) "
+   ```sh
+   cp configs/starship/starship.toml ~/.config/starship.toml
    ```
+
+   What it sets up, on top of the per-language symbols:
+   - **Right prompt** (`right_format`): command duration (only when over 2 s), a red `💥 <code>` after a non-zero exit, battery (only when it drops to 10% or less, Starship's default) and the time. A desktop notification fires for commands that run longer than 45 s.
+   - **`git_status`** shows counts: `⇡2` ahead, `⇣1` behind, `⇕⇡2⇣1` diverged.
+   - **`directory`** colours the repository root in bold cyan.
+   - **`gcloud`** shows the active project (`☁️ my-project`) instead of the account e-mail.
+   - **`sudo`** is disabled: its credential check added ~14 ms to every prompt.
 
 ## tmux (experimental)
 
@@ -330,7 +305,9 @@ fisher rkbk60/onedark-fish
    git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
    ```
 
-3. Copy the config from this repo. It loads [`tmux-cpu`](https://github.com/tmux-plugins/tmux-cpu) and [`tmux-network-bandwidth`](https://github.com/xamut/tmux-network-bandwidth), puts the meters in a One Dark coloured status line, enables the mouse, allows the `set_onedark` palette through (`allow-passthrough on`) and makes <kbd>Ctrl</kbd> + <kbd>L</kbd> clear the pane and its scrollback.
+3. Copy the config from this repo. It loads [`tmux-cpu`](https://github.com/tmux-plugins/tmux-cpu) and [`tmux-network-bandwidth`](https://github.com/xamut/tmux-network-bandwidth), puts the meters in a One Dark coloured status line, enables the mouse, allows the `set_onedark` palette through (`allow-passthrough on`) and makes <kbd>Ctrl</kbd> + <kbd>L</kbd> clear the pane and its scrollback. It also numbers windows and panes from 1 (renumbering when one closes) and adds three plugins:
+   - [`tmux-resurrect`](https://github.com/tmux-plugins/tmux-resurrect) and [`tmux-continuum`](https://github.com/tmux-plugins/tmux-continuum) save the sessions every 15 minutes and restore them when tmux starts after a reboot. Save and restore by hand with prefix + <kbd>Ctrl</kbd> + <kbd>s</kbd> / <kbd>Ctrl</kbd> + <kbd>r</kbd>.
+   - [`tmux-yank`](https://github.com/tmux-plugins/tmux-yank) copies to the macOS clipboard: <kbd>y</kbd> in copy mode, and mouse selections are copied on release.
 
    ```sh
    mkdir -p ~/.config/tmux

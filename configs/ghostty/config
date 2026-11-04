@@ -44,3 +44,11 @@ keybind = super+k=text:\x0c
 # Output of Last Command". Sends Alt+O (ESC o), which the tmux config binds.
 # Outside tmux, Ghostty's own equivalent is Cmd+triple-click on the output.
 keybind = super+shift+a=text:\x1bo
+
+# Quick terminal: toggles a drop-down terminal window from anywhere with Cmd+`
+# (Requires Accessibility permission in macOS System Settings > Privacy & Security > Accessibility)
+keybind = global:cmd+grave_accent=toggle_quick_terminal
+
+# SSH integration: automatically sends Ghostty's terminfo to remote hosts via `tic`
+# and propagates terminal environment variables, preventing `terminal unknown` errors.
+shell-integration-features = ssh-env,ssh-terminfo
