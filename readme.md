@@ -1,28 +1,43 @@
-# 💻 macOS Installfest
+# 💻 macOS installfest
 
-## Pre-install
+Set up a new Mac for development: Ghostty and tmux as the terminal, Fish with Starship as the shell, Zed as the editor, Git and GitHub, Node, Python and Rust, and Claude Code with shared agent skills.
 
-1. Identify which version of OSX you're using - ideally you should have Ventura or newer (13.3.x)
-2. Ensure that you've uninstalled any antivirus software you may have, as it can prevent some of the tools from installing properly
+Follow the sections in order. Later steps use tools installed earlier. Where a tool has a config file, this repo ships it under [`configs/`](./configs) and the steps copy it into place, so clone this repo first and run the commands from its root.
 
-## Install Xcode Command Line Tools
+## Before you start
 
-Xcode is a large suite of software development tools and libraries from Apple.
+- Check your macOS version: Apple menu > **About This Mac**. You need Ventura (13.3) or newer.
+- Uninstall any antivirus software. It can stop some of the installers from working.
 
-The Xcode Command Line Tools are part of Xcode. Installation of many common Unix-based tools requires the [GCC compiler](https://en.wikipedia.org/wiki/GNU_Compiler_Collection).The Xcode Command Line Tools include a GCC compiler.
+## Xcode Command Line Tools
 
-- Open terminal an type
+Apple's compilers and build tools. Homebrew and many of the tools below need them.
 
-  ```sh
-  xcode-select --install
-  ```
+1. Open **Terminal** (in `/Applications/Utilities`) and run
 
-- You'll see a panel that asks you to install Xcode Command Line Tools.
-- Click 'Install' to begin the download and installation process.
+   ```sh
+   xcode-select --install
+   ```
 
-## Terminal
+2. Click **Install** in the dialog that appears and wait for the download to finish.
 
-[Ghostty](https://ghostty.org/) has no preferences UI; everything lives in `~/.config/ghostty/config`. It also has no status bar, so the CPU/memory/network meters come from [tmux](#tmux) instead.
+## Homebrew
+
+[Homebrew](https://brew.sh/) installs and updates command-line tools and apps. Almost every step below uses it.
+
+1. Open [brew.sh](https://brew.sh/) and run the install command shown there. It is not copied here because it changes from time to time.
+2. Run the "Next steps" commands the installer prints at the end. They add Homebrew to your `PATH`.
+3. Check the install
+
+   ```sh
+   brew doctor
+   ```
+
+   You should see `Your system is ready to brew.`
+
+## Terminal: Ghostty
+
+[Ghostty](https://ghostty.org/) has no preferences window. Everything lives in `~/.config/ghostty/config`.
 
 1. Install Ghostty
 
@@ -30,92 +45,469 @@ The Xcode Command Line Tools are part of Xcode. Installation of many common Unix
    brew install --cask ghostty
    ```
 
-2. Copy the config from this repo. It sets **Monaco 14pt**, bold text in bright colours, and the One Dark theme installed in the [Terminal theme](#terminal-theme) section.
+2. Copy the config and the One Dark theme from this repo
 
    ```sh
-   mkdir -p ~/.config/ghostty
+   mkdir -p ~/.config/ghostty/themes
    cp configs/ghostty/config ~/.config/ghostty/config
+   cp configs/ghostty/themes/one-dark ~/.config/ghostty/themes/one-dark
    ```
 
-3. After editing the config, reload it in Ghostty with <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>,</kbd>
+   The config sets Monaco 14pt, bold text in bright colours and the One Dark theme. Ghostty's built-in `Atom One Dark` uses different colours, so the repo ships its own `one-dark` file, based on the [One Dark iTerm preset](https://github.com/one-dark/iterm-one-dark-theme) plus the colours that [`set_onedark`](#shell-fish-and-starship) applies at every shell start.
 
-4. Two extras are already in the config:
-   - <kbd>⌘</kbd> + <kbd>`</kbd> toggles a drop-down **quick terminal** from any app. Because the key is global, macOS asks for Accessibility permission the first time (`System Settings > Privacy & Security > Accessibility`).
-   - `shell-integration-features = ssh-env,ssh-terminfo` makes `ssh` work on hosts that do not know `xterm-ghostty`: Ghostty installs its terminfo on the remote host, or falls back to `xterm-256color`.
+3. Do not open Ghostty yet. The config starts tmux in every new window, and tmux is installed in the next section.
 
-## AI
+### What the config gives you
 
-### [Claude Code](https://code.claude.com/docs/en/quickstart#native-install-recommended)
+- <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>,</kbd> reloads the config after you edit it.
+- <kbd>⌘</kbd> + <kbd>`</kbd> toggles a drop-down quick terminal from any app. The first time, macOS asks you to allow Ghostty under **System Settings > Privacy & Security > Accessibility**.
+- `ssh` works on hosts that do not know `xterm-ghostty`. Ghostty installs its terminfo on the remote host, or falls back to `xterm-256color` (`shell-integration-features = ssh-env,ssh-terminfo`).
 
-1. Install
+## tmux
+
+Ghostty has no status bar ([ghostty#2421](https://github.com/ghostty-org/ghostty/discussions/2421)). [tmux](https://github.com/tmux/tmux/wiki) draws one inside the terminal with CPU, memory and network meters, and keeps your sessions alive across reboots.
+
+1. Install tmux and the tools the network meter needs
+
+   ```sh
+   brew install tmux gawk coreutils
+   ```
+
+2. Install [TPM](https://github.com/tmux-plugins/tpm), the tmux plugin manager. It goes under `~/.config/tmux/` because that is where the config lives.
+
+   ```sh
+   git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+   ```
+
+3. Copy the config from this repo
+
+   ```sh
+   mkdir -p ~/.config/tmux
+   cp configs/tmux/tmux.conf ~/.config/tmux/tmux.conf
+   ```
+
+4. Open Ghostty. It starts a tmux session called `main`.
+5. Install the plugins: press <kbd>Ctrl</kbd> + <kbd>b</kbd>, then <kbd>I</kbd> (capital i).
+
+   The status line at the top should now show `CPU`, `MEM` and `↓ ↑` network throughput.
+
+### What the config gives you
+
+- **Status line** with [`tmux-cpu`](https://github.com/tmux-plugins/tmux-cpu) and [`tmux-network-bandwidth`](https://github.com/xamut/tmux-network-bandwidth), in One Dark colours.
+- **Sessions survive reboots.** [`tmux-resurrect`](https://github.com/tmux-plugins/tmux-resurrect) and [`tmux-continuum`](https://github.com/tmux-plugins/tmux-continuum) save every 15 minutes and restore when tmux starts. Save or restore by hand with <kbd>Ctrl</kbd> + <kbd>b</kbd>, then <kbd>Ctrl</kbd> + <kbd>s</kbd> or <kbd>Ctrl</kbd> + <kbd>r</kbd>.
+- **Clipboard.** [`tmux-yank`](https://github.com/tmux-plugins/tmux-yank) copies a mouse selection when you release the button, and <kbd>y</kbd> copies in copy mode.
+- **Windows and panes are numbered from 1** and renumber when one closes.
+- <kbd>⌘</kbd> + <kbd>K</kbd> clears the pane and its scrollback. Ghostty sends it as <kbd>Ctrl</kbd> + <kbd>L</kbd>, which the tmux config binds.
+- <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>A</kbd> copies the output of the last command to the clipboard. tmux finds the start from the prompt marks Fish emits and the end by stepping over the 2-line Starship prompt. If you change the prompt height, adjust the two `cursor-up` steps in `tmux.conf`.
+- **Links.** Hold <kbd>⌘</kbd> + <kbd>⇧</kbd> while hovering a URL and click it. <kbd>⇧</kbd> is how Ghostty bypasses tmux's mouse handling for one click ([ghostty#1040](https://github.com/ghostty-org/ghostty/issues/1040)). Outside tmux it is <kbd>⌘</kbd> + click.
+
+Other keys, all after <kbd>Ctrl</kbd> + <kbd>b</kbd>:
+
+| Key                       | Does                                                     |
+| ------------------------- | -------------------------------------------------------- |
+| <kbd>c</kbd>              | New window                                               |
+| <kbd>n</kbd> <kbd>p</kbd> | Next or previous window                                  |
+| <kbd>%</kbd>              | Split left and right                                     |
+| <kbd>"</kbd>              | Split top and bottom                                     |
+| <kbd>d</kbd>              | Detach. The session keeps running; `tmux attach` returns |
+| <kbd>U</kbd>              | Update plugins                                           |
+
+To get a plain Fish shell instead of tmux, comment out the `command = …` line in `~/.config/ghostty/config`.
+
+## Shell: Fish and Starship
+
+[Fish](https://fishshell.com/) is the shell, with the One Dark colours, the [Starship](https://starship.rs/) prompt, fuzzy search with [fzf](https://github.com/junegunn/fzf), a smarter `cd` with [zoxide](https://github.com/ajeetdsouza/zoxide), and Node versions with [fnm](https://github.com/Schniz/fnm). Everything is installed first, then one config file turns it all on.
+
+1. Install Fish and the tools the config uses
+
+   ```sh
+   brew install fish starship fzf fd bat zoxide fnm
+   ```
+
+   - **fd** is a fast `find` that respects `.gitignore`. fzf uses it to list files.
+   - **bat** is `cat` with syntax highlighting. fzf uses it for file previews.
+
+2. Make Fish the default shell
+
+   ```sh
+   echo $(which fish) | sudo tee -a /etc/shells
+   chsh -s $(which fish)
+   ```
+
+3. Start Fish, then install the [Fisher](https://github.com/jorgebucaran/fisher) plugin manager and the [onedark-fish](https://github.com/rkbk60/onedark-fish) theme
+
+   ```sh
+   fish
+   ```
+
+   ```fish
+   curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+   fisher install rkbk60/onedark-fish
+   ```
+
+4. Copy the Fish, Starship and `git-clean` configs from this repo
+
+   ```sh
+   mkdir -p ~/.config/fish/functions
+   cp configs/fish/config.fish ~/.config/fish/config.fish
+   cp configs/fish/functions/git-clean.fish ~/.config/fish/functions/git-clean.fish
+   cp configs/starship/starship.toml ~/.config/starship.toml
+   ```
+
+5. Restart tmux so it picks up the new default shell, then open a new Ghostty window
+
+   ```sh
+   tmux kill-server
+   ```
+
+   You should see the Starship prompt: the directory, then `❯` on its own line.
+
+### What the config gives you
+
+[`config.fish`](./configs/fish/config.fish):
+
+- Homebrew and `~/.local/bin` on the `PATH`.
+- `set_onedark` repaints the terminal palette at every start.
+- `EDITOR` is `zed -w -n`, so Git and other tools open files in Zed and wait for you to close them.
+- fnm is loaded **outside** the `if status is-interactive` block. Scripts, editors and `pnpm` shims run non-interactive shells and need `node` on their `PATH` too. `--use-on-cd` switches Node version when you enter a directory with a `.nvmrc` or `.node-version`; `--version-file-strategy=recursive` also finds one in a parent directory.
+
+Fuzzy search and `cd`:
+
+| Key or command                    | Does                                                   |
+| --------------------------------- | ------------------------------------------------------ |
+| <kbd>Ctrl</kbd> + <kbd>R</kbd>    | Fuzzy search the command history                       |
+| <kbd>Ctrl</kbd> + <kbd>T</kbd>    | Fuzzy pick a file, with a preview, and insert its path |
+| <kbd>Shift</kbd> + <kbd>Tab</kbd> | Fuzzy completion for the word at the cursor            |
+| `z inst`                          | Jump to the most used directory matching `inst`        |
+| `zi`                              | Pick a directory from an interactive list              |
+
+fzf's <kbd>Option</kbd> + <kbd>C</kbd> binding is turned off because <kbd>Option</kbd> types accented characters on macOS. Use `zi` instead.
+
+[`starship.toml`](./configs/starship/starship.toml), on top of the per-language symbols:
+
+- **Right side of the prompt**: how long the last command took (when over 2 s), `💥 <code>` in red after a failed command, battery when it is at 10% or less, and the time. Commands that run longer than 45 s send a desktop notification.
+- **Git**: `⇡2` ahead, `⇣1` behind, `⇕⇡2⇣1` diverged. The repository root in the path is bold cyan.
+- **gcloud** shows the active project instead of the account e-mail.
+- **sudo** is off. Its credential check added about 14 ms to every prompt.
+
+## Editor: Zed
+
+[Zed](https://zed.dev/) is a fast editor with built-in collaboration and AI agents.
+
+1. Install Zed
+
+   ```sh
+   brew install --cask zed
+   ```
+
+2. Copy the settings from this repo
+
+   ```sh
+   mkdir -p ~/.config/zed
+   cp configs/zed/settings.json ~/.config/zed/settings.json
+   ```
+
+3. Open Zed and choose **Zed > Install CLI**. This adds the `zed` command that `EDITOR` uses.
+
+## Git and GitHub
+
+### Install Git
+
+macOS ships an old "Apple Git". Homebrew's Git is newer and easier to update.
+
+1. Install Git
+
+   ```sh
+   brew install git
+   ```
+
+2. Open a new terminal window and check which Git you are using
+
+   ```sh
+   which git
+   git --version
+   ```
+
+   `which git` should print `/opt/homebrew/bin/git`, not `/usr/bin/git`.
+
+### Tell Git who you are
+
+Use the name and e-mail registered with your GitHub account.
+
+```sh
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+```
+
+To use a different e-mail per repository instead, leave the global e-mail unset and make Git require a local one:
+
+1. Remove any global e-mail and require a per-repo identity
+
+   ```sh
+   git config --global --unset-all user.email
+   git config --global --add user.useConfigOnly true
+   ```
+
+2. Add each e-mail to your [GitHub account](https://github.com/settings/emails).
+3. Set the e-mail in each repository before its first commit
+
+   ```sh
+   git config --local --add user.email mail@example.com
+   ```
+
+### Git defaults
+
+```sh
+# New repositories start on `main`
+git config --global init.defaultBranch main
+
+# Run a mistyped command after a 2 second delay, with time to cancel
+git config --global help.autocorrect 20
+
+# Never track macOS folder metadata or dependencies, in any repository
+printf '.DS_Store\nnode_modules/\n' >> ~/.gitignore_global
+git config --global core.excludesfile ~/.gitignore_global
+```
+
+### Better diffs with Delta
+
+[Delta](https://github.com/dandavison/delta) adds syntax highlighting, side-by-side view and within-line change detection to `git diff`, `git show` and `git log -p`.
+
+1. Install Delta
+
+   ```sh
+   brew install git-delta
+   ```
+
+2. Add the following to `~/.gitconfig`
+
+   ```toml
+   [core]
+       pager = delta
+
+   [interactive]
+       diffFilter = delta --color-only
+
+   [delta]
+       features = side-by-side line-numbers decorations
+       whitespace-error-style = 22 reverse
+
+   [delta "decorations"]
+       commit-decoration-style = bold yellow box ul
+       file-style = bold yellow ul
+       file-decoration-style = none
+   ```
+
+### Delete stale branches with `git-clean`
+
+`git-clean` deletes every local branch whose remote branch has been deleted, for example after a pull request is merged. It was installed with the Fish config in the [Shell](#shell-fish-and-starship) section. Run it from inside a repository:
+
+```sh
+git-clean
+```
+
+### SSH key for GitHub
+
+An SSH key lets you push and pull without typing a password.
+
+1. Check whether you already have a key
+
+   ```sh
+   ls -al ~/.ssh
+   ```
+
+   If you see `id_rsa.pub`, skip to step 4.
+
+2. Create a key. Press <kbd>Enter</kbd> at both prompts to accept the default file name and no passphrase.
+
+   ```sh
+   ssh-keygen -t rsa -C "your_email@example.com"
+   ```
+
+3. Add it to the SSH agent
+
+   ```sh
+   ssh-add ~/.ssh/id_rsa
+   ```
+
+4. Copy the public key to the clipboard
+
+   ```sh
+   pbcopy < ~/.ssh/id_rsa.pub
+   ```
+
+5. Add it to GitHub: open [SSH and GPG keys](https://github.com/settings/keys), click **New SSH key**, give it a title, paste the key and click **Add SSH key**. Leave **Key type** as **Authentication Key**.
+6. Check that it works
+
+   ```sh
+   ssh -T git@github.com
+   ```
+
+   You should see `Hi <username>! You've successfully authenticated`.
+
+### Sign commits with the same key
+
+GitHub shows a **Verified** badge on signed commits. The same SSH key can sign them, but GitHub needs it added a second time as a signing key.
+
+1. Copy the public key again
+
+   ```sh
+   pbcopy < ~/.ssh/id_rsa.pub
+   ```
+
+2. On [SSH and GPG keys](https://github.com/settings/keys), click **New SSH key**, set **Key type** to **Signing Key**, paste the key and click **Add SSH key**.
+3. Tell Git to sign every commit and tag with it
+
+   ```sh
+   git config --global commit.gpgsign true
+   git config --global gpg.format ssh
+   git config --global user.signingkey ~/.ssh/id_rsa.pub
+   ```
+
+### GitHub CLI
+
+[`gh`](https://cli.github.com/) works with pull requests, issues and releases from the terminal.
+
+```sh
+brew install gh
+gh auth login
+```
+
+## Node
+
+fnm was installed in the [Shell](#shell-fish-and-starship) section. It reads the same `.nvmrc` and `.node-version` files as nvm and switches version in a few milliseconds.
+
+1. Install the current long-term support (LTS) release and the latest release, and make LTS the default
+
+   ```sh
+   fnm install --lts
+   fnm install latest
+   fnm default lts-latest
+   ```
+
+2. Check
+
+   ```sh
+   node --version
+   fnm list
+   ```
+
+In a project with a `.nvmrc`, fnm switches to that version when you `cd` in. If the version is not installed yet, `fnm install` with no arguments installs it.
+
+### pnpm
+
+[pnpm](https://pnpm.io/) is a fast, disk-efficient package manager.
+
+1. Install pnpm. The installer appends a `PNPM_HOME` block to `~/.config/fish/config.fish`.
+
+   ```sh
+   curl -fsSL https://get.pnpm.io/install.sh | sh -
+   ```
+
+2. Open a new shell, then check
+
+   ```sh
+   pnpm --version
+   ```
+
+To update later, run `pnpm self-update`.
+
+### Formatters: Prettier and Biome
+
+1. Install Prettier globally and copy its config from this repo
+
+   ```sh
+   pnpm add --global prettier@latest
+   cp configs/prettier/prettierrc.json ~/.prettierrc.json
+   ```
+
+2. Install [Biome](https://biomejs.dev/)
+
+   ```sh
+   brew install biome
+   ```
+
+## Python
+
+[uv](https://docs.astral.sh/uv/) installs Python versions and manages packages and virtual environments.
+
+1. Install uv
+
+   ```sh
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+
+2. Install the Python versions you need and pick a default. Check [python.org](https://www.python.org/downloads/) for the current numbers.
+
+   ```sh
+   uv python install 3.14 3.13
+   uv python pin 3.14
+   ```
+
+## Rust 🦀
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+## AI: Claude Code and agent skills
+
+### Claude Code
+
+1. Install [Claude Code](https://code.claude.com/docs/en/quickstart#native-install-recommended)
 
    ```sh
    curl -fsSL https://claude.ai/install.sh | bash
    ```
 
-2. Login
+2. Log in
+
    ```sh
    claude login
    ```
 
-## Text editor
+### Agent skills
 
-### Zed
+[Agent skills](https://zed.dev/docs/ai/skills) are instruction packages that the AI agent loads when a task matches. Zed reads them from `~/.agents/skills/` and Claude Code from `~/.claude/skills/`. These steps install one set at `~/.agents/skills/` and point `~/.claude/skills/` at it, so both tools see the same skills. The files are described in [`configs/skills/readme.md`](./configs/skills/readme.md).
 
-[Zed](https://zed.dev/) Zed is a next-generation code editor designed for
-high-performance collaboration with humans and AI, written in Rust 🦀.
+1. Register the two extra plugin marketplaces
 
-1. Download Zed
-2. Move the app from downloads folder to application folder
-3. Open Zed
-4. Open the settings with <kbd>⌘</kbd> + <kbd>,</kbd>
-5. Copy and paste the contents of this [`settings.json`](./configs/zed/settings.json) file into the settings
-6. Install the CLI integration by press `Zed > Install CLI Integration`
+   ```sh
+   claude plugin marketplace add accesslint/claude-marketplace
+   claude plugin marketplace add anthropics/skills
+   ```
 
-### Agent Skills
-
-[Agent Skills](https://zed.dev/docs/ai/skills) are reusable instruction packages the AI agent loads on demand. Zed reads them from `~/.agents/skills/`, Claude Code reads them from `~/.claude/skills/`. This installfest puts the canonical set at `~/.agents/skills/` and symlinks `~/.claude/skills/` to it so both tools see the same skills.
-
-This requires the [Claude CLI](https://docs.claude.com/en/docs/claude-code) (set up later in this installfest); if you have not installed it yet, do that first and come back.
-
-1. Register the two extra plugin marketplaces:
-
-```sh
-claude plugin marketplace add accesslint/claude-marketplace
-claude plugin marketplace add anthropics/skills
-```
-
-2. Install the Claude Code plugins listed in [`configs/skills/claude-plugins.txt`](./configs/skills/claude-plugins.txt):
+2. Install the Claude Code plugins listed in [`claude-plugins.txt`](./configs/skills/claude-plugins.txt)
 
    ```sh
    xargs -L1 claude plugin install < configs/skills/claude-plugins.txt
    ```
 
-   `firebase@claude-plugins-official` ships in the list. Disable it from the Claude UI if you do not need it.
+   The list includes `firebase@claude-plugins-official`. Disable it in Claude if you do not need it.
 
-3. Install the custom subagent:
+3. Install the custom subagent
 
    ```sh
    mkdir -p ~/.claude/agents
    cp configs/skills/agents/code-challenge-reviewer.md ~/.claude/agents/
    ```
 
-4. Create the shared skills directory and symlink `~/.claude/skills/` to it:
+4. Create the shared skills directory and point `~/.claude/skills/` at it
 
    ```sh
    mkdir -p ~/.agents/skills
    ln -sfn ~/.agents/skills ~/.claude/skills
    ```
 
-   `ln -sfn` overwrites any existing `~/.claude/skills/` entry. If you already have skills there from another setup, back them up first.
+   `ln -sfn` replaces an existing `~/.claude/skills/`. If you already have skills there, back them up first.
 
-5. Copy the vendored skill bundles into the shared directory:
+5. Copy the skill bundles from this repo
 
    ```sh
    cp -R configs/skills/bundles/* ~/.agents/skills/
    ```
 
-6. Sparse-clone the curated subset of the [Anthropic skills registry](https://github.com/anthropics/skills) listed in [`configs/skills/anthropic-skills.txt`](./configs/skills/anthropic-skills.txt):
+6. Fetch the skills listed in [`anthropic-skills.txt`](./configs/skills/anthropic-skills.txt) from the [Anthropic skills registry](https://github.com/anthropics/skills)
 
    ```sh
    git clone --filter=blob:none --sparse https://github.com/anthropics/skills /tmp/anthropic-skills
@@ -126,546 +518,49 @@ claude plugin marketplace add anthropics/skills
    rm -rf /tmp/anthropic-skills
    ```
 
-7. Verify. Open Zed and type `/` in the agent panel — your installed skills should appear in the completion menu. Optional CLI sanity checks:
+7. Check. In Zed, type `/` in the agent panel; the installed skills appear in the completion menu. From the terminal:
 
    ```sh
    claude plugin list
-   readlink ~/.claude/skills      # should print the path to ~/.agents/skills
-   ls ~/.agents/skills            # should list all installed skill folders
-   ls ~/.claude/agents            # should include code-challenge-reviewer.md
+   readlink ~/.claude/skills   # prints the path to ~/.agents/skills
+   ls ~/.agents/skills         # lists every installed skill
+   ls ~/.claude/agents         # includes code-challenge-reviewer.md
    ```
 
-## Terminal theme
+## macOS: faster key repeat
 
-Ghostty's built-in `Atom One Dark` is a different palette from the One Dark this setup uses, so this repo ships [`configs/ghostty/themes/one-dark`](./configs/ghostty/themes/one-dark). It combines the [One Dark iTerm preset](https://github.com/one-dark/iterm-one-dark-theme) palette with the colours that [`set_onedark`](#install-onedark-fish-theme) applies on top of it at every shell start, which is what you actually see. The `theme = one-dark` line in the Ghostty config already points at it.
+Holding a key to move the cursor is slow by default. Open **System Settings > Keyboard** and move **Key repeat rate** to **Fast** and **Delay until repeat** to **Short**.
 
-```sh
-mkdir -p ~/.config/ghostty/themes
-cp configs/ghostty/themes/one-dark ~/.config/ghostty/themes/one-dark
-```
+## Upgrading an existing Mac
 
-Reload with <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>,</kbd>.
+Only needed if you followed an older version of this guide.
 
-## Homebrew Package Manager
+### From `jethrokuan/z` to zoxide
 
-Homebrew is a package manager for ~~macOS~~ **Linux**.
-
-### What are packages?
-
-Packages are bundles of source code distributed by developers of software, which can be compiled and installed on your machine.
-
-### Install
-
-1. The package manager allows us to install and update software (like Ruby, Git, MongoDB, etc) from the command line:
-2. Open [http://brew.sh/](http://brew.sh/), scroll down to Install Homebrew and copy+paste the command into the terminal.
-3. Ensure that Homebrew is raring to brew and fix any issues: `brew doctor`
-4. Update Homebrew: `brew update`
-
-(**Note**: the absolute paths will not be used after the next step, but might not be needed if they already have `/usr/local/bin` in their \$PATH)
-
-## Fish Shell
-
-1. Install Fish shell
-
-   ```sh
-   brew install fish
-   ```
-
-2. Add the shell to `/etc/shells` with
-
-   ```sh
-    echo $(which fish) | sudo tee -a /etc/shells
-   ```
-
-3. Change the default shell to Fish
-
-   ```sh
-    chsh -s $(which fish)
-   ```
-
-4. Nothing to configure in the terminal: Ghostty launches `$SHELL` (now Fish, after `chsh`) and injects its Fish shell integration automatically. Open a new Ghostty window to pick up the change.
-
-### Install [Fisher](https://github.com/jorgebucaran/fisher) plugin manager
-
-Run the following command to install Fisher:
-
-```sh
-curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
-```
-
-### Install [onedark-fish](https://github.com/rkbk60/onedark-fish) theme
-
-```sh
-fisher rkbk60/onedark-fish
-```
-
-### Configure Fish shell
-
-1. Create a file called `config.fish` in the `~/.config/fish` directory
-
-   ```sh
-    zed ~/.config/fish/config.fish
-   ```
-
-2. Add the following to the file
-
-   ```sh
-   if status is-interactive
-      # Commands to run in interactive sessions can go here
-      fish_add_path /opt/homebrew/bin
-      set_onedark
-   end
-
-   # Homebrew
-   export HOMEBREW_PREFIX="/opt/homebrew"
-
-   # set editor
-   export EDITOR='zed -w -n'
-   export PAGER='less -f'
-   ```
-
-## Install [Starship 🚀](https://starship.rs/)
-
-1. Type
-
-   ```sh
-   brew install starship
-   ```
-
-2. Add following to `~/.config/fish/config.fish`
-
-   ```fish
-    if status is-interactive
-        # ... other commands
-        starship init fish | source
-    end
-   ```
-
-3. Copy the config from this repo to `~/.config/starship.toml`
-
-   ```sh
-   cp configs/starship/starship.toml ~/.config/starship.toml
-   ```
-
-   What it sets up, on top of the per-language symbols:
-   - **Right prompt** (`right_format`): command duration (only when over 2 s), a red `💥 <code>` after a non-zero exit, battery (only when it drops to 10% or less, Starship's default) and the time. A desktop notification fires for commands that run longer than 45 s.
-   - **`git_status`** shows counts: `⇡2` ahead, `⇣1` behind, `⇕⇡2⇣1` diverged.
-   - **`directory`** colours the repository root in bold cyan.
-   - **`gcloud`** shows the active project (`☁️ my-project`) instead of the account e-mail.
-   - **`sudo`** is disabled: its credential check added ~14 ms to every prompt.
-
-## tmux
-
-> Ghostty has no status bar (see [ghostty#2421](https://github.com/ghostty-org/ghostty/discussions/2421)). [tmux](https://github.com/tmux/tmux/wiki) runs inside the terminal and draws its own status line, which plugins can fill with the same meters.
-
-1. Install tmux and the dependencies of the network plugin
-
-   ```sh
-   brew install tmux gawk coreutils
-   ```
-
-2. Install [TPM](https://github.com/tmux-plugins/tpm), the tmux plugin manager. Because the config lives in `~/.config/tmux/`, TPM installs plugins into `~/.config/tmux/plugins/`, so TPM goes there too.
-
-   ```sh
-   git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
-   ```
-
-3. Copy the config from this repo. It loads [`tmux-cpu`](https://github.com/tmux-plugins/tmux-cpu) and [`tmux-network-bandwidth`](https://github.com/xamut/tmux-network-bandwidth), puts the meters in a One Dark coloured status line, enables the mouse, allows the `set_onedark` palette through (`allow-passthrough on`) and makes <kbd>Ctrl</kbd> + <kbd>L</kbd> clear the pane and its scrollback. It also numbers windows and panes from 1 (renumbering when one closes) and adds three plugins:
-   - [`tmux-resurrect`](https://github.com/tmux-plugins/tmux-resurrect) and [`tmux-continuum`](https://github.com/tmux-plugins/tmux-continuum) save the sessions every 15 minutes and restore them when tmux starts after a reboot. Save and restore by hand with prefix + <kbd>Ctrl</kbd> + <kbd>s</kbd> / <kbd>Ctrl</kbd> + <kbd>r</kbd>.
-   - [`tmux-yank`](https://github.com/tmux-plugins/tmux-yank) copies to the macOS clipboard: <kbd>y</kbd> in copy mode, and mouse selections are copied on release.
-
-   ```sh
-   mkdir -p ~/.config/tmux
-   cp configs/tmux/tmux.conf ~/.config/tmux/tmux.conf
-   ```
-
-4. Start tmux and install the plugins by pressing the prefix <kbd>Ctrl</kbd> + <kbd>b</kbd>, then <kbd>I</kbd> (capital i)
-
-   ```sh
-   tmux
-   ```
-
-   The status line should now show `CPU`, `MEM` and `↓ ↑` network throughput.
-
-5. The Ghostty config from this repo already opens every new Ghostty window straight into the shared `main` tmux session (`command = … tmux new-session -A -s main`), so the meters are there from the start. Comment that line out in `~/.config/ghostty/config` if you want a plain fish shell instead. It also remaps <kbd>⌘</kbd> + <kbd>K</kbd> to send <kbd>Ctrl</kbd> + <kbd>L</kbd>, so clearing the terminal works inside tmux.
-
-6. To open a URL inside tmux, hold <kbd>⌘</kbd> + <kbd>⇧</kbd> while hovering it (it underlines) and click. Outside tmux it is plain <kbd>⌘</kbd> + click. tmux owns the mouse (`mouse on`), and <kbd>⇧</kbd> is how Ghostty bypasses that for a single click; see [ghostty#1040](https://github.com/ghostty-org/ghostty/issues/1040).
-
-7. <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>A</kbd> copies the output of the last command to the clipboard, a quick way to grab command output. tmux finds the start of the output from the prompt marks fish emits; the end is worked out from the 2-line Starship prompt, so adjust the two `cursor-up` steps in `tmux.conf` if you change the prompt height. Ghostty has no hover toolbar or click-to-select for commands; outside tmux its native gesture is <kbd>⌘</kbd> + triple-click on the output.
-
-Useful keys (all after <kbd>Ctrl</kbd> + <kbd>b</kbd>): <kbd>c</kbd> new window, <kbd>n</kbd>/<kbd>p</kbd> next/previous window, <kbd>%</kbd> split left/right, <kbd>"</kbd> split top/bottom, <kbd>d</kbd> detach (session keeps running; `tmux attach` to return), <kbd>U</kbd> update plugins.
-
-## Install [fzf](https://github.com/junegunn/fzf), [fd](https://github.com/sharkdp/fd) and [zoxide](https://github.com/ajeetdsouza/zoxide)
-
-- **fzf** is a fuzzy finder for the command line: fuzzy history search, file picking and completion.
-- **fd** is a fast `find`; fzf uses it to list files (it respects `.gitignore`).
-- **zoxide** is a smarter `cd` that remembers the directories you use most. It replaces the `jethrokuan/z` fisher plugin.
-
-1. Install
-
-   ```sh
-   brew install fzf fd zoxide
-   ```
-
-2. Add the following to `~/.config/fish/config.fish`
-
-   ```fish
-   if status is-interactive
-       # ... other commands
-
-       # fzf: Ctrl+R fuzzy history, Ctrl+T fuzzy file picker, Shift+Tab fuzzy completion
-       set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --strip-cwd-prefix --exclude .git'
-       set -gx FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
-       set -gx FZF_CTRL_T_OPTS "--preview 'bat --color=always --style=numbers --line-range=:200 {}'"
-       # Option is a normal key on macOS (Option+C types ç), so skip fzf's Alt+C; use `zi` instead
-       set -gx FZF_ALT_C_COMMAND ''
-       fzf --fish | source
-
-       # zoxide: `z <part of a path>` jumps to the best match, `zi` picks interactively with fzf
-       zoxide init fish | source
-   end
-   ```
-
-3. Open a new shell and try it
-   - <kbd>Ctrl</kbd> + <kbd>R</kbd>: fuzzy search the command history
-   - <kbd>Ctrl</kbd> + <kbd>T</kbd>: fuzzy pick a file (with a `bat` preview) and insert its path at the cursor
-   - <kbd>Shift</kbd> + <kbd>Tab</kbd>: fuzzy completion for the word at the cursor
-   - `z inst` jumps to the most used directory matching `inst`; `zi` opens an interactive list
-
-### Migrating from `jethrokuan/z`
-
-If you had the `z` fisher plugin, import its history into zoxide first, then remove it:
+Import the directory history, then remove the plugin:
 
 ```sh
 _Z_DATA=~/.local/share/z/data zoxide import z
 fisher remove jethrokuan/z
 ```
 
-## Install [Bat 🦇](https://github.com/sharkdp/bat)
+### From nvm to fnm
 
-A cat(1) clone with syntax highlighting and Git integration.
+The previous nvm + bass setup took about 450 ms on every `cd` and every new shell.
 
-1. Type
-   ```sh
-   brew install bat
-   ```
-
-## Install [`uv`](https://docs.astral.sh/uv/#highlights)
-
-1. Type
-   ```sh
-   curl -LsSf https://astral.sh/uv/install.sh | sh
-   ```
-
-## Install Python
-
-> Check the latest [python](https://www.python.org/downloads/) version and replace the semver number
-
-1. Install
-   ```sh
-   uv python install 3.14 3.13
-   ```
-2. Set the global version
-   ```sh
-   uv python pin 3.14
-   ```
-
-## [fnm](https://github.com/Schniz/fnm) Node version manager
-
-fnm is a fast, Rust-based replacement for nvm. It reads the same `.nvmrc` (and `.node-version`) files and switches Node version on `cd` in a few milliseconds. The previous nvm + bass setup took ~450 ms on every `cd` and on every new shell.
-
-### Install
-
-1. Install fnm
+1. Note your global npm packages. They live inside each Node version and need reinstalling.
 
    ```sh
-   brew install fnm
+   npm ls -g
    ```
 
-2. Add the following to `~/.config/fish/config.fish`, **outside** the `if status is-interactive` block so that scripts, editors and `pnpm` shims (non-interactive shells) also get `node` on their `PATH`. `--use-on-cd` switches version automatically when entering a directory with a version file; `--version-file-strategy=recursive` also finds one in a parent directory.
-
-   ```fish
-   # after the `if status is-interactive ... end` block
-   fnm env --use-on-cd --version-file-strategy=recursive | source
-   ```
-
-3. Open a new shell (or `source ~/.config/fish/config.fish`)
-
-### Using fnm
-
-1. List the available versions
+2. Install the Node versions you need with fnm, for example `fnm install 24`, and reinstall the global packages.
+3. Remove nvm and its Fish glue
 
    ```sh
-   fnm list-remote
+   rm -rf ~/.nvm
+   rm -f ~/.config/fish/functions/{nvm,nvm_find_nvmrc,load_nvm}.fish
+   fisher remove edc/bass
    ```
 
-2. Install the current **Long term support** (_LTS_) release and the latest release, and make the LTS the default
-
-   ```sh
-   fnm install --lts
-   fnm install latest
-   fnm default lts-latest
-   ```
-
-3. Check that Node is installed
-
-   ```sh
-   node --version
-   fnm list
-   ```
-
-4. In a project, `fnm use` reads the `.nvmrc`; with `--use-on-cd` this happens automatically. `fnm install` with no argument installs the version the project asks for.
-
-### Migrating from nvm
-
-If you had nvm installed: `fnm list` shows nothing yet, so reinstall the versions you need (`fnm install 24`, etc). Global npm packages live inside each Node version, so reinstall those too (`npm ls -g` in the old version shows them). Then remove nvm and its fish glue:
-
-```sh
-rm -rf ~/.nvm
-rm -f ~/.config/fish/functions/{nvm,nvm_find_nvmrc,load_nvm}.fish
-fisher remove edc/bass
-```
-
-and delete the `load_nvm` line from `~/.config/fish/config.fish`.
-
-## Install PNPM
-
-1. Install pnpm
-
-   ```sh
-    curl -fsSL https://get.pnpm.io/install.sh | sh -
-   ```
-
-2. To update
-   ```sh
-   pnpm self-update
-   ```
-3. Add the following to `~/.config/fish/config.fish`
-
-## Biome
-
-Install Biome
-
-```sh
-brew install biome
-```
-
-## Prettier
-
-### Create `.prettierrc.json` file
-
-- Let define some rules for `prettier`
-
-```sh
-zed ~/.prettierrc
-```
-
-- Copy and paste this [configuration](./configs/prettier/prettierrc.json)
-
-- Save file <kbd>command </kbd> + <kbd>S</kbd>.
-
-### Install `prettier` packages
-
-Install the following **prettier** packages
-
-```sh
-pnpm add --global prettier@latest
-```
-
-## Install Rust 🦀
-
-Just run this
-
-```sh
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
-
-## Install Git
-
-Git is the version control system that we will use throughout the course. It is one of the most powerful tools you will use as a developer.
-
-1. This ensures we can upgrade Git more easily:
-   `brew install git`
-2. Restart the terminal
-3. Ensure you're not using "Apple Git" from the path `/usr/bin/git` by checking `which git` and `git --version`
-4. Configure your name and email address for commits (be sure to use the email address you have registered with Github):
-
-```sh
- git config --global user.name "Your Name"
- git config --global user.email "you@example.com"
-```
-
-### Git Multiple identities
-
-Instead to have a global user email, we can set a different identity per repo.
-
-1. Reset global user email
-   ```sh
-   git config --global --unset-all user.email
-   ```
-2. Set local config per repo
-
-   ```sh
-   git config --global --add user.useConfigOnly true
-   ```
-
-3. Add email to your GitHub account [emails](https://github.com/settings/emails)
-4. Before the first commit on repo
-
-   ```sh
-   git config --local --add user.email mail@example.com
-   ```
-
-### Git set default branch to be `main`
-
-```sh
-git config --global init.defaultBranch main
-```
-
-## `git show` plugin [(Delta)](https://github.com/dandavison/delta)
-
-> Delta provides language syntax-highlighting, within-line insertion/deletion detection, and restructured diff output for git on the command line.
-
-1. Install via brew
-   ```sh
-   brew install git-delta
-   ```
-2. Configure git to use delta adding the following to `.gitconfig`:
-
-   ```toml
-    [core]
-        pager = delta
-
-    [interactive]
-        diffFilter = delta --color-only
-
-    [delta]
-        features = side-by-side line-numbers decorations
-        whitespace-error-style = 22 reverse
-
-    [delta "decorations"]
-        commit-decoration-style = bold yellow box ul
-        file-style = bold yellow ul
-        file-decoration-style = none
-   ```
-
-## `git-clean`
-
-> Based on # Git Remove tracking branches no longer on remotE https://stackoverflow.com/a/33548037/4842303
-
-1. Create a fish file function
-
-   ```sh
-   zed ~/.config/fish/functions/git_clean.fish
-   ```
-
-2. Add the following function
-
-   ```sh
-   function git-clean
-    git fetch -p
-    for branch in (git for-each-ref --format '%(refname) %(upstream:track)' refs/heads | awk '$2 == "[gone]" {sub("refs/heads/", "", $1); print $1}')
-      git branch -D $branch
-    end
-   end
-   ```
-
-## Global `.gitignore`
-
-There are a few files that we don't want Git to track. We can specifically ignore them by adding the files to a global `.gitignore` file.
-
-### .DS_Store files
-
-`.DS_Store` files are used by Mac OS X to store folder specific metadata information. They are different for every mac, it means that they often cause conflicts in version controlled folders.
-
-Since we never want to track .DS_Store files, we can make a global `.gitignore` file, and tell git to use it for all repositories:
-
-```sh
-echo .DS_Store >> ~/.gitignore_global
-git config --global core.excludesfile ~/.gitignore_global
-```
-
-### public/uploads/, node_modules & bower_components
-
-In the same way, we want to never track the contents of our uploads folder in Rails (which usually contain images or media that we have uploaded during testing) or our node_modules or bower_components.
-
-```sh
-echo "/public/uploads/\nnode_modules/\nbower_components/" >> ~/.gitignore_global
-```
-
-### autocorrect
-
-Enable auto-correct the suggested command will run after a short delay to give you the chance to cancel the command if it is not what you intended
-
-```sh
-git config --global help.autocorrect 20
-```
-
-## Configure SSH keys on Github
-
-GitHub is a web-based Git repository hosting service. It allows us to keep a remote version of our version-controlled projects. When we push and pull from Git, we don't want to always have to login to verify who we are. Therefore, what we can do is generate and use something called an SSH key. SSH keys are a way to identify trusted computers, without involving passwords.
-
-1. First, we need to check for existing SSH keys on your computer. Open up your Terminal and type:
-   ```sh
-   ls -al ~/.ssh
-   ```
-   Check the directory listing to see if you have files named either **id_rsa.pub** or **id_dsa.pub**. If you have either of those files you can skip to the step 'add your SSH key to Github'.
-2. Generate a new SSH key
-   ```sh
-    ssh-keygen -t rsa -C "your_email@example.com"
-   ```
-3. You'll be prompted for a file to save the key, and a passphrase. Press enter for both steps (default name, and no passphrase)
-4. Then add your new key to the ssh-agent:
-   ```sh
-    ssh-add ~/.ssh/id_rsa
-   ```
-5. Add your SSH key to GitHub by logging into Github, visiting **account settings** and clicking **SSH keys**. Click **Add SSH key**
-6. Copy your key to the clipboard with the terminal command:
-   ```sh
-    pbcopy < ~/.ssh/id_rsa.pub
-   ```
-7. On Github, create a descriptive title for your key, an paste into the `key` field - _do not add or remove and characters or whitespace to the key_
-8. Click `Add key` and check everything works in the terminal by typing:
-   ```sh
-    ssh -T git@github.com
-   ```
-
-## Configure signed commits
-
-1. Copy your key to the clipboard with the terminal command:
-   ```sh
-    pbcopy < ~/.ssh/id_rsa.pub
-   ```
-2. On Github, create a descriptive title for your key, an paste into the `key` field - _do not add or remove and characters or whitespace to the key_
-3. Select the type of key to be `Signing Key`.
-4. Click `Add key`
-5. Configure Git to use SSH to sign commits and tags
-   ```sh
-   git config --global commit.gpgsign true
-   git config --global gpg.format ssh
-   ```
-6. To set your SSH signing key in Git with the path to the public key you'd like to use.
-   ```sh
-   git config --global user.signingkey ~/.ssh/id_rsa.pub
-   ```
-
-### Install GitHub CLI
-
-1. Install the GitHub CLI with the terminal command:
-   ```sh
-   brew install gh
-   ```
-2. Log in to GitHub CLI with the terminal command:
-   ```sh
-   gh auth login
-   ```
-
-## Speed up your cursor
-
-During the course, we will be doing a lot of navigating using our keyboards. By default, the speed of the curson on a Mac is a little too slow. Let's increase the speed of the cursor by going to:
-
-```
-System Preferences > Keyboard
-```
-
-Move both up to maximum.
+4. Delete the `load_nvm` line from `~/.config/fish/config.fish`.
