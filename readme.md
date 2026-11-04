@@ -1,6 +1,6 @@
 # 💻 macOS installfest
 
-Set up a new Mac for development: Ghostty and tmux as the terminal, Fish with Starship as the shell, Zed as the editor, Git and GitHub, Node, Python and Rust, then Claude Code and Delta sharing one set of agent skills.
+Set up a new Mac for development using [Ghostty](https://ghostty.org/) and [tmux](https://tmux.app/) as the terminal, [Fish](https://fishshell.com/) with [Starship](https://starship.rs/) as the shell, [Zed](https://zed.dev/) as the editor, [Git](https://git-scm.com/) and [GitHub](https://github.com/), [Node](https://nodejs.org/en), [Python](https://www.python.org/) and [Rust](https://rust-lang.org/), then [Claude Code](https://code.claude.com/docs/en/overview) and [Delta](https://delta.dev/) sharing one set of agent skills.
 
 Follow the sections in order. Later steps use tools installed earlier. Where a tool has a config file, this repo ships it under [`configs/`](./configs) and the steps copy it into place; the [Git](#git) section clones the repo, and every command after that runs from its root.
 
@@ -37,7 +37,11 @@ Apple's compilers and build tools. Homebrew and many of the tools below need the
 
 ## Git
 
-macOS ships an old "Apple Git" with the Xcode tools. Install Homebrew's Git now so every `git` command in this guide, starting with the next section, uses the newer one.
+Install Homebrew's Git, create an SSH key for GitHub, then clone this repo. Everything after this section copies files from it.
+
+### Install Git
+
+macOS ships an old "Apple Git" with the Xcode tools. Homebrew's is newer and easier to update.
 
 1. Install Git
 
@@ -54,15 +58,54 @@ macOS ships an old "Apple Git" with the Xcode tools. Install Homebrew's Git now 
 
    `which git` should print `/opt/homebrew/bin/git`, not `/usr/bin/git`.
 
-3. Clone this repo and move into it. The rest of the guide copies config files from its `configs/` folder, so run every command from here.
+### SSH key for GitHub
+
+An SSH key lets you clone, push and pull without typing a password. Set it up now so this repo can be cloned over SSH in the next step.
+
+1. Check whether you already have a key
 
    ```sh
-   mkdir -p ~/dev
-   git clone https://github.com/pataruco/installfest.git ~/dev/installfest
-   cd ~/dev/installfest
+   ls -al ~/.ssh
    ```
 
-   HTTPS is used because the SSH key is set up later, in [Git and GitHub](#git-and-github).
+   If you see `id_rsa.pub`, skip to step 4.
+
+2. Create a key. Press <kbd>Enter</kbd> at both prompts to accept the default file name and no passphrase.
+
+   ```sh
+   ssh-keygen -t rsa -C "your_email@example.com"
+   ```
+
+3. Add it to the SSH agent
+
+   ```sh
+   ssh-add ~/.ssh/id_rsa
+   ```
+
+4. Copy the public key to the clipboard
+
+   ```sh
+   pbcopy < ~/.ssh/id_rsa.pub
+   ```
+
+5. Add it to GitHub: open [SSH and GPG keys](https://github.com/settings/keys), click **New SSH key**, give it a title, paste the key and click **Add SSH key**. Leave **Key type** as **Authentication Key**.
+6. Check that it works
+
+   ```sh
+   ssh -T git@github.com
+   ```
+
+   You should see `Hi <username>! You've successfully authenticated`.
+
+### Clone this repo
+
+The rest of the guide copies config files from this repo's `configs/` folder, so run every command after this from its root.
+
+```sh
+mkdir -p ~/dev
+git clone git@github.com:pataruco/installfest.git ~/dev/installfest
+cd ~/dev/installfest
+```
 
 ## Terminal: Ghostty
 
@@ -93,8 +136,6 @@ macOS ships an old "Apple Git" with the Xcode tools. Install Homebrew's Git now 
 - `ssh` works on hosts that do not know `xterm-ghostty`. Ghostty installs its terminfo on the remote host, or falls back to `xterm-256color` (`shell-integration-features = ssh-env,ssh-terminfo`).
 
 ## tmux
-
-Ghostty has no status bar ([ghostty#2421](https://github.com/ghostty-org/ghostty/discussions/2421)). [tmux](https://github.com/tmux/tmux/wiki) draws one inside the terminal with CPU, memory and network meters. It also keeps sessions across reboots.
 
 1. Install tmux and the tools the network meter needs
 
@@ -240,7 +281,7 @@ fzf's <kbd>Option</kbd> + <kbd>C</kbd> binding is turned off because <kbd>Option
 
 ## Git and GitHub
 
-Git itself was installed after [Homebrew](#git). This section configures it and connects it to GitHub.
+Git and the SSH key were set up in the [Git](#git) section. This section configures identity, defaults, diffs and commit signing.
 
 ### Tell Git who you are
 
@@ -318,48 +359,9 @@ git config --global core.excludesfile ~/.gitignore_global
 git-clean
 ```
 
-### SSH key for GitHub
-
-An SSH key lets you push and pull without typing a password.
-
-1. Check whether you already have a key
-
-   ```sh
-   ls -al ~/.ssh
-   ```
-
-   If you see `id_rsa.pub`, skip to step 4.
-
-2. Create a key. Press <kbd>Enter</kbd> at both prompts to accept the default file name and no passphrase.
-
-   ```sh
-   ssh-keygen -t rsa -C "your_email@example.com"
-   ```
-
-3. Add it to the SSH agent
-
-   ```sh
-   ssh-add ~/.ssh/id_rsa
-   ```
-
-4. Copy the public key to the clipboard
-
-   ```sh
-   pbcopy < ~/.ssh/id_rsa.pub
-   ```
-
-5. Add it to GitHub: open [SSH and GPG keys](https://github.com/settings/keys), click **New SSH key**, give it a title, paste the key and click **Add SSH key**. Leave **Key type** as **Authentication Key**.
-6. Check that it works
-
-   ```sh
-   ssh -T git@github.com
-   ```
-
-   You should see `Hi <username>! You've successfully authenticated`.
-
 ### Sign commits with the same key
 
-GitHub shows a **Verified** badge on signed commits. The same SSH key can sign them, but GitHub needs it added a second time as a signing key.
+GitHub shows a **Verified** badge on signed commits. The SSH key from the [Git](#git) section can sign them, but GitHub needs it added a second time as a signing key.
 
 1. Copy the public key again
 
