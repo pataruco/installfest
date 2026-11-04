@@ -1,6 +1,6 @@
 # 💻 macOS installfest
 
-Set up a new Mac for development: Ghostty and tmux as the terminal, Fish with Starship as the shell, Zed as the editor, Git and GitHub, Node, Python and Rust, and Claude Code with shared agent skills.
+Set up a new Mac for development: Ghostty and tmux as the terminal, Fish with Starship as the shell, Zed as the editor, Git and GitHub, Node, Python and Rust, and Claude Code and Delta with shared agent skills.
 
 Follow the sections in order. Later steps use tools installed earlier. Where a tool has a config file, this repo ships it under [`configs/`](./configs) and the steps copy it into place, so clone this repo first and run the commands from its root.
 
@@ -452,7 +452,7 @@ To update later, run `pnpm self-update`.
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-## AI: Claude Code and agent skills
+## AI: Claude Code, Delta and agent skills
 
 ### Claude Code
 
@@ -468,9 +468,39 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
    claude login
    ```
 
+### Delta
+
+[Delta](https://delta.dev/) is Zed's collaborative agent workspace. An agent works in a separate checkout of your repository, and you review, comment on and pull in the result; teammates can join the thread. It needs macOS 13 or later on Apple Silicon and a Zed account.
+
+1. Sign in or create an account on the [Zed dashboard](https://dashboard.zed.dev/delta-beta) and accept the Delta Early Access Agreement.
+2. Install the app and the `delta` command
+
+   ```sh
+   curl -fsSL https://delta.dev/install.sh -o delta-install.sh
+   sh delta-install.sh
+   rm delta-install.sh
+   ```
+
+   The installer asks before downloading. It puts the app in `~/Applications/Delta.app` and links the command to `~/.local/bin/delta`. If it offers to change your shell config, say no: the Fish config from the [Shell](#shell-fish-and-starship) section already has `~/.local/bin` on the `PATH`.
+
+3. Open Delta and follow the **Welcome to Delta** steps to sign in and connect a model
+
+   ```sh
+   delta
+   ```
+
+4. Connect it to Claude Code, so a Claude Code session can be shared as a Delta thread with `/delta share`, or join one with `/delta join`
+
+   ```sh
+   claude plugin marketplace add zed-industries/delta-claude
+   claude plugin install delta@zed-industries
+   ```
+
+To update later, run `delta update`. See the [Delta docs](https://delta.dev/docs) for the rest.
+
 ### Agent skills
 
-[Agent skills](https://zed.dev/docs/ai/skills) are instruction packages that the AI agent loads when a task matches. Zed reads them from `~/.agents/skills/` and Claude Code from `~/.claude/skills/`. These steps install one set at `~/.agents/skills/` and point `~/.claude/skills/` at it, so both tools see the same skills. The files are described in [`configs/skills/readme.md`](./configs/skills/readme.md).
+[Agent skills](https://zed.dev/docs/ai/skills) are instruction packages that the AI agent loads when a task matches. Zed and Delta read them from `~/.agents/skills/` and Claude Code from `~/.claude/skills/`. These steps install one set at `~/.agents/skills/` and point `~/.claude/skills/` at it, so all three tools see the same skills. The files are described in [`configs/skills/readme.md`](./configs/skills/readme.md).
 
 1. Register the two extra plugin marketplaces
 
