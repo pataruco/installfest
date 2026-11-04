@@ -2,7 +2,7 @@
 
 Set up a new Mac for development: Ghostty and tmux as the terminal, Fish with Starship as the shell, Zed as the editor, Git and GitHub, Node, Python and Rust, then Claude Code and Delta sharing one set of agent skills.
 
-Follow the sections in order. Later steps use tools installed earlier. Where a tool has a config file, this repo ships it under [`configs/`](./configs) and the steps copy it into place, so clone this repo first and run the commands from its root.
+Follow the sections in order. Later steps use tools installed earlier. Where a tool has a config file, this repo ships it under [`configs/`](./configs) and the steps copy it into place; the [Git](#git) section clones the repo, and every command after that runs from its root.
 
 ## Before you start
 
@@ -53,6 +53,16 @@ macOS ships an old "Apple Git" with the Xcode tools. Install Homebrew's Git now 
    ```
 
    `which git` should print `/opt/homebrew/bin/git`, not `/usr/bin/git`.
+
+3. Clone this repo and move into it. The rest of the guide copies config files from its `configs/` folder, so run every command from here.
+
+   ```sh
+   mkdir -p ~/dev
+   git clone https://github.com/pataruco/installfest.git ~/dev/installfest
+   cd ~/dev/installfest
+   ```
+
+   HTTPS is used because the SSH key is set up later, in [Git and GitHub](#git-and-github).
 
 ## Terminal: Ghostty
 
