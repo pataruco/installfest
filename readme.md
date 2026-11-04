@@ -562,37 +562,3 @@ To update later, run `delta update`. See the [Delta docs](https://delta.dev/docs
 ## macOS: faster key repeat
 
 Holding a key to move the cursor is slow by default. Open **System Settings > Keyboard** and move **Key repeat rate** to **Fast** and **Delay until repeat** to **Short**.
-
-## Upgrading an existing Mac
-
-Only needed if you followed an older version of this guide.
-
-### From `jethrokuan/z` to zoxide
-
-Import the directory history, then remove the plugin:
-
-```sh
-_Z_DATA=~/.local/share/z/data zoxide import z
-fisher remove jethrokuan/z
-```
-
-### From nvm to fnm
-
-The previous nvm + bass setup took about 450 ms on every `cd` and every new shell.
-
-1. Note your global npm packages. They live inside each Node version and need reinstalling.
-
-   ```sh
-   npm ls -g
-   ```
-
-2. Install the Node versions you need with fnm, for example `fnm install 24`, and reinstall the global packages.
-3. Remove nvm and its Fish glue
-
-   ```sh
-   rm -rf ~/.nvm
-   rm -f ~/.config/fish/functions/{nvm,nvm_find_nvmrc,load_nvm}.fish
-   fisher remove edc/bass
-   ```
-
-4. Delete the `load_nvm` line from `~/.config/fish/config.fish`.
