@@ -252,6 +252,7 @@ fzf's <kbd>Option</kbd> + <kbd>C</kbd> binding is turned off because <kbd>Option
 - **Git**: `⇡2` ahead, `⇣1` behind, `⇕⇡2⇣1` diverged. The repository root in the path is bold cyan.
 - **gcloud** shows the active project instead of the account e-mail.
 - **sudo** is off. Its credential check added about 14 ms to every prompt.
+- **Claude Code**: Starship powers the Claude Code statusline with the active model, Git branch, context window gauge and session cost (configured in the [Claude Code](#claude-code) section).
 
 ## Editor: Zed
 
@@ -472,6 +473,21 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
    ```sh
    claude login
    ```
+
+3. Configure the [Starship statusline](https://starship.rs/advanced-config/#statusline-for-claude-code)
+
+   ```sh
+   mkdir -p ~/.claude
+   cp configs/claude/settings.json ~/.claude/settings.json
+   ```
+
+   If `~/.claude/settings.json` already exists, add the `statusLine` setting to it:
+
+   ```sh
+   jq '.statusLine = {"type": "command", "command": "starship statusline claude-code"}' ~/.claude/settings.json > ~/.claude/settings.json.tmp && mv ~/.claude/settings.json.tmp ~/.claude/settings.json
+   ```
+
+   The statusline displays the active model, Git branch, context window usage gauge and session cost in Claude Code.
 
 ### Delta
 
