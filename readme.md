@@ -42,7 +42,7 @@ The Xcode Command Line Tools are part of Xcode. Installation of many common Unix
    brew install --cask ghostty
    ```
 
-2. Copy the config from this repo (it sets the font size to **14pt** and points at the One Dark theme installed in the [Terminal theme](#terminal-theme) section)
+2. Copy the config from this repo. It matches the iTerm2 profile: **Monaco 14pt**, bold text in bright colours, and the One Dark theme installed in the [Terminal theme](#terminal-theme) section.
 
    ```sh
    mkdir -p ~/.config/ghostty

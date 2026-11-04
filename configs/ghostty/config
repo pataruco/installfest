@@ -3,8 +3,17 @@
 # Reload with cmd+shift+, after editing.
 # Reference: https://ghostty.org/docs/config/reference
 
-# Terminal: same size as the iTerm "Profiles > Text > Font" step
+# Terminal: same font and size as the iTerm2 profile ("Profiles > Text").
+# Ghostty's default is its bundled JetBrains Mono, which looks noticeably
+# different from Monaco. Monaco has no bold/italic faces; Ghostty synthesises
+# them like iTerm does (font-synthetic-style, on by default).
+font-family = Monaco
 font-size = 14
+
+# iTerm2's "Use Bright Bold": bold text is drawn in the bright palette
+# colours. Starship styles its segments as `bold <colour>`, so without this
+# they render in the darker normal colours and the prompt looks different.
+bold-color = bright
 
 # Terminal theme: loaded from ~/.config/ghostty/themes/one-dark
 # (see ./themes/one-dark in this repo)
