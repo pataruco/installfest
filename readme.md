@@ -11,7 +11,7 @@ Follow the sections in order. Later steps use tools installed earlier. Where a t
 
 ## Xcode Command Line Tools
 
-Apple's compilers and build tools, including a copy of Git. Homebrew and many of the tools below need them. The Git from this install is enough for the `git clone` steps below; the [Git and GitHub](#git-and-github) section later replaces it with Homebrew's newer Git.
+Apple's compilers and build tools. Homebrew and many of the tools below need them.
 
 1. Open **Terminal** (in `/Applications/Utilities`) and run
 
@@ -34,6 +34,25 @@ Apple's compilers and build tools, including a copy of Git. Homebrew and many of
    ```
 
    You should see `Your system is ready to brew.`
+
+## Git
+
+macOS ships an old "Apple Git" with the Xcode tools. Install Homebrew's Git now so every `git` command in this guide, starting with the next section, uses the newer one.
+
+1. Install Git
+
+   ```sh
+   brew install git
+   ```
+
+2. Open a new terminal window and check which Git you are using
+
+   ```sh
+   which git
+   git --version
+   ```
+
+   `which git` should print `/opt/homebrew/bin/git`, not `/usr/bin/git`.
 
 ## Terminal: Ghostty
 
@@ -73,7 +92,7 @@ Ghostty has no status bar ([ghostty#2421](https://github.com/ghostty-org/ghostty
    brew install tmux gawk coreutils
    ```
 
-2. Install [TPM](https://github.com/tmux-plugins/tpm), the tmux plugin manager. It goes under `~/.config/tmux/` because that is where the config lives. `git` is already available from the Xcode Command Line Tools.
+2. Install [TPM](https://github.com/tmux-plugins/tpm), the tmux plugin manager. It goes under `~/.config/tmux/` because that is where the config lives.
 
    ```sh
    git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
@@ -211,24 +230,7 @@ fzf's <kbd>Option</kbd> + <kbd>C</kbd> binding is turned off because <kbd>Option
 
 ## Git and GitHub
 
-### Install Git
-
-macOS ships an old "Apple Git". Homebrew's Git is newer and easier to update.
-
-1. Install Git
-
-   ```sh
-   brew install git
-   ```
-
-2. Open a new terminal window and check which Git you are using
-
-   ```sh
-   which git
-   git --version
-   ```
-
-   `which git` should print `/opt/homebrew/bin/git`, not `/usr/bin/git`.
+Git itself was installed after [Homebrew](#git). This section configures it and connects it to GitHub.
 
 ### Tell Git who you are
 
