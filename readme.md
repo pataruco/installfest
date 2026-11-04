@@ -166,20 +166,26 @@ cd ~/dev/installfest
 - **Sessions survive reboots.** [`tmux-resurrect`](https://github.com/tmux-plugins/tmux-resurrect) and [`tmux-continuum`](https://github.com/tmux-plugins/tmux-continuum) save every 15 minutes and restore when tmux starts. Save or restore by hand with <kbd>Ctrl</kbd> + <kbd>b</kbd>, then <kbd>Ctrl</kbd> + <kbd>s</kbd> or <kbd>Ctrl</kbd> + <kbd>r</kbd>.
 - **Clipboard.** [`tmux-yank`](https://github.com/tmux-plugins/tmux-yank) copies a mouse selection when you release the button, and <kbd>y</kbd> copies in copy mode.
 - **Windows and panes are numbered from 1** and renumber when one closes.
-- <kbd>⌘</kbd> + <kbd>K</kbd> clears the pane and its scrollback. Ghostty sends it as <kbd>Ctrl</kbd> + <kbd>L</kbd>, which the tmux config binds.
-- <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>A</kbd> copies the output of the last command to the clipboard. tmux finds the start from the prompt marks Fish emits and the end by stepping over the 2-line Starship prompt. If you change the prompt height, adjust the two `cursor-up` steps in `tmux.conf`.
 - **Links.** Hold <kbd>⌘</kbd> + <kbd>⇧</kbd> while hovering a URL and click it. <kbd>⇧</kbd> is how Ghostty bypasses tmux's mouse handling for one click ([ghostty#1040](https://github.com/ghostty-org/ghostty/issues/1040)). Outside tmux it is <kbd>⌘</kbd> + click.
 
-Other keys, all after <kbd>Ctrl</kbd> + <kbd>b</kbd>:
+All tmux shortcuts use the default prefix <kbd>Ctrl</kbd> + <kbd>b</kbd>:
 
-| Key                       | Does                                                     |
-| ------------------------- | -------------------------------------------------------- |
-| <kbd>c</kbd>              | New window                                               |
-| <kbd>n</kbd> <kbd>p</kbd> | Next or previous window                                  |
-| <kbd>%</kbd>              | Split left and right                                     |
-| <kbd>"</kbd>              | Split top and bottom                                     |
-| <kbd>d</kbd>              | Detach. The session keeps running; `tmux attach` returns |
-| <kbd>U</kbd>              | Update plugins                                           |
+| Key                         | Does                                                     |
+| --------------------------- | -------------------------------------------------------- |
+| <kbd>c</kbd>                | New window                                               |
+| <kbd>n</kbd> / <kbd>p</kbd> | Next or previous window                                  |
+| <kbd>1</kbd>–<kbd>9</kbd>   | Switch to window by number                               |
+| <kbd>,</kbd>                | Rename current window                                    |
+| <kbd>&</kbd>                | Close current window                                     |
+| <kbd>%</kbd>                | Split pane vertically (left and right)                   |
+| <kbd>"</kbd>                | Split pane horizontally (top and bottom)                 |
+| <kbd>o</kbd>                | Switch between panes (or click with mouse)               |
+| <kbd>z</kbd>                | Toggle zoom for current pane                             |
+| <kbd>x</kbd>                | Close current pane                                       |
+| <kbd>[</kbd>                | Enter copy mode / scroll history (<kbd>q</kbd> to exit)  |
+| <kbd>]</kbd>                | Paste the most recent buffer                             |
+| <kbd>d</kbd>                | Detach. The session keeps running; `tmux attach` returns |
+| <kbd>U</kbd>                | Update plugins                                           |
 
 To get a plain Fish shell instead of tmux, comment out the `command = …` line in `~/.config/ghostty/config`.
 

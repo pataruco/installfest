@@ -27,20 +27,9 @@ theme = Atom One Dark
 # Comment this line out to get a plain fish shell instead.
 command = /opt/homebrew/bin/tmux new-session -A -s main
 
-# Cmd+K inside tmux: Ghostty's default `clear_screen` wipes Ghostty's own
-# buffer, which tmux immediately redraws. Send Ctrl+L (\x0c) instead so the
-# tmux config's `bind -n C-l` clears the pane and its scrollback.
-# Outside tmux, fish's own Ctrl+L binding clears the screen.
-keybind = super+k=text:\x0c
-
 # URLs inside tmux: tmux owns the mouse (`mouse on`), so hold Cmd+Shift to
 # highlight and click a link there; Shift bypasses tmux's mouse capture for
 # one click. Outside tmux, Cmd+click works directly. Nothing to configure.
-
-# Cmd+Shift+A copies the output of the last command. Sends Alt+O (ESC o),
-# which the tmux config binds. Outside tmux, Ghostty's own equivalent is
-# Cmd+triple-click on the output.
-keybind = super+shift+a=text:\x1bo
 
 # Quick terminal: toggles a drop-down terminal window from anywhere with Cmd+`
 # (Requires Accessibility permission in macOS System Settings > Privacy & Security > Accessibility)
