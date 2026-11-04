@@ -1,0 +1,33 @@
+# One Dark theme for Ghostty
+# Install to ~/.config/ghostty/themes/one-dark
+#
+# Converted from the iTerm2 preset used elsewhere in this installfest:
+# https://raw.githubusercontent.com/one-dark/iterm-one-dark-theme/master/One%20Dark.itermcolors
+#
+# One deliberate deviation: the iTerm file sets "Cursor Text" to #abb2bf (same
+# as the cursor) and relies on iTerm's "smart cursor color" to keep the text
+# readable. Ghostty has no such option, so cursor-text uses the background.
+
+palette = 0=#21252b
+palette = 1=#e06c75
+palette = 2=#98c379
+palette = 3=#e5c07b
+palette = 4=#61afef
+palette = 5=#c678dd
+palette = 6=#56b6c2
+palette = 7=#abb2bf
+palette = 8=#767676
+palette = 9=#e06c75
+palette = 10=#98c379
+palette = 11=#e5c07b
+palette = 12=#61afef
+palette = 13=#c678dd
+palette = 14=#56b6c2
+palette = 15=#abb2bf
+
+background = #21252b
+foreground = #abb2bf
+cursor-color = #abb2bf
+cursor-text = #21252b
+selection-background = #323844
+selection-foreground = #abb2bf

@@ -1,0 +1,33 @@
+# Ghostty configuration
+# Install to ~/.config/ghostty/config
+# Reload with cmd+shift+, after editing.
+# Reference: https://ghostty.org/docs/config/reference
+
+# Terminal: same size as the iTerm "Profiles > Text > Font" step
+font-size = 14
+
+# Terminal theme: loaded from ~/.config/ghostty/themes/one-dark
+# (see ./themes/one-dark in this repo)
+theme = one-dark
+
+# Fish shell: not needed. Ghostty uses $SHELL / the passwd entry, so
+# `chsh -s (which fish)` is enough, and fish shell integration is injected
+# automatically. Uncomment only to force fish regardless of login shell.
+# command = /opt/homebrew/bin/fish
+
+# tmux: Ghostty has no status bar, so the tmux section of the installfest
+# provides CPU/memory/network meters instead. Every new Ghostty window
+# attaches to the shared `main` tmux session (creating it if needed).
+# Comment this line out to get a plain fish shell instead.
+command = /opt/homebrew/bin/tmux new-session -A -s main
+
+# Cmd+K inside tmux: Ghostty's default `clear_screen` wipes Ghostty's own
+# buffer, which tmux immediately redraws. Send Ctrl+L (\x0c) instead so the
+# tmux config's `bind -n C-l` clears the pane and its scrollback, like iTerm.
+# Outside tmux, fish's own Ctrl+L binding clears the screen.
+keybind = super+k=text:\x0c
+
+# Cmd+Shift+A copies the output of the last command, like iTerm2's "Select
+# Output of Last Command". Sends Alt+O (ESC o), which the tmux config binds.
+# Outside tmux, Ghostty's own equivalent is Cmd+triple-click on the output.
+keybind = super+shift+a=text:\x1bo

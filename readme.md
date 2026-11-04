@@ -22,11 +22,34 @@ The Xcode Command Line Tools are part of Xcode. Installation of many common Unix
 
 ## Terminal
 
+> Ghostty is being trialled side by side with iTerm2 until it reaches feature parity. Both can be installed at the same time; they do not share any configuration. The **Ghostty (experimental)** steps below mirror each iTerm step. Known gap: Ghostty has no status bar, so the CPU/memory/network meters come from [tmux](#tmux-experimental) instead.
+
+### iTerm2
+
 1. Install [iTerm2](https://www.iterm2.com/downloads.html)
 2. Set the font size to be **14pt**
    - Press <kbd>⌘</kbd> + <kbd>,</kbd>
    - Navigate to **Profiles** > **Text** > **Font**
    - Increase the font size
+
+### Ghostty (experimental)
+
+[Ghostty](https://ghostty.org/) has no preferences UI; everything lives in `~/.config/ghostty/config`.
+
+1. Install Ghostty
+
+   ```sh
+   brew install --cask ghostty
+   ```
+
+2. Copy the config from this repo (it sets the font size to **14pt** and points at the One Dark theme installed in the [Terminal theme](#terminal-theme) section)
+
+   ```sh
+   mkdir -p ~/.config/ghostty
+   cp configs/ghostty/config ~/.config/ghostty/config
+   ```
+
+3. After editing the config, reload it in Ghostty with <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>,</kbd>
 
 ## AI
 
@@ -122,6 +145,8 @@ claude plugin marketplace add anthropics/skills
 
 ## Terminal theme
 
+### iTerm2
+
 1. Create file called `one-dark.itermcolors` on the `~/Desktop` and open it
 
    ```sh
@@ -133,6 +158,17 @@ claude plugin marketplace add anthropics/skills
    - Press <kbd>⌘</kbd> + <kbd>,</kbd>
    - Navigate to **Profiles** > **Colors** > **Color presets...**
    - Select **one-dark**
+
+### Ghostty (experimental)
+
+Ghostty's built-in `Atom One Dark` is a different palette from the iTerm preset above, so this repo ships [`configs/ghostty/themes/one-dark`](./configs/ghostty/themes/one-dark), a direct conversion of that `.itermcolors` file. The `theme = one-dark` line in the Ghostty config already points at it.
+
+```sh
+mkdir -p ~/.config/ghostty/themes
+cp configs/ghostty/themes/one-dark ~/.config/ghostty/themes/one-dark
+```
+
+Reload with <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>,</kbd>.
 
 ## Homebrew Package Manager
 
@@ -177,6 +213,8 @@ Packages are bundles of source code distributed by developers of software, which
    - Navigate to **Profiles** > **General** > **Command**
    - Select **Command** `Login Shell`
    - Check `Load integration automatically`
+
+   **Ghostty (experimental):** nothing to configure. Ghostty launches `$SHELL` (now Fish, after `chsh`) and injects its Fish shell integration automatically. Open a new Ghostty window to pick up the change.
 
 ### Install [Fisher](https://github.com/jorgebucaran/fisher) plugin manager
 
@@ -283,6 +321,43 @@ fisher rkbk60/onedark-fish
    [terraform]
    format = "[🏎💨 $workspace]($style) "
    ```
+
+## tmux (experimental)
+
+> Only needed with Ghostty. iTerm2 has a built-in status bar with CPU, memory and network meters; Ghostty has none (see [ghostty#2421](https://github.com/ghostty-org/ghostty/discussions/2421)). [tmux](https://github.com/tmux/tmux/wiki) runs inside the terminal and draws its own status line, which plugins can fill with the same meters.
+
+1. Install tmux and the dependencies of the network plugin
+
+   ```sh
+   brew install tmux gawk coreutils
+   ```
+
+2. Install [TPM](https://github.com/tmux-plugins/tpm), the tmux plugin manager. Because the config lives in `~/.config/tmux/`, TPM installs plugins into `~/.config/tmux/plugins/`, so TPM goes there too.
+
+   ```sh
+   git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+   ```
+
+3. Copy the config from this repo. It loads [`tmux-cpu`](https://github.com/tmux-plugins/tmux-cpu) and [`tmux-network-bandwidth`](https://github.com/xamut/tmux-network-bandwidth), puts the meters in a One Dark coloured status line, enables the mouse, allows the `set_onedark` palette through (`allow-passthrough on`) and makes <kbd>Ctrl</kbd> + <kbd>L</kbd> clear the pane and its scrollback.
+
+   ```sh
+   mkdir -p ~/.config/tmux
+   cp configs/tmux/tmux.conf ~/.config/tmux/tmux.conf
+   ```
+
+4. Start tmux and install the plugins by pressing the prefix <kbd>Ctrl</kbd> + <kbd>b</kbd>, then <kbd>I</kbd> (capital i)
+
+   ```sh
+   tmux
+   ```
+
+   The status line should now show `CPU`, `MEM` and `↓ ↑` network throughput.
+
+5. The Ghostty config from this repo already opens every new Ghostty window straight into the shared `main` tmux session (`command = … tmux new-session -A -s main`), so the meters are there from the start. Comment that line out in `~/.config/ghostty/config` if you want a plain fish shell instead. It also remaps <kbd>⌘</kbd> + <kbd>K</kbd> to send <kbd>Ctrl</kbd> + <kbd>L</kbd>, so clearing the terminal works inside tmux like it does in iTerm2.
+
+6. <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>A</kbd> copies the output of the last command to the clipboard, the closest thing to iTerm2's click-to-select command blocks. tmux finds the start of the output from the prompt marks fish emits; the end is worked out from the 2-line Starship prompt, so adjust the two `cursor-up` steps in `tmux.conf` if you change the prompt height. Ghostty has no hover toolbar or click-to-select for commands; outside tmux its native gesture is <kbd>⌘</kbd> + triple-click on the output.
+
+Useful keys (all after <kbd>Ctrl</kbd> + <kbd>b</kbd>): <kbd>c</kbd> new window, <kbd>n</kbd>/<kbd>p</kbd> next/previous window, <kbd>%</kbd> split left/right, <kbd>"</kbd> split top/bottom, <kbd>d</kbd> detach (session keeps running; `tmux attach` to return), <kbd>U</kbd> update plugins.
 
 ## Install [Bat 🦇](https://github.com/sharkdp/bat)
 
