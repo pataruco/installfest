@@ -1,6 +1,6 @@
 # 💻 macOS installfest
 
-Set up a new Mac for development using [Ghostty](https://ghostty.org/) and [tmux](https://tmux.app/) as the terminal, [Fish](https://fishshell.com/) with [Starship](https://starship.rs/) as the shell, [Zed](https://zed.dev/) as the editor, [Git](https://git-scm.com/) and [GitHub](https://github.com/), [Node](https://nodejs.org/en), [Python](https://www.python.org/) and [Rust](https://rust-lang.org/), then [Claude Code](https://code.claude.com/docs/en/overview) and [Delta](https://delta.dev/) sharing one set of agent skills.
+Set up a new Mac for development using [Ghostty](https://ghostty.org/) and [tmux](https://tmux.app/) as the terminal, [Fish](https://fishshell.com/) with [Starship](https://starship.rs/) as the shell, [Zed](https://zed.dev/) as the editor, [Git](https://git-scm.com/) and [GitHub](https://github.com/), [Node](https://nodejs.org/en), [Python](https://www.python.org/) and [Rust](https://rust-lang.org/), [SOPS](https://getsops.io/) and [GPG](https://gnupg.org/) for secrets, then [Claude Code](https://code.claude.com/docs/en/overview) and [Delta](https://delta.dev/) sharing one set of agent skills.
 
 Follow the sections in order. Later steps use tools installed earlier. Where a tool has a config file, this repo ships it under [`configs/`](./configs) and the steps copy it into place; the [Git](#git) section clones the repo, and every command after that runs from its root.
 
@@ -458,6 +458,32 @@ To update later, run `pnpm self-update`.
 ```sh
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
+
+## Secrets: SOPS and GPG
+
+[SOPS](https://getsops.io/) encrypts and decrypts files such as `.env` and configuration files in Git repositories. [GnuPG](https://gnupg.org/) (GPG) manages the keys used to encrypt and decrypt them.
+
+1. Install SOPS and GPG
+
+   ```sh
+   brew install sops gnupg
+   ```
+
+2. Import your master GPG key
+
+   ```sh
+    gpg --import path/to/master-key.asc
+   ```
+
+   The leading space prevents the command and file path from being saved to your Fish shell history.
+
+3. Check the imported key
+
+   ```sh
+   gpg --list-secret-keys --keyid-format LONG
+   ```
+
+   You should see your key listed under `sec`.
 
 ## AI: Claude Code, Delta and agent skills
 
